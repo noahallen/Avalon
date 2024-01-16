@@ -2,21 +2,21 @@
 
 ## Initial Setup
 
-1. Clone the repository (which downloads a local copy of the project to your computer):
+1. You will need to download git (and if you are using windows make sure you include the git credentials manager).
+   Here is the link for the [Git download](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-   ```
-   git clone https://github.com/noahallen/Avalon.git
-   cd Avalon
-   ```
-
-2. You will need to download git credentials manager.
-   Here is the link for [Windows](https://gitforwindows.org/) and [Mac](https://gitforwindows.org/)
-
-3. Before you start using Git, configure your user name and email.
+2. Before you start using Git, configure your user name and email.
 
    ```
    git config --global user.name "Your Name"
    git config --global user.email "your.email@example.com"
+   ```
+
+3. Clone the repository (which downloads a local copy of the project to your computer):
+
+   ```
+   git clone https://github.com/noahallen/Avalon.git
+   cd Avalon
    ```
 
 4. You will need to download [Node](https://nodejs.org/en/download/current) (which includes npm). I downloaded version 21.6.0 (which includes npm 10.2.4)
