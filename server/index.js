@@ -2,12 +2,13 @@
 // res.send stuff can go in routes folder 
 const express = require('express');
 const app = express();
+const CORS = require('cors');
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.use(CORS());  
 
-app.listen(3000, () => console.log('Express listening on port 3000!'));
+app.listen(5000, () => console.log('Express listening on port 5000!'));
 
 
-app.get('*', (req, res) => {
-    res.send('404! This is an invalid URL.');
-  });
+app.get("/", (req, res) => {
+  res.json({ message: "Hello from server!" });
+});
