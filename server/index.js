@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const CORS = require('cors');
 
-app.use(CORS());
+app.use(CORS());  
 
 app.listen(5000, () => console.log('Express listening on port 5000!'));
 

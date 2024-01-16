@@ -1,12 +1,13 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
+
 import './App.css';
 import Routing from "./routes/index";
 
 function App() {
 
-  const [data, setData] = React.useState(null);
+  const [data, setData] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch("http://localhost:5000/")
         .then(res => res.json())
         .then(resData => {
