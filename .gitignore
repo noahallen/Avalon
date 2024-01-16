@@ -1,0 +1,5 @@
+##########################
+# Dependency Directories #
+##########################
+/client/node_modules
+/server/node_modules
