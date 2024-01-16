@@ -2,65 +2,85 @@
 
 ## Initial Setup
 
-1. You will need to download git (and if you are using windows make sure you include the git credentials manager).
+1. Download and use [VSCode](https://code.visualstudio.com/download) for development (This is what I use/recommend)
+
+2. You will need to download git (and if you are using windows make sure you include the git credentials manager).
    Here is the link for the [Git download](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-2. Before you start using Git, configure your user name and email.
+3. Before you start using Git, configure your user name and email.
 
-   ```
-   git config --global user.name "Your Name"
-   git config --global user.email "your.email@example.com"
-   ```
+    ```
+    git config --global user.name "Your Name"
+    git config --global user.email "your.email@example.com"
+    ```
 
-3. Clone the repository (which downloads a local copy of the project to your computer):
+4. Clone the repository (which downloads a local copy of the project to your computer):
 
-   ```
-   git clone https://github.com/noahallen/Avalon.git
-   cd Avalon
-   ```
+    ```
+    git clone https://github.com/noahallen/Avalon.git
+    cd Avalon
+    ```
 
-4. You will need to download [Node](https://nodejs.org/en/download/current) (which includes npm). I downloaded version 21.6.0 (which includes npm 10.2.4)
+5. You will need to download [Node](https://nodejs.org/en/download/current) (which includes npm). I downloaded version 21.6.0 (which includes npm 10.2.4)
+
+6. Once you have the repository, git, and node downloaded, you should then install the needed dependencies for the project. To do this first you need to open a terminal in the project's folder (control + shift + ` in vscode).
+
+    #### Then to install the dependencies on the client you:
+
+    ```
+    cd client
+    npm install
+    cd ..
+    ```
+
+    #### Then to install the dependencies on the server you:
+
+    ```
+    cd server
+    npm install
+    cd ..
+    ```
 
 ## Regular Development Workflow
 
 1. Switch to the main branch and pull the latest changes:
 
-   ```
-   git switch main
-   git pull
-   ```
+    ```
+    git switch main
+    git pull
+    ```
 
 2. Create a new feature branch:
 
-   ```
-   git checkout -b "<Insert_name_of_feature_branch_here>"
-   ```
+    ```
+    git checkout -b "<Insert_name_of_feature_branch_here>"
+    ```
 
 3. Make changes and stage them for commit:
 
-   #### To stage **specific** files
+    #### To stage **specific** files
 
-   ```
-   git add <file_to_track>
-   ```
+    ```
+    git add <file_to_track>
+    ```
 
-   #### To stage **all** changes
+    #### To stage **all** changes
 
-   ```
-   git add .
-   ```
+    ```
+    git add .
+    ```
 
 4. Commit your changes with a descriptive message:
 
-   ```
-   git commit -m "Message describing the changes you made in the commit"
-   ```
+    ```
+    git commit -m "Message describing the changes you made in the commit"
+    ```
 
 5. Push your feature branch to the remote repository:
-   #### **Note: If it's your first time pushing, follow the recommended command if prompted**
-   ```
-   git push
-   ```
+    #### **Note: If it's your first time pushing, follow the recommended command if prompted**
+    ```
+    git push
+    ```
 
 ## Do When You Are Ready To Merge Changes
 
@@ -68,12 +88,12 @@
 
 7. After approval, ensure your feature branch is up to date with main using rebase:
 
-   ```
-   git switch main
-   git pull
-   git switch "<Insert_name_of_feature_branch_here>"
-   git rebase main
-   ```
+    ```
+    git switch main
+    git pull
+    git switch "<Insert_name_of_feature_branch_here>"
+    git rebase main
+    ```
 
 8. Resolve any conflicts, if needed, during rebase.
 
