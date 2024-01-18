@@ -28,17 +28,13 @@
     #### Then to install the dependencies on the client you:
 
     ```
-    cd client
     npm install
-    cd ..
     ```
 
     #### Then to install the dependencies on the server you:
 
     ```
-    cd server
     npm install
-    cd ..
     ```
 
 ## Regular Development Workflow
