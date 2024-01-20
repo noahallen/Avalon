@@ -30,12 +30,6 @@
     ```
     npm install
     ```
-
-    #### Then to install the dependencies on the server you:
-
-    ```
-    npm install
-    ```
     
 7. Download and place the .env file from the Discord into the root directory. This file contains the firebase api key and other private information
 
