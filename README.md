@@ -31,7 +31,7 @@
     npm install
     ```
     
-7. Download and place the .env file from the Discord into the root directory. This file contains the firebase api key and other private information
+7. Download and place the .env file from the Discord into the root directory. This file contains the firebase api key and other private information. All of this information will only live locally, do not save it to git.
 
 ## Regular Development Workflow
 
