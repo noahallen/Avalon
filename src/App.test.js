@@ -11,12 +11,12 @@ test('renders learn react link', () => {
 */
 // Test suite for App component
 describe("App component", () => {
-  // Test case: App renders without crashing
-  test("renders without crashing", () => {
-    // Render the App component
-    const { container } = render(<App />);
+	// Test case: App renders without crashing
+	test("renders without crashing", () => {
+		// Render the App component
+		const { container } = render(<App />);
 
-    // Check if the App component rendered
-    expect(container).toBeTruthy();
-  });
+		// Check if the App component rendered
+		expect(container).toBeTruthy();
+	});
 });
