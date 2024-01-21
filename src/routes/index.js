@@ -7,11 +7,13 @@ import {
 } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import NotFound from "../pages/NotFound";
+import TestState from "../pages/TestStatePage";
 const Routing = (props) => {
 	return (
 		<Router>
 			<Routes>
 				<Route exact path="/" element={<HomePage />} />
+				<Route exact path="/test" element={<TestState />} />
 				<Route exact path="*" element={<NotFound />} />
 			</Routes>
 		</Router>
