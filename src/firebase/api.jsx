@@ -2,7 +2,7 @@ import React from "react";
 import { initializeApp } from "firebase/app";
 import { getDatabase , ref, onValue, get, child, set, update} from "firebase/database";
 import { getAuth, signInWithRedirect } from "firebase/auth";
-import Constants from "../res/constants.jsx"
+
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -21,7 +21,6 @@ const firebaseConfig = {
   // Initialize Realtime Database and get a reference to the service
   const database = getDatabase(app);
   const auth = getAuth();
-  
 
   //helper functions
   function makeid(length) {
@@ -36,48 +35,43 @@ const firebaseConfig = {
     return result;
 }
 
-
   //Game creation functions
   
   function createGameLobby(userId, userName, setPlayers, setGoodRoles, setBadRoles) {
     //create id until no existing game ahs it
     let gameId = makeid(6);
-    let gameExist = {id:"000000"};
-    while (gameExist) {
-      const listener = onValue(ref(database, '/games/' + gameId), (snapshot) => {
-        gameExist = snapshot.val();
-      }, {
-        onlyOnce: true
-      });
-      gameId = makeid(6);
-      listener();
-    }
+
 
     set(ref(database, '/games/' + gameId), {
       players: {
-      '1': {userId: userId, displayName: userName, role:''},
+      '0': {userId: userId, displayName: userName, role:''},
       },
       goodRoles: ['Merlin'],
       badRoles: ['Assassin','Mordred'],
     });
     const playerListener = onValue(ref(database,'/games/' + gameId + `/players/`), (snapshot) => {
-      setPlayers(snapshot.val());
+      const playerObject = {};
+      for (let key in snapshot.val()) {
+        playerObject[key] = snapshot.val()[key];
+      }
+      setPlayers(playerObject);
+      console.log(playerObject);
     })
 
-    const goodRolesListener = onValue(ref(database, '/games/' + gameId + 'goodRoles'), (snapshot) => {
+    const goodRolesListener = onValue(ref(database, '/games/' + gameId + '/goodRoles/'), (snapshot) => {
       setGoodRoles(snapshot.val());
+      console.log(snapshot.val());
     })
-    const badRolesListener = onValue(ref(database, '/games/' + gameId + 'goodRoles'), (snapshot) => {
+    const badRolesListener = onValue(ref(database, '/games/' + gameId + '/badRoles/'), (snapshot) => {
       setBadRoles(snapshot.val());
+      console.log(snapshot.val());
     })
     return {pL: playerListener,gRL: goodRolesListener, bRL: badRolesListener};
   }
 
-  function loadGameLobby(userName, displayName, gameId, setPlayers, setGoodRoles, setBadRoles) {
-    
+  function loadGameLobby(gameId, setPlayers, setGoodRoles, setBadRoles) {
     const playerListener = onValue(ref(database,'/games/' + gameId + `/players/`), (snapshot) => {
       setPlayers(snapshot.val());
-      const playerList = snapshot.val();
     });
 
     const goodRolesListener = onValue(ref(database, '/games/' + gameId + 'goodRoles'), (snapshot) => {
@@ -87,7 +81,6 @@ const firebaseConfig = {
     const badRolesListener = onValue(ref(database, '/games/' + gameId + 'goodRoles'), (snapshot) => {
       setBadRoles(snapshot.val());
     });
-
 
     return {pL: playerListener,gRL: goodRolesListener, bRL: badRolesListener, joinStatus: 1};
   }
@@ -103,16 +96,14 @@ const firebaseConfig = {
       return 0;
     }
 
-    set(ref(database,'/games/' + gameId + '/players/' + userName), {userId: userName, displayName: displayName, role:''});
+    set(ref(database,'/games/' + gameId + '/players/' + playerCount), {userId: userName, displayName: displayName, role:''});
     return 1;
   }
 
-
-
   const apiFunctions = {
     createGameLobby,
-    joinGameLobby,
     loadGameLobby,
+    joinGameLobby,
   }
 
   export default apiFunctions;
