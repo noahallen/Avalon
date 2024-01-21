@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-const JoinBox = () =>{
-    const [joinCode, setJoinCode] = useState('')
-    const [error, setError] = useState(null)
+const JoinBox = (props) =>{
+    const {joinCode, error} = props;
+
 
     const handleCreate = async(e) => {
         // prevents reload on submit
