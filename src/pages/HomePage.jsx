@@ -9,7 +9,7 @@ const HomePage = () => {
 		<div>
 			<h2>HomePage</h2>
 
-			<JoinBox />
+			<JoinBox joinCode="" error="" />
 		</div>
 	);
 };
