@@ -14,6 +14,8 @@ const JoinBox = (props) =>{
     const handleJoin = async(e) => {
         // prevents reload on submit
         e.preventDefault();
+
+        
         
         console.log("handle join")
         // handle join button click
@@ -31,6 +33,7 @@ const JoinBox = (props) =>{
                 <h3>Join the Resistance:</h3>
                 <input
                     type="text"
+                    required
                 />
                 <button>Join!</button>
             </form>
