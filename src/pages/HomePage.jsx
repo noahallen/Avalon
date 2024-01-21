@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import JoinBox from '../components/box-join';
 
 
 const HomePage = () => {
     return (
         <div>
-            <h3>
+            <h2>
                 HomePage
-            </h3>
+            </h2>
+
+            <JoinBox />
         </div>
     );
 }
