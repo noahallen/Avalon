@@ -1,0 +1,68 @@
+{
+	"folders": [
+		{
+			"path": ".",
+		},
+	],
+	"settings": {
+		"editor.detectIndentation": false,
+		"omnisharp.useEditorFormattingSettings": false,
+		"workbench.editor.tabSizing": "fixed",
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "build",
+				"type": "shell",
+				"command": "npm run build",
+				"group": {
+					"kind": "build",
+					"isDefault": true,
+				},
+			},
+			{
+				"label": "test",
+				"type": "shell",
+				"command": "npm run test",
+				"group": {
+					"kind": "test",
+					"isDefault": true,
+				},
+			},
+			{
+				"label": "lint",
+				"type": "shell",
+				"command": "npm run lint",
+				"group": {
+					"kind": "test",
+					"isDefault": true,
+				},
+			},
+			{
+				"label": "start",
+				"type": "shell",
+				"command": "npm start",
+				"group": {
+					"kind": "build",
+					"isDefault": true,
+				},
+				"presentation": {
+					"reveal": "always",
+					"panel": "dedicated",
+				},
+				"problemMatcher": [],
+			},
+		],
+	},
+	"extensions": {
+		"recommendations": [
+			"esbenp.prettier-vscode", // Prettier extension for formatting
+			"jest-community.jest-vscode", // Jest extension for unit tests
+			"gitlens.gitLens", // GitLens extension for git
+			"htmlpreview.htmlpreview", // HTML Preview extension for previewing HTML files
+			"Wayou-Liu.TODO-Highlight", // TODO Highlight extension for highlighting TODOs
+			"vscode-icons-team.vscode-icons", // VSCode Icons extension for icons
+		],
+	},
+}
