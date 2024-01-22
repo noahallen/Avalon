@@ -45,17 +45,13 @@ const firebaseConfig = {
     set(ref(database, '/games/' + gameId), {
       playerCount: 1,
       players: {
-      '0': {userName: userName, displayName: displayName, role:''},
+      [userName]: {index: '0', displayName: displayName, role:''},
       },
       goodRoles: ['Merlin'],
       badRoles: ['Assassin','Mordred'],
     });
     const playerListener = onValue(ref(database,'/games/' + gameId + `/players/`), (snapshot) => {
-      const playerObject = {};
-      for (let key in snapshot.val()) {
-        playerObject[key] = snapshot.val()[key];
-      }
-      setPlayers(playerObject);
+      setPlayers(snapshot.val());
     })
 
     const goodRolesListener = onValue(ref(database, '/games/' + gameId + '/goodRoles/'), (snapshot) => {
@@ -74,11 +70,11 @@ const firebaseConfig = {
       setPlayers(snapshot.val());
     });
 
-    const goodRolesListener = onValue(ref(database, '/games/' + gameId + 'goodRoles'), (snapshot) => {
+    const goodRolesListener = onValue(ref(database, '/games/' + gameId + '/goodRoles/'), (snapshot) => {
       setGoodRoles(snapshot.val());
     });
 
-    const badRolesListener = onValue(ref(database, '/games/' + gameId + 'goodRoles'), (snapshot) => {
+    const badRolesListener = onValue(ref(database, '/games/' + gameId + '/goodRoles/'), (snapshot) => {
       setBadRoles(snapshot.val());
     });
 
@@ -91,15 +87,14 @@ const firebaseConfig = {
     const dbref = ref(database);
     let playerCount;
     let alreadyIn = 0;
-    await get(child(dbref,'/games/' + gameId + '/players/' )).then((snapshot) => {
+    await get(child(dbref,'/games/' + gameId + '/players/' + userName )).then((snapshot) => {
       if (snapshot.exists()) {
-        playerCount = Object.keys(snapshot.val()).length;
-        for (let key in snapshot.val()) {
-          if (userName == snapshot.val()[key].userName) {
-            alreadyIn = 1;
-            break;
-          }
-        }
+        alreadyIn = 1;
+      }
+    })
+    await get(child(dbref,'/games/' + gameId + '/playerCount')).then((snapshot) => {
+      if (snapshot.exists()) {
+        playerCount = snapshot.val();
       }
     })
     if (alreadyIn) {
@@ -112,8 +107,8 @@ const firebaseConfig = {
     if (playerCount > 10) {
       return 0;
     }
-
-    set(ref(database,'/games/' + gameId + '/players/' + playerCount), {userId: userName, displayName: displayName, role:''});
+    set(ref(database,'/games/' + gameId + '/playerCount'), playerCount + 1);
+    set(ref(database,'/games/' + gameId + '/players/' + userName), {index: playerCount, displayName: displayName, role:''});
     return 1;
   }
 

@@ -2,7 +2,7 @@ import React, { useState,useEffect  } from 'react';
 import apiFunctions from '../firebase/api';
 
 
-const TestPage = () => {
+const TestFirebasePage = () => {
     const [players, setPlayers] = useState({});
     const [goodRoles, setGoodRoles] = useState({});
     const [badRoles, setBadRoles] = useState({});
@@ -26,4 +26,4 @@ const TestPage = () => {
     );
 }
 
-export default TestPage;
+export default TestFirebasePage;
