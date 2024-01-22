@@ -1,6 +1,6 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
-import { getDatabase , ref, onValue, get, child, set, update} from "firebase/database";
+import { getDatabase , ref, onValue, get, child, set, update, off} from "firebase/database";
 import { getAuth, signInWithRedirect } from "firebase/auth";
 
 
@@ -37,14 +37,15 @@ const firebaseConfig = {
 
   //Game creation functions
   
-  function createGameLobby(userId, userName, setPlayers, setGoodRoles, setBadRoles) {
+  function createGameLobby(userName, displayName, setPlayers, setGoodRoles, setBadRoles) {
     //create id until no existing game ahs it
     let gameId = makeid(6);
 
 
     set(ref(database, '/games/' + gameId), {
+      playerCount: 1,
       players: {
-      '0': {userId: userId, displayName: userName, role:''},
+      '0': {userName: userName, displayName: displayName, role:''},
       },
       goodRoles: ['Merlin'],
       badRoles: ['Assassin','Mordred'],
@@ -55,20 +56,19 @@ const firebaseConfig = {
         playerObject[key] = snapshot.val()[key];
       }
       setPlayers(playerObject);
-      console.log(playerObject);
     })
 
     const goodRolesListener = onValue(ref(database, '/games/' + gameId + '/goodRoles/'), (snapshot) => {
       setGoodRoles(snapshot.val());
-      console.log(snapshot.val());
     })
     const badRolesListener = onValue(ref(database, '/games/' + gameId + '/badRoles/'), (snapshot) => {
       setBadRoles(snapshot.val());
-      console.log(snapshot.val());
     })
     return {pL: playerListener,gRL: goodRolesListener, bRL: badRolesListener};
   }
 
+  //uses load players finished to tell when player array is ready
+  //set good bad and players are functions to be passed in
   function loadGameLobby(gameId, setPlayers, setGoodRoles, setBadRoles) {
     const playerListener = onValue(ref(database,'/games/' + gameId + `/players/`), (snapshot) => {
       setPlayers(snapshot.val());
@@ -82,17 +82,34 @@ const firebaseConfig = {
       setBadRoles(snapshot.val());
     });
 
-    return {pL: playerListener,gRL: goodRolesListener, bRL: badRolesListener, joinStatus: 1};
+    return {pL: playerListener,gRL: goodRolesListener, bRL: badRolesListener};
   }
 
 
-  //0 = lobby full, 1 = success, 2 = already in
-  function joinGameLobby(userName, displayName, gameId, playerList) {
-    if (playerList[userName]) {
+  //0 = lobby full, 1 = success, 2 = already in, 3 = game doesn't exist
+  async function joinGameLobby(userName, displayName, gameId) {
+    const dbref = ref(database);
+    let playerCount;
+    let alreadyIn = 0;
+    await get(child(dbref,'/games/' + gameId + '/players/' )).then((snapshot) => {
+      if (snapshot.exists()) {
+        playerCount = Object.keys(snapshot.val()).length;
+        for (let key in snapshot.val()) {
+          if (userName == snapshot.val()[key].userName) {
+            alreadyIn = 1;
+            break;
+          }
+        }
+      }
+    })
+    if (alreadyIn) {
       return 2;
     }
-    const playerCount = Object.keys(playerList).length;
-    if (playerCount >= 10) {
+  
+    if (playerCount < 1) {
+      return 3
+    }
+    if (playerCount > 10) {
       return 0;
     }
 

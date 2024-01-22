@@ -6,11 +6,10 @@ import JoinBox from "../components/box-join";
 
 const HomePage = () => {
 
-
     return (
         <div>
             <h3>
-                HomePage - 
+                HomePage 
             </h3>
         </div>
     );
