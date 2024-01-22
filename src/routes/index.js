@@ -16,6 +16,7 @@ const Routing = (props) => {
 				<Route exact path="/" element={<HomePage />} />
 				<Route exact path="/test" element={<TestState />} />
 				<Route exact path="/testPrivate" element={<PrivateRoute redirectRoute="/"><TestState /></PrivateRoute>} />
+				<Route exact path="/privGame/:id" element={<PrivateRoute redirectRoute="/"><TestState /></PrivateRoute>} />
 				<Route exact path="*" element={<NotFound />} />
 			</Routes>
 		</Router>
