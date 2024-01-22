@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import JoinBox from "../components/box-join";
-import JoinBox from "../components/box-join";
 
 const HomePage = () => {
 	return (
