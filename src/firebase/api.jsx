@@ -38,8 +38,11 @@ const firebaseConfig = {
   //Game creation functions
   
   function createGameLobby(userName, displayName, setPlayers, setGoodRoles, setBadRoles) {
-    //create id until no existing game ahs it
+    //create id until no existing game has it
     let gameId = makeid(6);
+
+
+    
 
 
     set(ref(database, '/games/' + gameId), {
