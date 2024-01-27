@@ -134,6 +134,14 @@ const TestState = () => {
 					required
 					disabled={joined}
 				/>
+				<input
+					type="text"
+					value={gameID}
+					onChange={(e) => setGameID(e.target.value)}
+					placeholder="GameID"
+					required
+					disabled={submitted || created}
+				/>
 			</form>
 			<br></br>
 			Current roster of players:{" "}

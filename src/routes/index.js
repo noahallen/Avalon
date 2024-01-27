@@ -52,7 +52,11 @@ const Routing = (props) => {
 					path="role-selection"
 					element={<RoleSelectionPage />}
 				/>
-				<Route exact path="/testfirebase" element={<TestFirebasePage/>} />
+				<Route
+					exact
+					path="/testfirebase"
+					element={<TestFirebasePage />}
+				/>
 			</Routes>
 		</Router>
 	);
