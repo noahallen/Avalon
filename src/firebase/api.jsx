@@ -64,7 +64,7 @@ const firebaseConfig = {
       setGoodRoles(snapshot.val());
     });
 
-    const badRolesListener = onValue(ref(database, '/games/' + gameId + '/goodRoles/'), (snapshot) => {
+    const badRolesListener = onValue(ref(database, '/games/' + gameId + '/badRoles/'), (snapshot) => {
       setBadRoles(snapshot.val());
     });
 
