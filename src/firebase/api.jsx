@@ -42,7 +42,6 @@ const firebaseConfig = {
     let gameId = makeid(6);
 
     set(ref(database, '/games/' + gameId), {
-      playerCount: 1,
       players: {
       [userName]: {index: '0', displayName: displayName, role:''},
       },
@@ -78,16 +77,14 @@ const firebaseConfig = {
     const dbref = ref(database);
     let playerCount;
     let alreadyIn = 0;
-    await get(child(dbref,'/games/' + gameId + '/players/' + userName )).then((snapshot) => {
-      if (snapshot.exists()) {
+    await get(child(dbref,'/games/' + gameId + '/players/' )).then((snapshot) => {
+      const playerObjects = snapshot.val();
+      playerCount = Object.keys(playerObjects).length;
+      if (userName in playerObjects) {
         alreadyIn = 1;
       }
     })
-    await get(child(dbref,'/games/' + gameId + '/playerCount')).then((snapshot) => {
-      if (snapshot.exists()) {
-        playerCount = snapshot.val();
-      }
-    })
+
     if (alreadyIn) {
       return 2;
     }
