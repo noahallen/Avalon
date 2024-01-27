@@ -41,10 +41,6 @@ const firebaseConfig = {
     //create id until no existing game has it
     let gameId = makeid(6);
 
-
-    
-
-
     set(ref(database, '/games/' + gameId), {
       playerCount: 1,
       players: {
@@ -53,17 +49,9 @@ const firebaseConfig = {
       goodRoles: ['Merlin'],
       badRoles: ['Assassin','Mordred'],
     });
-    const playerListener = onValue(ref(database,'/games/' + gameId + `/players/`), (snapshot) => {
-      setPlayers(snapshot.val());
-    })
-
-    const goodRolesListener = onValue(ref(database, '/games/' + gameId + '/goodRoles/'), (snapshot) => {
-      setGoodRoles(snapshot.val());
-    })
-    const badRolesListener = onValue(ref(database, '/games/' + gameId + '/badRoles/'), (snapshot) => {
-      setBadRoles(snapshot.val());
-    })
-    return {gameId: gameId, pL: playerListener,gRL: goodRolesListener, bRL: badRolesListener};
+    const listeners = loadGameLobby(gameId, setPlayers, setGoodRoles, setBadRoles);
+    listeners.gameId = gameId;
+    return listeners;
   }
 
   //uses load players finished to tell when player array is ready
@@ -105,7 +93,7 @@ const firebaseConfig = {
     }
   
     if (playerCount < 1) {
-      return 3
+      return 3;
     }
     if (playerCount > 10) {
       return 0;
