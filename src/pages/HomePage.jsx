@@ -1,10 +1,7 @@
-import React, { useState, useContext,useEffect  } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import apiFunctions from '../firebase/api';
-
 import { GameContext } from "../components/GameProvider.js";
 import JoinBox from "../components/box-join";
-
-
 
 const HomePage = () => {
 	return (
