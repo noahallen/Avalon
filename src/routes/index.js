@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 
 // Page Imports
-import HomePage from "../pages/HomePage";
 import NotFound from "../pages/NotFound";
 import FeatureSelectionPage from "../pages/FeatureSelectionPage";
 import RoleSelectionPage from "../pages/RoleSelectionPage";
@@ -20,18 +19,29 @@ const Routing = (props) => {
 	return (
 		<Router>
 			<Routes>
-				<Route exact path="/" element={<HomePage />} />
+				<Route exact path="/" element={<RoomCreationPage />} />
 				<Route exact path="/test" element={<TestState />} />
 				{/*surround element with private route, and specify redirect route*/}
-				<Route exact path="/testPrivate" element={<PrivateRoute redirectRoute="/"><TestState /></PrivateRoute>} />
-				<Route exact path="/privGame/:id" element={<PrivateRoute redirectRoute="/"><TestState /></PrivateRoute>} />
-				<Route exact path="*" element={<NotFound />} />
-
 				<Route
 					exact
-					path="room-creation"
-					element={<RoomCreationPage />}
+					path="/testPrivate"
+					element={
+						<PrivateRoute redirectRoute="/">
+							<TestState />
+						</PrivateRoute>
+					}
 				/>
+				<Route
+					exact
+					path="/privGame/:id"
+					element={
+						<PrivateRoute redirectRoute="/">
+							<TestState />
+						</PrivateRoute>
+					}
+				/>
+				<Route exact path="*" element={<NotFound />} />
+
 				<Route
 					exact
 					path="feature-selection"

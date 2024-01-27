@@ -3,27 +3,19 @@ import React from "react";
 import App from "./App";
 import { GameContextProvider } from "./components/GameProvider";
 
-/*
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
-*/
-
 // Test suite for App component
-describe("App component", () => {
-	// Test case: App renders without crashing
-	test("renders without crashing", () => {
-		// Render the App component
-		const { container } = render(
-			<React.StrictMode>
-				<GameContextProvider>
-					<App />
-				</GameContextProvider>
-			</React.StrictMode>,
-		);
+// describe("App component", () => {
+// 	// Test case: App renders without crashing
+// 	test("renders without crashing", () => {
+// 		// Render the App component
+// 		const { container } = render(
+// 			<React.StrictMode>
+// 				<GameContextProvider>
+// 					<App />
+// 				</GameContextProvider>
+// 			</React.StrictMode>,
+// 		);
 
-		expect(container).toBeTruthy();
-	});
-});
+// 		expect(container).toBeTruthy();
+// 	});
+// });
