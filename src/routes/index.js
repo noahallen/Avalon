@@ -15,6 +15,7 @@ import RoomCreationPage from "../pages/RoomCreationPage";
 
 import TestState from "../pages/TestStatePage";
 import PrivateRoute from "./PrivateRoute";
+import TestFirebasePage from "../pages/TestFirebasePage";
 const Routing = (props) => {
 	return (
 		<Router>
@@ -41,6 +42,7 @@ const Routing = (props) => {
 					path="role-selection"
 					element={<RoleSelectionPage />}
 				/>
+				<Route exact path="/testfirebase" element={<TestFirebasePage/>} />
 			</Routes>
 		</Router>
 	);
