@@ -25,8 +25,8 @@ const TestFirebasePage = () => {
 
     }
 
-    const joinGame = () => {
-
+    const joinGame = async () => {
+        await apiFunctions.joinGameLobby(testid2,test2,gameId);
     }
 
     return (
@@ -36,7 +36,7 @@ const TestFirebasePage = () => {
             </h3>
                 <button onClick={createGame}>create game</button>
                 <button>load game</button>
-                <button>join game</button>
+                <button onClick={joinGame}>join game</button>
             <h3>
                 Game information: {players? Object.keys(players):null} - {goodRoles} - {badRoles} - {gameId}
             </h3>
