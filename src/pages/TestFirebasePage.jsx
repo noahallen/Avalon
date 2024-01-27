@@ -4,8 +4,9 @@ import apiFunctions from '../firebase/api';
 
 const TestFirebasePage = () => {
     const [players, setPlayers] = useState({});
-    const [goodRoles, setGoodRoles] = useState({});
-    const [badRoles, setBadRoles] = useState({});
+    const [goodRoles, setGoodRoles] = useState([]);
+    const [badRoles, setBadRoles] = useState([]);
+    const [gameId, setGameId] = useState("");
     const testid1 = "Troll1";
     const test1 = "Merlin Plus";
     const testid2 = "Troll2";
@@ -16,7 +17,8 @@ const TestFirebasePage = () => {
     const test4 = "Merlin Minus Minus";
 
     const createGame = () => {
-
+        const holder = apiFunctions.createGameLobby(testid1,test1,setPlayers,setGoodRoles,setBadRoles);
+        setGameId(holder.gameId);
     }
 
     const loadGame = () => {
@@ -31,15 +33,12 @@ const TestFirebasePage = () => {
         <div>
             <h3>
                 TestFirebase
-                <button>create game</button>
-                <button>load game</button>
-                <button>join game</button>
             </h3>
-                <button>create game</button>
+                <button onClick={createGame}>create game</button>
                 <button>load game</button>
                 <button>join game</button>
             <h3>
-                Game information: 
+                Game information: {players? Object.keys(players):null} - {goodRoles} - {badRoles} - {gameId}
             </h3>
 
         </div>
