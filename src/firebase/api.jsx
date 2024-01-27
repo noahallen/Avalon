@@ -60,7 +60,7 @@ const firebaseConfig = {
     const badRolesListener = onValue(ref(database, '/games/' + gameId + '/badRoles/'), (snapshot) => {
       setBadRoles(snapshot.val());
     })
-    return {pL: playerListener,gRL: goodRolesListener, bRL: badRolesListener};
+    return {gameId: gameId, pL: playerListener,gRL: goodRolesListener, bRL: badRolesListener};
   }
 
   //uses load players finished to tell when player array is ready

@@ -15,13 +15,33 @@ const TestFirebasePage = () => {
     const testid4 = "Troll4";
     const test4 = "Merlin Minus Minus";
 
+    const createGame = () => {
 
+    }
+
+    const loadGame = () => {
+
+    }
+
+    const joinGame = () => {
+
+    }
 
     return (
         <div>
             <h3>
-                TestPage 
+                TestFirebase
+                <button>create game</button>
+                <button>load game</button>
+                <button>join game</button>
             </h3>
+                <button>create game</button>
+                <button>load game</button>
+                <button>join game</button>
+            <h3>
+                Game information: 
+            </h3>
+
         </div>
     );
 }
