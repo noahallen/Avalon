@@ -24,7 +24,7 @@ const FeatureSelectionPage = () => {
 
 	const handleKingTrackingToggle = () => {
 		setKingTracking(!kingTracking);
-		// Reset sub toggle state when toggle4 is unchecked
+		// Reset sub toggle state when kingTracking is unchecked
 		if (!kingTracking) {
 			setKingChoosesQuestPlayers(false);
 		}
