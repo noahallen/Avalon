@@ -35,10 +35,6 @@
 	transition: 0.4s;
 }
 
-input:checked + .slider {
-	background-color: darkred; /* Changed from #2196f3 to darkred */
-}
-
 input:checked + .slider:before {
 	transform: translateX(26px);
 }
@@ -54,4 +50,12 @@ input:checked + .slider:before {
 /* Sub toggle button class */
 .sub-toggle {
 	margin-left: 40px;
+}
+
+:root {
+	--slider-checked-background-color: darkred;
+}
+
+input:checked + .slider {
+	background-color: var(--slider-checked-background-color);
 }

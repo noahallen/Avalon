@@ -5,7 +5,7 @@ import Routing from "./routes/index";
 
 function App() {
 	return (
-		<div style={{ padding: "0 10px" }}>
+		<div class="App">
 			<Routing />
 		</div>
 	);
