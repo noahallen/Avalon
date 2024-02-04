@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import apiFunctions from "../firebase/api";
+import QRCodeComponent from "../components/QRCode.js";
 
 const TestState = () => {
 	/*
@@ -143,6 +144,7 @@ const TestState = () => {
 					disabled={submitted || created}
 				/>
 			</form>
+			<div>{created ? <QRCodeComponent code={gameID} /> : ""}</div>
 			<br></br>
 			Current roster of players:{" "}
 			<pre>
