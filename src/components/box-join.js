@@ -1,15 +1,22 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const JoinBox = (props) => {
-	const { joinCode, error } = props;
 	const [inputValue, setInputValue] = useState("");
+	const navigate = useNavigate();
 
 	const handleCreate = async (e) => {
 		e.preventDefault();
+		navigate("/enterName", {
+			state: { isCreate: true, roomId: "PLACEHOLDER" },
+		});
 	};
 
 	const handleJoin = async (e) => {
 		e.preventDefault();
+		navigate("/enterName", {
+			state: { isCreate: false, roomId: inputValue },
+		});
 	};
 
 	const handleChange = (e) => {
