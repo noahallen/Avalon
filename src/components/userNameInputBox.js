@@ -35,14 +35,14 @@ const UserNameInputBox = (props) => {
 			console.log(roomId);
 			// call the create room function here
 			navigate("/waiting-room", {
-				state: { isAdmin: true, roomId: roomId },
+				state: { isAdmin: isCreate, roomId: roomId },
 			});
 		} else {
 			console.log("is join room");
 			console.log(roomId);
 			//call the load and join game code here
 			navigate("/waiting-room", {
-				state: { isAdmin: false, roomId: roomId },
+				state: { isAdmin: isCreate, roomId: roomId },
 			});
 		}
 	};
