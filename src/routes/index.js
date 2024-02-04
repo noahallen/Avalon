@@ -26,9 +26,9 @@ const Routing = (props) => {
 					exact
 					path="/testPrivate"
 					element={
-						<PrivateRoute redirectRoute="/">
-							<TestState />
-						</PrivateRoute>
+					<PrivateRoute redirectRoute="/">
+						<TestState />
+					</PrivateRoute>
 					}
 				/>
 				<Route
