@@ -36,7 +36,7 @@ form button {
 	font-size: 1.2em;
 	border-radius: 8px;
 }
-.box-join {
+.box-input {
 	background-color: var(--background-4);
 	color: var(--text-primary);
 	border-radius: 15px;
@@ -47,10 +47,10 @@ form button {
 	align-items: center;
 	text-align: center;
 }
-.box-join h3 {
-	text-align: center;
-	align-items: center;
+.box-input h3 {
+	margin-top: 0px;
 }
+
 .room-creation {
 	display: grid;
 	grid-template-columns: 5fr;
