@@ -1,10 +1,3 @@
-// Write the username input box that will contain:
-// an input field with ghost text of "Enter your username here"
-// a button with the text of "Continue"
-// This button will also reference the GameContextProvider to set the username state
-// The button should be enabled if the username is not empty and shouldUseAuth is false or (shouldUseAuth is true and isAuthCompleted is true)
-// The button should be disabled if the username is empty or shouldUseAuth is true and isAuthCompleted is false
-
 import { useState, useContext } from "react";
 import SampleAuth from "./sampleAuth";
 import { GameContext } from "./GameProvider";
