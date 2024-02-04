@@ -12,6 +12,20 @@
 	/* General Colors */
 	--error: #ac0404;
 	--success: #4caf50;
+
+	background-image: url("./res/Wall.png");
+	background-repeat: repeat;
+	background-size: contain;
+	overflow: hidden;
+	background-position: center;
+}
+
+body {
+	background-image: url("./res/Wall.png");
+	background-repeat: repeat;
+	background-size: contain;
+	overflow: hidden;
+	background-position: center;
 }
 
 label,
