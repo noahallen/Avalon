@@ -2,34 +2,37 @@ import { useState } from "react";
 
 const JoinBox = (props) => {
 	const { joinCode, error } = props;
+	const [inputValue, setInputValue] = useState("");
 
 	const handleCreate = async (e) => {
-		// prevents reload on submit
 		e.preventDefault();
-
-		console.log("handle create");
-		// handle create button click
 	};
-	const handleJoin = async (e) => {
-		// prevents reload on submit
-		e.preventDefault();
 
-		console.log("handle join");
-		// handle join button click
+	const handleJoin = async (e) => {
+		e.preventDefault();
+	};
+
+	const handleChange = (e) => {
+		if (e.target.value.length <= 6) {
+			setInputValue(e.target.value);
+		}
 	};
 
 	return (
-		<div className="box-join">
-			{/* "Create a room" button */}
-			<form onSubmit={handleCreate}>
-				<button>Create a room</button>
-			</form>
-
-			{/* "Join the Resistance" code and button entry */}
+		<div className="box-input">
 			<form onSubmit={handleJoin}>
 				<h3>Join the Resistance:</h3>
-				<input type="text" />
-				<button>Join!</button>
+				<input
+					type="text"
+					placeholder="Enter 6 digit room code"
+					value={inputValue}
+					onChange={handleChange}
+				/>
+				<button disabled={inputValue.length < 6}>Join!</button>
+			</form>
+			<h2>OR</h2>
+			<form onSubmit={handleCreate}>
+				<button>Create a room</button>
 			</form>
 		</div>
 	);
