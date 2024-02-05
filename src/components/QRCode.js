@@ -3,7 +3,7 @@ import QRCode from "qrcode.react";
 
 const QRCodeComponent = ({ code }) => {
 	// TODO: Change URL to real hosted URL later
-	const URL = "http://localhost:3000";
+	const URL = "http://localhost:3000/join-intermediate";
 	return <QRCode value={URL + "/" + code} />;
 };
 

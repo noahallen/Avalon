@@ -9,6 +9,7 @@ export const GameContextProvider = ({ children }) => {
 	const [userName, setUserName] = useState("");
 	const [selectedGoodRoles, setSelectedGoodRoles] = useState([]);
 	const [selectedEvilRoles, setSelectedEvilRoles] = useState([]);
+	const [listeners, setListeners] = useState({});
 
 	const goodRoles = {
 		Merlin: "Merlin",
@@ -57,6 +58,8 @@ export const GameContextProvider = ({ children }) => {
 				setName,
 				userName,
 				setUserName,
+				listeners,
+				setListeners,
 			}}
 		>
 			{children}

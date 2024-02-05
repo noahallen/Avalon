@@ -3,14 +3,27 @@ import SampleAuth from "./sampleAuth";
 import { GameContext } from "./GameProvider";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import apiFunctions from "../firebase/api";
 
 const UserNameInputBox = (props) => {
 	const shouldUseAuth = props.shouldUseAuth;
 	const isCreate = props.isCreate;
 	const roomId = props.roomId;
 	const [isAuthCompleted, setIsAuthCompleted] = useState(false);
-	const { userName, setUserName } = useContext(GameContext);
-	const { name, setName } = useContext(GameContext);
+	const {
+		setPlayerState,
+		setSelectedGoodRoles,
+		setSelectedEvilRoles,
+		setGameID,
+		name,
+		setName,
+		userName,
+		setUserName,
+		setListeners,
+		gameID,
+		playerState,
+	} = useContext(GameContext);
+
 	const navigate = useNavigate();
 
 	const handleChange = (e) => {
@@ -21,22 +34,45 @@ const UserNameInputBox = (props) => {
 		setName(e.target.value);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (isCreate) {
-			console.log("is create room");
-			console.log(roomId);
-			// call the create room function here
+			const createResponse = apiFunctions.createGameLobby(
+				userName,
+				name,
+				setPlayerState,
+				setSelectedGoodRoles,
+				setSelectedEvilRoles,
+			);
+			setListeners(createResponse.listeners);
+			setGameID(createResponse.gameID);
 			navigate("/waiting-room", {
-				state: { isAdmin: isCreate, roomId: roomId },
+				state: { isAdmin: isCreate, gameID: gameID },
 			});
 		} else {
-			console.log("is join room");
-			console.log(roomId);
-			//call the load and join game code here
-			navigate("/waiting-room", {
-				state: { isAdmin: isCreate, roomId: roomId },
-			});
+			if (roomId === undefined) {
+				navigate("/");
+			}
+			setListeners(
+				apiFunctions.loadGameLobby(
+					roomId,
+					setPlayerState,
+					setSelectedGoodRoles,
+					setSelectedEvilRoles,
+				),
+			);
+
+			const joinResponse = await apiFunctions.joinGameLobby(
+				userName,
+				name,
+				roomId,
+			);
+			if (joinResponse === 1) {
+				setGameID(roomId);
+				navigate("/waiting-room", {
+					state: { isAdmin: isCreate, gameID: gameID },
+				});
+			}
 		}
 	};
 
