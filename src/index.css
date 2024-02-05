@@ -2,6 +2,7 @@
 
 :root {
 	/* Text Colors */
+	--text-header: rgb(255, 230, 0);
 	--text-primary: #fff;
 	--text-seconadry: #f46036;
 
@@ -76,12 +77,21 @@ form button {
 	padding-right: 20px;
 }
 
+
 .page-header {
 	text-align: center;
-	background-color: var(--background-3);
-	color: var(--text-primary);
+	
+	/* this is for the blue bar behind the avalon text */
+	/* background-color: var(--background-3); */
+
+	color: var(--text-header);
+	font-size: 4.5em;	
+   
+	text-shadow: 3px 3px black;
 
 	font-family: "Old Standard TT", serif;
+
+
 }
 
 /* below was previously here */
