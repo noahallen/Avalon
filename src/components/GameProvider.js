@@ -9,6 +9,18 @@ export const GameContextProvider = ({ children }) => {
 	const [userName, setUserName] = useState("");
 	const [selectedGoodRoles, setSelectedGoodRoles] = useState([]);
 	const [selectedEvilRoles, setSelectedEvilRoles] = useState([]);
+	/* Key for states
+	 * 0: member selection for quest
+	 * 1: voting for approving team or not
+	 * 2: quest action
+	 * 3: quest result
+	 * 4: lady phase
+	 * 5: narration / role info reveal
+	 */
+	const [gamePhase, setGamePhase] = useState(0);
+	const [questNumber, setQuestNumber] = useState(0);
+	const [successfulQuests, setSuccessfulQuests] = useState(0);
+	const [missionInfo, setMissionInfo] = useState({});
 
 	const goodRoles = {
 		Merlin: "Merlin",
