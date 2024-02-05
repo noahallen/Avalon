@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import JoinBox from "../components/box-join";
-import UserNameInputBox from "../components/userNameInputBox";
 
 const RoomCreationPage = () => {
 	return (

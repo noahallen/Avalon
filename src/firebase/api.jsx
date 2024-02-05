@@ -55,9 +55,9 @@ function createGameLobby(
 	setBadRoles,
 ) {
 	//create id until no existing game has it
-	let gameId = makeid(6);
+	let gameID = makeid(6);
 
-	set(ref(database, "/games/" + gameId), {
+	set(ref(database, "/games/" + gameID), {
 		players: {
 			[userName]: { index: "0", displayName: displayName, role: "" },
 		},
@@ -65,13 +65,15 @@ function createGameLobby(
 		badRoles: ["Assassin", "Mordred"],
 	});
 	const listeners = loadGameLobby(
-		gameId,
+		gameID,
 		setPlayers,
 		setGoodRoles,
 		setBadRoles,
 	);
-	listeners.gameId = gameId;
-	return listeners;
+	const response = {};
+	response.listeners = listeners;
+	response.gameID = gameID;
+	return response;
 }
 
 //uses load players finished to tell when player array is ready
