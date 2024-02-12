@@ -72,6 +72,15 @@ const UserNameInputBox = (props) => {
 				navigate("/waiting-room", {
 					state: { isAdmin: isCreate, gameID: gameID },
 				});
+			} else if (joinResponse === 0) {
+				alert("Game is full");
+			} else if (joinResponse === 3) {
+				alert("Game does not exist");
+			} else if (joinResponse === 2) {
+				setGameID(roomId);
+				navigate("/waiting-room", {
+					state: { isAdmin: isCreate, gameID: gameID },
+				});
 			}
 		}
 	};

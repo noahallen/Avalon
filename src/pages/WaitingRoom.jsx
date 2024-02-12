@@ -9,8 +9,11 @@ const WaitingRoom = () => {
 	const location = useLocation();
 	const isAdmin = location ? location.state.isAdmin : undefined;
 
+	const gearOnClick = () => {
+		console.log("gear clicked");
+	};
+
 	const { playerState, gameID, name } = useContext(GameContext);
-	console.log(gameID);
 	if (isAdmin === null || isAdmin === undefined) {
 		return <Navigate to={"/"} />;
 	} else {
@@ -20,13 +23,27 @@ const WaitingRoom = () => {
 				<h3>Game ID: {gameID}</h3>
 				<QRCodeComponent code={gameID} />
 				<h3>Members: </h3>
-				<pre>
+				<div className="members-list">
+					{console.log(playerState)}
 					{playerState
-						? Object.keys(playerState).map(
-								(key) => playerState[key].displayName + "\n",
-							)
+						? Object.keys(playerState).map((key) => (
+								<div id={toString(key)}>
+									{playerState[key].displayName}
+								</div>
+							))
 						: ""}
-				</pre>
+				</div>
+				<div>
+					{isAdmin ? (
+						<a onClick={gearOnClick}>
+							<img
+								src={gear}
+								alt="settings"
+								className="small-gear-image"
+							/>
+						</a>
+					) : null}
+				</div>
 			</div>
 		);
 	}
