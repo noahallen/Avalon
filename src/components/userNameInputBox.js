@@ -8,7 +8,7 @@ import apiFunctions from "../firebase/api";
 const UserNameInputBox = (props) => {
 	const shouldUseAuth = props.shouldUseAuth;
 	const isCreate = props.isCreate;
-	const roomId = props.gameID;
+	const roomId = props.roomId;
 	const [isAuthCompleted, setIsAuthCompleted] = useState(false);
 	const {
 		setPlayerState,

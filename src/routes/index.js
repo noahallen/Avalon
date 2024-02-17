@@ -17,7 +17,6 @@ import PrivateRoute from "./PrivateRoute";
 import TestFirebasePage from "../pages/TestFirebasePage";
 import EnterName from "../pages/EnterName";
 import WaitingRoom from "../pages/WaitingRoom";
-import JoinIntermediate from "../pages/JoinIntermediate";
 const Routing = (props) => {
 	return (
 		<Router>
@@ -62,11 +61,6 @@ const Routing = (props) => {
 				/>
 				<Route exact path="/enterName" element={<EnterName />} />
 				<Route exact path="/waiting-room" element={<WaitingRoom />} />
-				<Route
-					exact
-					path="/join-intermediate/:gameID"
-					element={<JoinIntermediate />}
-				/>
 			</Routes>
 		</Router>
 	);
