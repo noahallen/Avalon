@@ -11,7 +11,7 @@ import {
 	off,
 } from "firebase/database";
 import { getAuth, signInWithRedirect } from "firebase/auth";
-console.log("testing");
+
 const firebaseConfig = {
 	apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
 	authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -63,6 +63,14 @@ function createGameLobby(
 		},
 		goodRoles: ["Merlin"],
 		badRoles: ["Assassin", "Mordred"],
+		featureSettings: {
+			useLady: false,
+			useKingChoose: false,
+			useKingTracking: false,
+			useNarration: false,
+			useRoleDist: false,
+			useQuestCards: false,
+		},
 	});
 	const listeners = loadGameLobby(
 		gameID,
@@ -146,36 +154,30 @@ async function joinGameLobby(userName, displayName, gameID) {
 	return 1;
 }
 
-// waiting room functions:
-
-//use lady with app
-function toggleLady(gameID, value) {
-	set(database, "/games/" + gameID + "/useLady", value);
+// feature selection set
+function loadFeatureSelection(
+	gameID,
+	setFeatureSelectionSettings,
+	setListeners,
+	listeners,
+	featureFunctions,
+) {
+	const featureSelectionListener = onValue(
+		ref(database, "/games/" + gameID + "/featureSettings"),
+		(snapshot) => {
+			setFeatureSelectionSettings(snapshot.val());
+			for (const key in snapshot.val()) {
+				featureFunctions[key](snapshot.val()[key]);
+			}
+		},
+	);
+	if (!("featureSelectionListener" in listeners)) {
+		listeners.featureSelectionListener = featureSelectionListener;
+		setListeners(listeners);
+	}
 }
-
-//use king in app
-function toggleKingTracker(gameID, value) {
-	set(database, "/games/" + gameID + "/useKingTracker", value);
-}
-
-//king chooses team with app
-function toggleKingChooser(gameID, value) {
-	set(database, "/games/" + gameID + "/useKingChooser", value);
-}
-
-//use quest cards in app
-function toggleQuestCards(gameID, value) {
-	set(database, "/games/" + gameID + "/useQuestCards", value);
-}
-
-//use app to select roles
-function toggleRoleSelection(gameID, value) {
-	set(database, "/games/" + gameID + "/useRoleSelection", value);
-}
-
-//narrate in app
-function toggleNarration(gameID, value) {
-	set(database, "/games/" + gameID + "/useNarration", value);
+function setFeatureSelection(gameID, value) {
+	set(ref(database, "/games/" + gameID + "/featureSettings"), value);
 }
 
 // Role functions
@@ -221,12 +223,8 @@ const apiFunctions = {
 	joinGameLobby,
 	addRole,
 	removeRole,
-	toggleLady,
-	toggleNarration,
-	toggleRoleSelection,
-	toggleKingTracker,
-	toggleQuestCards,
-	toggleKingChooser,
+	setFeatureSelection,
+	loadFeatureSelection,
 };
 
 export default apiFunctions;

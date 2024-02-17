@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ToggleSlider from "../components/ToggleSlider";
 import apiFunctions from "../firebase/api";
-// lady
-// kingChoose
-// kingTracking
-// narration
-// roleDist
-// questCards
-//
-const FeatureSelectionPage = () => {
+import { GameContext } from "../components/GameProvider.js";
+
+// useLady
+// useKingChoose
+// useKingTracking
+// useNarration
+// useRoleDist
+// useQuestCards
+// props.setPopupState
+// isAdmin
+const FeatureSelectionPage = (props) => {
 	const [roleDistribution, setRoleDistribution] = useState(false);
 	const [narrationInfo, setNarrationInfoToggle] = useState(false);
 	const [playWithLady, setPlayWithLady] = useState(false);
@@ -16,6 +19,27 @@ const FeatureSelectionPage = () => {
 	const [questCards, setQuestCards] = useState(false);
 	const [kingChoosesQuestPlayers, setKingChoosesQuestPlayers] =
 		useState(false); // New state for sub toggle button
+	const { gameID, setFeatureSelectionSettings, listeners, setListeners } =
+		useContext(GameContext);
+
+	useEffect(() => {
+		if (props.isAdmin) {
+			apiFunctions.loadFeatureSelection(
+				gameID,
+				setFeatureSelectionSettings,
+				setListeners,
+				listeners,
+				{
+					useLady: setPlayWithLady,
+					useKingChoose: setKingChoosesQuestPlayers,
+					useKingTracking: setKingTracking,
+					useNarration: setNarrationInfoToggle,
+					useRoleDist: setRoleDistribution,
+					useQuestCards: setQuestCards,
+				},
+			);
+		}
+	}, []);
 
 	const handleRoleDistributionToggle = () => {
 		setRoleDistribution(!roleDistribution);
@@ -43,6 +67,18 @@ const FeatureSelectionPage = () => {
 
 	const handleQuestCards = () => {
 		setQuestCards(!questCards);
+	};
+
+	const saveFeatures = () => {
+		apiFunctions.setFeatureSelection(gameID, {
+			useLady: playWithLady,
+			useKingChoose: kingChoosesQuestPlayers,
+			useKingTracking: kingTracking,
+			useNarration: narrationInfo,
+			useRoleDist: roleDistribution,
+			useQuestCards: questCards,
+		});
+		props.setPopupState(false);
 	};
 
 	return (
@@ -75,7 +111,7 @@ const FeatureSelectionPage = () => {
 					isChecked={kingTracking}
 					handleToggle={handleKingTrackingToggle}
 				/>
-				{/* Conditionally render the sub toggle button */}
+				{/* Conditionally render the sub toggle button TODO remove padding */}
 				{kingTracking && (
 					<div className="sub-toggle">
 						<h3 className="header">King Chooses Quest Players</h3>
@@ -92,6 +128,15 @@ const FeatureSelectionPage = () => {
 					isChecked={questCards}
 					handleToggle={handleQuestCards}
 				/>
+				<h3 className="header">controls</h3>
+				<button onClick={saveFeatures}>Save</button>
+				<button
+					onClick={() => {
+						props.setPopupState(false);
+					}}
+				>
+					Close
+				</button>
 			</main>
 			<footer></footer>
 		</div>
