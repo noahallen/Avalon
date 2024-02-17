@@ -11,6 +11,7 @@ import NotFound from "../pages/NotFound";
 import FeatureSelectionPage from "../pages/FeatureSelectionPage";
 import RoleSelectionPage from "../pages/RoleSelectionPage";
 import RoomCreationPage from "../pages/RoomCreationPage";
+import JoinIntermediate from "../pages/JoinIntermediate";
 
 import TestState from "../pages/TestStatePage";
 import PrivateRoute from "./PrivateRoute";
