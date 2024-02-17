@@ -11,6 +11,7 @@ import NotFound from "../pages/NotFound";
 import FeatureSelectionPage from "../pages/FeatureSelectionPage";
 import RoleSelectionPage from "../pages/RoleSelectionPage";
 import RoomCreationPage from "../pages/RoomCreationPage";
+import JoinIntermediate from "../pages/JoinIntermediate";
 
 import TestState from "../pages/TestStatePage";
 import PrivateRoute from "./PrivateRoute";
@@ -61,6 +62,16 @@ const Routing = (props) => {
 				/>
 				<Route exact path="/enterName" element={<EnterName />} />
 				<Route exact path="/waiting-room" element={<WaitingRoom />} />
+				<Route
+					exact
+					path="/join-intermediate/:gameID"
+					element={<JoinIntermediate />}
+				/>
+				<Route
+					exact
+					path="/featureSelection"
+					element={<FeatureSelectionPage />}
+				/>
 			</Routes>
 		</Router>
 	);

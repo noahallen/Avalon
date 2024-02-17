@@ -10,6 +10,9 @@ export const GameContextProvider = ({ children }) => {
 	const [selectedGoodRoles, setSelectedGoodRoles] = useState([]);
 	const [selectedEvilRoles, setSelectedEvilRoles] = useState([]);
 	const [listeners, setListeners] = useState({});
+	const [featureSelectionSettings, setFeatureSelectionSettings] = useState(
+		{},
+	);
 
 	const goodRoles = {
 		Merlin: "Merlin",
@@ -41,6 +44,17 @@ export const GameContextProvider = ({ children }) => {
 		EvilMessenger: "Evil Messenger",
 	};
 
+	const gamePhases = {
+		WaitingRoom: "WR",
+		RoleEdit: "RE",
+		TeamSelection: "TS",
+		TeamSelectionVote: "VOTE",
+		TeamSelectionReveal: "REV",
+		MissionRun: "MR",
+		MissionReveal: "MREV",
+		Lady: "LAD",
+	};
+
 	return (
 		<GameContext.Provider
 			value={{
@@ -48,6 +62,7 @@ export const GameContextProvider = ({ children }) => {
 				setPlayerState,
 				goodRoles,
 				evilRoles,
+				gamePhases,
 				selectedGoodRoles,
 				setSelectedGoodRoles,
 				selectedEvilRoles,
@@ -60,6 +75,8 @@ export const GameContextProvider = ({ children }) => {
 				setUserName,
 				listeners,
 				setListeners,
+				featureSelectionSettings,
+				setFeatureSelectionSettings,
 			}}
 		>
 			{children}
