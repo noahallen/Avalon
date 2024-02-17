@@ -61,6 +61,16 @@ const Routing = (props) => {
 				/>
 				<Route exact path="/enterName" element={<EnterName />} />
 				<Route exact path="/waiting-room" element={<WaitingRoom />} />
+				<Route
+					exact
+					path="/join-intermediate/:gameID"
+					element={<JoinIntermediate />}
+				/>
+				<Route
+					exact
+					path="/featureSelection"
+					element={<FeatureSelectionPage />}
+				/>
 			</Routes>
 		</Router>
 	);

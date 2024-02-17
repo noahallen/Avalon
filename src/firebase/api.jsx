@@ -110,11 +110,11 @@ function loadGameLobby(gameId, setPlayers, setGoodRoles, setBadRoles) {
 }
 
 //0 = lobby full, 1 = success, 2 = already in, 3 = game doesn't exist
-async function joinGameLobby(userName, displayName, gameId) {
+async function joinGameLobby(userName, displayName, gameID) {
 	const dbref = ref(database);
 	let playerCount;
 	let alreadyIn = 0;
-	let path = "/games/" + gameId + "/players/";
+	let path = "/games/" + gameID + "/players/";
 
 	await get(child(dbref, path)).then((snapshot) => {
 		const playerObjects = snapshot.val();
@@ -135,10 +135,10 @@ async function joinGameLobby(userName, displayName, gameId) {
 		return 0;
 	}
 	await set(
-		ref(database, "/games/" + gameId + "/playerCount"),
+		ref(database, "/games/" + gameID + "/playerCount"),
 		playerCount + 1,
 	);
-	await set(ref(database, "/games/" + gameId + "/players/" + userName), {
+	await set(ref(database, "/games/" + gameID + "/players/" + userName), {
 		index: playerCount,
 		displayName: displayName,
 		role: "",
@@ -146,10 +146,87 @@ async function joinGameLobby(userName, displayName, gameId) {
 	return 1;
 }
 
+// waiting room functions:
+
+//use lady with app
+function toggleLady(gameID, value) {
+	set(database, "/games/" + gameID + "/useLady", value);
+}
+
+//use king in app
+function toggleKingTracker(gameID, value) {
+	set(database, "/games/" + gameID + "/useKingTracker", value);
+}
+
+//king chooses team with app
+function toggleKingChooser(gameID, value) {
+	set(database, "/games/" + gameID + "/useKingChooser", value);
+}
+
+//use quest cards in app
+function toggleQuestCards(gameID, value) {
+	set(database, "/games/" + gameID + "/useQuestCards", value);
+}
+
+//use app to select roles
+function toggleRoleSelection(gameID, value) {
+	set(database, "/games/" + gameID + "/useRoleSelection", value);
+}
+
+//narrate in app
+function toggleNarration(gameID, value) {
+	set(database, "/games/" + gameID + "/useNarration", value);
+}
+
+// Role functions
+
+//Add role
+
+function addRole(gameID, newRoleTeam, oldRoles, newRole) {
+	// evil
+	if (newRoleTeam === false) {
+		set(ref(database, "/games/" + gameID + "/badRoles/"), [
+			...oldRoles,
+			newRole,
+		]);
+	} else {
+		//good
+		set(ref(database, "/games/" + gameID + "/goodRoles/"), [
+			...oldRoles,
+			newRole,
+		]);
+	}
+}
+
+//Remove role
+function removeRole(gameID, removeRoleTeam, oldRoles, removedRole) {
+	for (let i = 0; i < oldRoles.length; i++) {
+		if (oldRoles[i] === removedRole) {
+			oldRoles.splice(i, 1);
+			break;
+		}
+	}
+	if (removeRoleTeam === false) {
+		//bad
+		set(ref(database, "/games/" + gameID + "/badRoles/"), oldRoles);
+	} else {
+		//good
+		set(ref(database, "/games/" + gameID + "/goodRoles/"), oldRoles);
+	}
+}
+
 const apiFunctions = {
 	createGameLobby,
 	loadGameLobby,
 	joinGameLobby,
+	addRole,
+	removeRole,
+	toggleLady,
+	toggleNarration,
+	toggleRoleSelection,
+	toggleKingTracker,
+	toggleQuestCards,
+	toggleKingChooser,
 };
 
 export default apiFunctions;

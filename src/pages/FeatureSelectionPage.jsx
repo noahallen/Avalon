@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import ToggleSlider from "../components/ToggleSlider";
-
+import apiFunctions from "../firebase/api";
+// lady
+// kingChoose
+// kingTracking
+// narration
+// roleDist
+// questCards
+//
 const FeatureSelectionPage = () => {
 	const [roleDistribution, setRoleDistribution] = useState(false);
 	const [narrationInfo, setNarrationInfoToggle] = useState(false);

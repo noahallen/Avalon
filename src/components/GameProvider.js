@@ -41,6 +41,17 @@ export const GameContextProvider = ({ children }) => {
 		EvilMessenger: "Evil Messenger",
 	};
 
+	const gamePhases = {
+		WaitingRoom: "WR",
+		RoleEdit: "RE",
+		TeamSelection: "TS",
+		TeamSelectionVote: "VOTE",
+		TeamSelectionReveal: "REV",
+		MissionRun: "MR",
+		MissionReveal: "MREV",
+		Lady: "LAD",
+	};
+
 	return (
 		<GameContext.Provider
 			value={{
