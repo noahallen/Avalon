@@ -4,7 +4,7 @@
 	/* Text Colors */
 	--text-header: rgb(255, 230, 0);
 	--text-primary: #fff;
-	--text-seconadry: #f46036;
+	--text-secondary: #f46036;
 
 	/* Background Colors */
 	--background-1: #171123;
@@ -16,19 +16,20 @@
 	--error: #ac0404;
 	--success: #4caf50;
 
-	background-image: url("./res/Wall.png");
-	background-repeat: repeat;
-	background-size: contain;
+	background-image: url("./res/Castle.png"), url("./res/Wall.png");
+	background-repeat: no-repeat, repeat;
+	background-size: 17rem, contain;
+	background-position:
+		bottom left,
+		top left;
 	overflow: hidden;
-	background-position: center;
 }
-
+html,
 body {
-	background-image: url("./res/Wall.png");
-	background-repeat: repeat;
-	background-size: contain;
-	overflow: hidden;
-	background-position: center;
+	min-height: 100vh;
+}
+/* Media query for screens less than 600px wide */
+@media (min-width: 600px) {
 }
 
 label,
@@ -77,21 +78,18 @@ form button {
 	padding-right: 20px;
 }
 
-
 .page-header {
 	text-align: center;
-	
+
 	/* this is for the blue bar behind the avalon text */
 	/* background-color: var(--background-3); */
 
 	color: var(--text-header);
-	font-size: 4.5em;	
-   
+	font-size: 4.5em;
+
 	text-shadow: 3px 3px black;
 
 	font-family: "Old Standard TT", serif;
-
-
 }
 
 /* below was previously here */

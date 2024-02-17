@@ -23,6 +23,7 @@ const AvalonHeader = () => {
 					></feGaussianBlur>
 					<feMerge>
 						<feMergeNode in="coloredBlur"></feMergeNode>
+
 						<feMergeNode in="SourceGraphic"></feMergeNode>
 					</feMerge>
 				</filter>
@@ -35,7 +36,7 @@ const AvalonHeader = () => {
 			/>
 			<text
 				style={{
-					fontSize: "6em",
+					fontSize: "7em",
 					fontWeight: "bold",
 					fill: "#FBC02D",
 					filter: "url(#neon-effect)",
