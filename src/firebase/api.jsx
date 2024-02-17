@@ -171,10 +171,11 @@ function loadFeatureSelection(
 			}
 		},
 	);
-	if (!("featureSelectionListener" in listeners)) {
-		listeners.featureSelectionListener = featureSelectionListener;
-		setListeners(listeners);
-	}
+
+	setListeners({
+		...listeners,
+		featureSelectionListener: featureSelectionListener,
+	});
 }
 function setFeatureSelection(gameID, value) {
 	set(ref(database, "/games/" + gameID + "/featureSettings"), value);
