@@ -14,6 +14,25 @@
 	}
 }
 
+.members-list {
+	list-style-type: none;
+	padding: 0;
+	background-color: beige;
+	/* Make this div only take up 70% of the width of the screen */
+	width: 70%;
+	/* Center the div */
+	margin: auto;
+	/* Make sure each item rendered in the  */
+}
+
+.small-gear-image {
+	width: 2em;
+	height: 2em;
+	/* Make this small-gear-image such that it can render next to other objects */
+	margin-right: 0.5em;
+	display: flex;
+}
+
 .App-header {
 	background-color: #282c34;
 	min-height: 100vh;

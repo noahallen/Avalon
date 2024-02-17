@@ -8,14 +8,14 @@ const JoinBox = (props) => {
 	const handleCreate = async (e) => {
 		e.preventDefault();
 		navigate("/enterName", {
-			state: { isCreate: true, gameID: "PLACEHOLDER" },
+			state: { isCreate: true, roomId: "PLACEHOLDER" },
 		});
 	};
 
 	const handleJoin = async (e) => {
 		e.preventDefault();
 		navigate("/enterName", {
-			state: { isCreate: false, gameID: inputValue },
+			state: { isCreate: false, roomId: inputValue },
 		});
 	};
 

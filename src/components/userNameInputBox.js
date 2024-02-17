@@ -8,7 +8,7 @@ import apiFunctions from "../firebase/api";
 const UserNameInputBox = (props) => {
 	const shouldUseAuth = props.shouldUseAuth;
 	const isCreate = props.isCreate;
-	const roomId = props.gameID;
+	const roomId = props.roomId;
 	const [isAuthCompleted, setIsAuthCompleted] = useState(false);
 	const {
 		setPlayerState,
@@ -68,6 +68,15 @@ const UserNameInputBox = (props) => {
 				roomId,
 			);
 			if (joinResponse === 1) {
+				setGameID(roomId);
+				navigate("/waiting-room", {
+					state: { isAdmin: isCreate, gameID: gameID },
+				});
+			} else if (joinResponse === 0) {
+				alert("Game is full");
+			} else if (joinResponse === 3) {
+				alert("Game does not exist");
+			} else if (joinResponse === 2) {
 				setGameID(roomId);
 				navigate("/waiting-room", {
 					state: { isAdmin: isCreate, gameID: gameID },

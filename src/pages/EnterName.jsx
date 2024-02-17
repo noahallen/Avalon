@@ -4,12 +4,11 @@ import { useLocation } from "react-router-dom";
 
 const EnterName = () => {
 	const location = useLocation();
-	console.log(location);
 	return (
 		<div>
 			<UserNameInputBox
 				shouldUseAuth={false}
-				roomId={location.state.gameID}
+				roomId={location.state.roomId}
 				isCreate={location.state.isCreate}
 			/>
 		</div>
