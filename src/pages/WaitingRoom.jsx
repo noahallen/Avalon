@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import QRCodeComponent from "../components/QRCode.js";
 import gear from "../res/Gear.png";
 import FeatureSelectionPage from "./FeatureSelectionPage.jsx";
+import scroll from "../res/Scroll.png";
 
 const WaitingRoom = () => {
 	const [popupState, setPopupState] = useState(false);
@@ -28,6 +29,11 @@ const WaitingRoom = () => {
 						<QRCodeComponent code={gameID} />
 						<h3>Members: </h3>
 						<div className="members-list">
+							<img
+								src={scroll}
+								alt="scroll"
+								className="scrollList"
+							/>
 							{playerState
 								? Object.keys(playerState).map((key) => (
 										<div id={toString(key)}>

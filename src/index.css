@@ -28,6 +28,7 @@ html,
 body {
 	min-height: 100vh;
 }
+
 /* Media query for screens less than 600px wide */
 @media (min-width: 600px) {
 }
