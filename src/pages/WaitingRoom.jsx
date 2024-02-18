@@ -10,12 +10,12 @@ const WaitingRoom = () => {
 	const [popupState, setPopupState] = useState(false);
 	const location = useLocation();
 	const isAdmin = location ? location.state.isAdmin : undefined;
+	const { playerState, gameID, name } = useContext(GameContext);
 
 	const gearOnClick = () => {
 		setPopupState(true);
 	};
 
-	const { playerState, gameID, name } = useContext(GameContext);
 	if (isAdmin === null || isAdmin === undefined) {
 		return <Navigate to={"/"} />;
 	} else {

@@ -45,6 +45,20 @@ function makeid(length) {
 	return result;
 }
 
+function shuffle(array) {
+	let currentIndex = array.length,
+		randomIndex;
+	while (currentIndex != 0) {
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+		[array[currentIndex], array[randomIndex]] = [
+			array[randomIndex],
+			array[currentIndex],
+		];
+	}
+	return array;
+}
+
 //Game creation functions
 
 function createGameLobby(
@@ -226,6 +240,36 @@ const apiFunctions = {
 	removeRole,
 	setFeatureSelection,
 	loadFeatureSelection,
+	assignRoles,
 };
+
+// Call assignRoles like this:
+//const { gameID, selectedGoodRoles, selectedEvilRoles } = useContext(GameContext);
+// const assignRoleOnClick = () => {
+//     const combinedSelectedRoles =
+//         selectedGoodRoles.concat(selectedEvilRoles);
+
+//     apiFunctions.assignRoles(combinedSelectedRoles, gameID);
+// };
+
+async function assignRoles(roles, gameId) {
+	const dbref = ref(database);
+
+	const shuffledRoles = shuffle(roles);
+	let path = "/games/" + gameId + "/players/";
+	let playerObjects;
+	await get(child(dbref, path)).then((snapshot) => {
+		playerObjects = snapshot.val();
+	});
+
+	const players = Object.values(playerObjects);
+
+	for (let player of players) {
+		player.role = shuffledRoles.pop();
+	}
+
+	await set(ref(database, "/games/" + gameId + "/players/"), players);
+	return 1;
+}
 
 export default apiFunctions;
