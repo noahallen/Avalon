@@ -1,7 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Old+Standard+TT&display=swap");
+
 :root {
 	/* Text Colors */
+	--text-header: rgb(255, 230, 0);
 	--text-primary: #fff;
-	--text-seconadry: #f46036;
+	--text-secondary: #f46036;
 
 	/* Background Colors */
 	--background-1: #171123;
@@ -12,6 +15,22 @@
 	/* General Colors */
 	--error: #ac0404;
 	--success: #4caf50;
+
+	background-image: url("./res/Castle.png"), url("./res/Wall.png");
+	background-repeat: no-repeat, repeat;
+	background-size: 17rem, contain;
+	background-position:
+		bottom left,
+		top left;
+	overflow: hidden;
+}
+html,
+body {
+	min-height: 100vh;
+}
+
+/* Media query for screens less than 600px wide */
+@media (min-width: 600px) {
 }
 
 label,
@@ -62,8 +81,16 @@ form button {
 
 .page-header {
 	text-align: center;
-	background-color: var(--background-3);
-	color: var(--text-primary);
+
+	/* this is for the blue bar behind the avalon text */
+	/* background-color: var(--background-3); */
+
+	color: var(--text-header);
+	font-size: 4.5em;
+
+	text-shadow: 3px 3px black;
+
+	font-family: "Old Standard TT", serif;
 }
 
 /* below was previously here */

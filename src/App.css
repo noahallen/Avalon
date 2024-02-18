@@ -17,12 +17,31 @@
 .members-list {
 	list-style-type: none;
 	padding: 0;
-	background-color: beige;
+	/* background-image: url("./res/Scroll.png"); */
+	/* background-repeat: no-repeat; */
+	/* background-color: beige; */
 	/* Make this div only take up 70% of the width of the screen */
 	width: 70%;
 	/* Center the div */
-	margin: auto;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2rem;
+	position: relative;
+
 	/* Make sure each item rendered in the  */
+}
+
+.scrollList {
+	margin-top: -6.3em;
+	height: 30rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: -1;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .small-gear-image {
