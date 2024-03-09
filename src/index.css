@@ -123,3 +123,15 @@ input.error {
 	border: 2px solid var(--error);
 	font-family: "Roboto";
 }
+
+.evil-roles-list {
+	display: block;
+}
+.good-roles-list {
+	display: block;
+}
+.container-roles {
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+}
