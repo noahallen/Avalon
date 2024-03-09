@@ -28,18 +28,23 @@ const JoinBox = (props) => {
 	return (
 		<div className="box-input">
 			<form onSubmit={handleJoin}>
-				<h3>Join the Resistance:</h3>
+				<h3 style={{ fontFamily: "Georgia" }}>Join the Resistance:</h3>
 				<input
 					type="text"
 					placeholder="Enter 6 digit room code"
 					value={inputValue}
 					onChange={handleChange}
 				/>
-				<button disabled={inputValue.length < 6}>Join!</button>
+				<button
+					disabled={inputValue.length < 6}
+					className="join-button"
+				>
+					Join!
+				</button>
 			</form>
-			<h2>OR</h2>
+			<h2 style={{ fontFamily: "Georgia" }}>OR</h2>
 			<form onSubmit={handleCreate}>
-				<button>Create a room</button>
+				<button className="create-room-button">Create a room</button>
 			</form>
 		</div>
 	);

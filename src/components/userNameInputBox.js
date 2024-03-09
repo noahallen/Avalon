@@ -91,7 +91,7 @@ const UserNameInputBox = (props) => {
 	return (
 		<div className="box-input">
 			<form onSubmit={handleSubmit}>
-				<h3>Enter Your Username:</h3>
+				<h3 style={{ fontFamily: "Georgia" }}>Enter Your Username:</h3>
 				<input
 					type="text"
 					placeholder="Enter your username here"
@@ -107,7 +107,9 @@ const UserNameInputBox = (props) => {
 					isAuthCompleted={isAuthCompleted}
 					setIsAuthCompleted={setIsAuthCompleted}
 				/>
-				<button disabled={isButtonDisabled}>Continue</button>
+				<button disabled={isButtonDisabled} className="continue-button">
+					Continue
+				</button>
 			</form>
 		</div>
 	);

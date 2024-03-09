@@ -53,7 +53,7 @@ input:checked + .slider:before {
 }
 
 :root {
-	--slider-checked-background-color: darkred;
+	--slider-checked-background-color: rgb(221, 166, 47);
 }
 
 input:checked + .slider {

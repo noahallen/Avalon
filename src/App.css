@@ -14,6 +14,65 @@
 	}
 }
 
+.box-input {
+	background-color: rgba(
+		117,
+		56,
+		45,
+		0.961
+	); /* Change the background color */
+	padding: 20px;
+	border-radius: 30px; /* Adds rounded corners if desired */
+	margin-top: 5em;
+}
+
+.join-button {
+	background-color: #927543; /* Change to your preferred color */
+}
+
+.create-room-button {
+	background-color: #927543;
+}
+
+.continue-button {
+	background-color: #927543;
+}
+
+.welcome-message {
+	text-align: center;
+	display: block; /* Stack the elements on smaller screens */
+	margin: 0.5rem auto; /* Center the elements */
+	width: fit-content;
+}
+
+.welcome-title {
+	background-color: #b8955a;
+	color: white;
+	padding: 0.3rem;
+	display: inline-block;
+	margin: 0.5rem 0;
+	font-family: "Georgia", serif;
+	font-size: 2em;
+	font-weight: bold;
+	margin-bottom: 0.2em;
+	border-radius: 15px;
+}
+.game-id {
+	background-color: #b8955a;
+	color: white;
+	padding: 0.2rem;
+	display: inline-block;
+	margin: 0.2rem 0;
+	font-family: "Georgia", serif;
+	font-size: 1.5rem;
+	font-weight: lighter;
+	margin-bottom: 2em;
+	display: block; /* Stack the elements on smaller screens */
+	margin: 0.5rem auto; /* Center the elements */
+	width: fit-content;
+	border-radius: 15px;
+}
+
 .members-list {
 	list-style-type: none;
 	padding: 0;
@@ -21,19 +80,20 @@
 	/* background-repeat: no-repeat; */
 	/* background-color: beige; */
 	/* Make this div only take up 70% of the width of the screen */
-	width: 70%;
+	width: auto;
 	/* Center the div */
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 2rem;
+	margin-top: 3rem;
 	position: relative;
 
 	/* Make sure each item rendered in the  */
 }
 
 .scrollList {
-	margin-top: -6.3em;
-	height: 30rem;
+	margin-top: -7.5em;
+	width: 15em;
+	height: 35rem;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -44,12 +104,18 @@
 	margin-right: auto;
 }
 
+.member-name {
+	font-family: "Courier";
+	font-weight: 800;
+	font-size: 1.5rem;
+	color: #000000;
+}
 .small-gear-image {
-	width: 2em;
-	height: 2em;
+	width: 3em;
+	height: 3em;
 	/* Make this small-gear-image such that it can render next to other objects */
-	margin-right: 0.5em;
-	display: flex;
+	margin-right: 20rem;
+	/* display: l; */
 }
 
 .App-header {
