@@ -232,6 +232,14 @@ function removeRole(gameID, removeRoleTeam, oldRoles, removedRole) {
 	}
 }
 
+//Team vote functions
+
+function setPlayerVoteListener(gameID, setValue, listeners, setListeners) {}
+
+function playerVote(gameID, userName, value) {
+	set(ref());
+}
+
 const apiFunctions = {
 	createGameLobby,
 	loadGameLobby,

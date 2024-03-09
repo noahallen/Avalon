@@ -18,6 +18,7 @@ import PrivateRoute from "./PrivateRoute";
 import TestFirebasePage from "../pages/TestFirebasePage";
 import EnterName from "../pages/EnterName";
 import WaitingRoom from "../pages/WaitingRoom";
+import GamePage from "../pages/GamePage";
 const Routing = (props) => {
 	return (
 		<Router>
@@ -72,6 +73,7 @@ const Routing = (props) => {
 					path="/featureSelection"
 					element={<FeatureSelectionPage />}
 				/>
+				<Route exact path="/game" element={<GamePage />} />
 			</Routes>
 		</Router>
 	);
