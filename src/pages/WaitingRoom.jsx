@@ -23,11 +23,15 @@ const WaitingRoom = () => {
 		return (
 			<div>
 				{!popupState && (
-					<div>
-						<h1> {name ? "Welcome " + name : ""}</h1>
-						<h3>Game ID: {gameID}</h3>
-						<QRCodeComponent code={gameID} />
-						<h3>Members: </h3>
+					<div className="welcome-message">
+						<h1 className="welcome-title">
+							{" "}
+							{name ? "Welcome " + name : ""}
+						</h1>
+						<h3 className="game-id">Room Code: {gameID}</h3>
+						<div style={{ textAlign: "center", marginTop: "1em" }}>
+							<QRCodeComponent code={gameID} />
+						</div>
 						<div className="members-list">
 							<img
 								src={scroll}
@@ -36,22 +40,27 @@ const WaitingRoom = () => {
 							/>
 							{playerState
 								? Object.keys(playerState).map((key) => (
-										<div id={toString(key)}>
+										<div
+											id={toString(key)}
+											className="member-name"
+										>
 											{playerState[key].displayName}
 										</div>
 									))
 								: ""}
 						</div>
 						<div>
-							{isAdmin ? (
-								<a onClick={gearOnClick}>
-									<img
-										src={gear}
-										alt="settings"
-										className="small-gear-image"
-									/>
-								</a>
-							) : null}
+							{isAdmin && (
+								<>
+									<a onClick={gearOnClick}>
+										<img
+											src={gear}
+											alt="settings"
+											className="small-gear-image"
+										/>
+									</a>
+								</>
+							)}
 						</div>
 					</div>
 				)}

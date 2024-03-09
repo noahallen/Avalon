@@ -5,7 +5,7 @@ const AvalonHeader = () => {
 	return (
 		<svg
 			width="100%"
-			height="200px"
+			height="100px"
 			viewBox="0 0 600 180"
 			style={{ display: "block", margin: "auto" }}
 		>

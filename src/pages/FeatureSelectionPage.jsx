@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import ToggleSlider from "../components/ToggleSlider";
 import apiFunctions from "../firebase/api";
 import { GameContext } from "../components/GameProvider.js";
+import "../style/toggleheader.css";
 
 // useLady
 // useKingChoose
@@ -83,29 +84,26 @@ const FeatureSelectionPage = (props) => {
 
 	return (
 		<div>
-			<header>
-				<h1>Feature Selection Page</h1>
-			</header>
 			<main>
-				<h3 className="header">Role Distribution</h3>
+				<h3 className="toggle-header">Role Distribution</h3>
 				<ToggleSlider
 					id="roleDistribution"
 					isChecked={roleDistribution}
 					handleToggle={handleRoleDistributionToggle}
 				/>
-				<h3 className="header">Narration Info</h3>
+				<h3 className="toggle-header">Narration Info</h3>
 				<ToggleSlider
 					id="narrationInfo"
 					isChecked={narrationInfo}
 					handleToggle={handleNarrationInfoToggle}
 				/>
-				<h3 className="header">Play with Lady</h3>
+				<h3 className="toggle-header">Play with Lady</h3>
 				<ToggleSlider
 					id="playWithLady"
 					isChecked={playWithLady}
 					handleToggle={handlePlayWithLadyToggle}
 				/>
-				<h3 className="header">Keep Track of King</h3>
+				<h3 className="toggle-header">Keep Track of King</h3>
 				<ToggleSlider
 					id="kingTracking"
 					isChecked={kingTracking}
@@ -114,7 +112,9 @@ const FeatureSelectionPage = (props) => {
 				{/* Conditionally render the sub toggle button TODO remove padding */}
 				{kingTracking && (
 					<div className="sub-toggle">
-						<h3 className="header">King Chooses Quest Players</h3>
+						<h3 className="toggle-header">
+							King Chooses Quest Players
+						</h3>
 						<ToggleSlider
 							id="kingChoosesQuestPlayers"
 							isChecked={kingChoosesQuestPlayers}
@@ -122,13 +122,13 @@ const FeatureSelectionPage = (props) => {
 						/>
 					</div>
 				)}
-				<h3 className="header">Quest Cards</h3>
+				<h3 className="toggle-header">Quest Cards</h3>
 				<ToggleSlider
 					id="questCards"
 					isChecked={questCards}
 					handleToggle={handleQuestCards}
 				/>
-				<h3 className="header">controls</h3>
+				<h3 className="toggle-header"></h3>
 				<button onClick={saveFeatures}>Save</button>
 				<button
 					onClick={() => {
