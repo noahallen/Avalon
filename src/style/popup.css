@@ -1,0 +1,36 @@
+.tabs {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	background-color: #111; /* Dark background for the tab buttons */
+	border-top: 2px solid darkred;
+}
+
+.tabs button {
+	padding: 10px 20px;
+	font-size: 16px;
+	background: transparent;
+	color: gold; /* Gold text color for the buttons */
+	border: none; /* Removes the border */
+	outline: none;
+}
+
+.popup {
+	position: fixed;
+	width: 80%;
+	height: 50%;
+	top: 25%; /* Center the popup */
+	left: 10%;
+	background: white;
+	border: 1px solid #ccc;
+	z-index: 10;
+	padding: 20px;
+}
+
+.popup button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}

@@ -12,6 +12,7 @@ import FeatureSelectionPage from "../pages/FeatureSelectionPage";
 import RoleSelectionPage from "../pages/RoleSelectionPage";
 import RoomCreationPage from "../pages/RoomCreationPage";
 import JoinIntermediate from "../pages/JoinIntermediate";
+import MainGamePage from "../pages/MainGamePage";
 
 import TestState from "../pages/TestStatePage";
 import PrivateRoute from "./PrivateRoute";
@@ -72,6 +73,7 @@ const Routing = (props) => {
 					path="/featureSelection"
 					element={<FeatureSelectionPage />}
 				/>
+				<Route exact path="/game" element={<MainGamePage />} />
 			</Routes>
 		</Router>
 	);
