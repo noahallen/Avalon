@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import { apiFunctions } from "../firebase/api.jsx";
+import { objectMethod } from "@babel/types";
+import { object } from "prop-types";
 
 const RoleSelectionPage = () => {
 	const { goodRoles, evilRoles } = useContext(GameContext);
@@ -9,56 +11,39 @@ const RoleSelectionPage = () => {
 
 	const [currentRoles, setCurrentRoles] = useState([]);
 
-	const handleOnClick = (key) => {
-		console.log(`key ${key}`);
-		if (key in currentRoles) {
-			console.log(`This was already selected!`);
-			if (key === `Servant` || key === `Minion`) {
-			}
-		} else {
-			console.log(`${key} was added!`);
-			// If the current role isn't in the selected roles at all
-			setCurrentRoles((currentRolesSelected) => [
-				...currentRolesSelected,
-				key,
-			]);
-		}
+	// console.log(Object.keys(goodRoles));
 
-		console.log(`currentIDs: ${currentRoles}`);
+	const handleOnClick = (key) => {
+		setCurrentRoles();
+		console.log(`key ${key}`);
+		console.log(`current roles ${currentRoles}`);
 	};
+
+	let goodRoleButtons = [];
+	let evilRoleButtons = [];
+	// create the buttons for each good role
+	for (let role in goodRoles) {
+		goodRoleButtons.push(
+			<div onClick={() => handleOnClick(role)}>{goodRoles[role]}</div>,
+		);
+	}
+	// create the buttons for each bad role
+	for (let role in evilRoles) {
+		evilRoleButtons.push(
+			<div onClick={() => handleOnClick(role)}>{evilRoles[role]}</div>,
+		);
+	}
 
 	return (
 		<div className="container-roles">
 			<div className="good-roles-list">
 				<h3>Good Roles</h3>
-				{goodRoles
-					? Object.keys(goodRoles).map((key) => (
-							<div
-								// Pass in the key of the clicked character
-								onClick={() => handleOnClick(key)}
-								key={goodRoles[key]}
-								id={goodRoles[key]}
-							>
-								{goodRoles[key]}
-							</div>
-						))
-					: ""}
+				{goodRoleButtons}
 			</div>
 
 			<div className="evil-roles-list">
 				<h3>Evil Roles</h3>
-				{evilRoles
-					? Object.keys(evilRoles).map((key) => (
-							<div
-								// Pass in the key of the clicked character
-								onClick={() => handleOnClick(key)}
-								key={evilRoles[key]}
-								id={evilRoles[key]}
-							>
-								{evilRoles[key]}
-							</div>
-						))
-					: ""}
+				{evilRoleButtons}
 			</div>
 
 			<div className="current-roles-list">
