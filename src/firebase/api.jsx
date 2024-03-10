@@ -1,16 +1,5 @@
-import React from "react";
 import { initializeApp } from "firebase/app";
-import {
-	getDatabase,
-	ref,
-	onValue,
-	get,
-	child,
-	set,
-	update,
-	off,
-} from "firebase/database";
-import { getAuth, signInWithRedirect } from "firebase/auth";
+import { getDatabase, ref, onValue, get, child, set } from "firebase/database";
 
 const firebaseConfig = {
 	apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -28,7 +17,7 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(app);
-const auth = getAuth(app);
+// const auth = getAuth(app);
 
 //helper functions
 function makeid(length) {
@@ -48,7 +37,7 @@ function makeid(length) {
 function shuffle(array) {
 	let currentIndex = array.length,
 		randomIndex;
-	while (currentIndex != 0) {
+	while (currentIndex !== 0) {
 		randomIndex = Math.floor(Math.random() * currentIndex);
 		currentIndex--;
 		[array[currentIndex], array[randomIndex]] = [

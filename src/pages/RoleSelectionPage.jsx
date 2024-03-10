@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { GameContext } from "../components/GameProvider.js";
 
 const RoleSelectionPage = () => {
-	const { goodRoles, evilRoles } = useContext(GameContext);
-	const userName1 = "hi";
+	const { goodRoles } = useContext(GameContext);
 	// addPlayerRole(userName1, goodRoles.Merlin);
 
 	return (

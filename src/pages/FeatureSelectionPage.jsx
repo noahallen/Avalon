@@ -40,7 +40,13 @@ const FeatureSelectionPage = (props) => {
 				},
 			);
 		}
-	}, []);
+	}, [
+		gameID,
+		listeners,
+		props.isAdmin,
+		setFeatureSelectionSettings,
+		setListeners,
+	]);
 
 	const handleRoleDistributionToggle = () => {
 		setRoleDistribution(!roleDistribution);
@@ -128,8 +134,8 @@ const FeatureSelectionPage = (props) => {
 					isChecked={questCards}
 					handleToggle={handleQuestCards}
 				/>
-				<h3 className="toggle-header"></h3>
-				<button onClick={saveFeatures}>Save</button>
+				<h3 className="toggle-header">Save</h3>
+				<button onClick={saveFeatures}></button>
 				<button
 					onClick={() => {
 						props.setPopupState(false);

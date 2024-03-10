@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import SampleAuth from "./sampleAuth";
 import { GameContext } from "./GameProvider";
-import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import apiFunctions from "../firebase/api";
 
@@ -21,7 +20,6 @@ const UserNameInputBox = (props) => {
 		setUserName,
 		setListeners,
 		gameID,
-		playerState,
 	} = useContext(GameContext);
 
 	const navigate = useNavigate();

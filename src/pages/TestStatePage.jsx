@@ -148,17 +148,19 @@ const TestState = () => {
 			<br></br>
 			Current roster of players:{" "}
 			<pre>
-				{playerState != {} ? JSON.stringify(playerState, null, 2) : ""}
+				{Object.keys(playerState).length !== 0
+					? JSON.stringify(playerState, null, 2)
+					: ""}
 			</pre>
 			Current good roles:{" "}
 			<pre>
-				{selectedGoodRoles != {}
+				{Object.keys(selectedGoodRoles).length !== 0
 					? JSON.stringify(selectedGoodRoles, null, 2)
 					: ""}
 			</pre>
 			Current evil roles:{" "}
 			<pre>
-				{selectedEvilRoles != {}
+				{Object.keys(selectedEvilRoles).length !== 0
 					? JSON.stringify(selectedEvilRoles, null, 2)
 					: ""}
 			</pre>

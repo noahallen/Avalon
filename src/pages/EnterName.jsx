@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import UserNameInputBox from "../components/userNameInputBox";
 import { useLocation } from "react-router-dom";
 
