@@ -16,7 +16,7 @@ jobs:
             - run: npm run build
             - uses: FirebaseExtended/action-hosting-deploy@v0
               with:
-                  repoToken: "${{ .env }}"
+                  repoToken: "${{ secrets.GITHUB_TOKEN }}"
                   firebaseServiceAccount: "${{ .env }}"
                   channelId: live
                   projectId: avalon-cfacb
