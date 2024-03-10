@@ -95,6 +95,9 @@ function createGameLobby(
 	const response = {};
 	response.listeners = listeners;
 	response.gameID = gameID;
+	localStorage.setItem("gameID", JSON.stringify(gameID));
+	localStorage.setItem("userName", JSON.stringify(userName));
+	localStorage.setItem("displayName", JSON.stringify(displayName));
 	return response;
 }
 
@@ -165,6 +168,9 @@ async function joinGameLobby(userName, displayName, gameID) {
 		displayName: displayName,
 		role: "",
 	});
+	localStorage.setItem("gameID", JSON.stringify(gameID));
+	localStorage.setItem("userName", JSON.stringify(userName));
+	localStorage.setItem("displayname", JSON.stringify(displayName));
 	return 1;
 }
 
@@ -231,17 +237,9 @@ function removeRole(gameID, removeRoleTeam, oldRoles, removedRole) {
 		set(ref(database, "/games/" + gameID + "/goodRoles/"), oldRoles);
 	}
 }
-
-const apiFunctions = {
-	createGameLobby,
-	loadGameLobby,
-	joinGameLobby,
-	addRole,
-	removeRole,
-	setFeatureSelection,
-	loadFeatureSelection,
-	assignRoles,
-};
+function logOut() {
+	localStorage.clear();
+}
 
 // Call assignRoles like this:
 //const { gameID, selectedGoodRoles, selectedEvilRoles } = useContext(GameContext);
@@ -271,5 +269,17 @@ async function assignRoles(roles, gameId) {
 	await set(ref(database, "/games/" + gameId + "/players/"), players);
 	return 1;
 }
+
+const apiFunctions = {
+	createGameLobby,
+	loadGameLobby,
+	joinGameLobby,
+	addRole,
+	removeRole,
+	setFeatureSelection,
+	loadFeatureSelection,
+	assignRoles,
+	logOut,
+};
 
 export default apiFunctions;
