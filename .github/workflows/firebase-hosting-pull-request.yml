@@ -2,13 +2,7 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on PR
-on:
-    push:
-        branches:
-            - "*"
-        pull_request:
-            branches:
-                - "*"
+"on": pull_request
 permissions:
     checks: write
     contents: read
@@ -25,5 +19,5 @@ jobs:
             - uses: FirebaseExtended/action-hosting-deploy@v0
               with:
                   repoToken: "${{ secrets.GITHUB_TOKEN }}"
-                  firebaseServiceAccount: "${{ .env }}"
+                  firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_AVALON_CFACB }}"
                   projectId: avalon-cfacb
