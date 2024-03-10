@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { GameContext } from "../components/GameProvider.js";
 import { Navigate } from "react-router-dom";
@@ -49,19 +49,14 @@ const WaitingRoom = () => {
 									))
 								: ""}
 						</div>
-						<div>
-							{isAdmin && (
-								<>
-									<a onClick={gearOnClick}>
-										<img
-											src={gear}
-											alt="settings"
-											className="small-gear-image"
-										/>
-									</a>
-								</>
-							)}
-						</div>
+						{isAdmin && (
+							<img
+								src={gear}
+								alt="settings"
+								className="small-gear-image"
+								onClick={gearOnClick}
+							/>
+						)}
 					</div>
 				)}
 				{popupState && isAdmin && (

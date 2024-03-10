@@ -28,7 +28,7 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(app);
-const auth = getAuth();
+const auth = getAuth(app);
 
 //helper functions
 function makeid(length) {
