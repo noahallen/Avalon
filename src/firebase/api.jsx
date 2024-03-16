@@ -256,6 +256,22 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 	set(ref(database, "/games/" + gameID + "/gameState"), "TS");
 }
 
+//debug functions start
+function addMembers(gameID, number) {
+	const baseName = "test user ";
+
+	for (let i = 0; i < number; i++) {
+		set(
+			ref(
+				database,
+				"/games/" + gameID + "/players/" + baseName + i.toString(),
+			),
+			{ displayName: baseName + i.toString(), role: "", index: i + 1 },
+		);
+	}
+}
+//debug functions end
+
 const apiFunctions = {
 	setRoleListener,
 	createGameLobby,
@@ -269,6 +285,8 @@ const apiFunctions = {
 	voteCount,
 	beginGame,
 	setGameStateListen,
+	//debug functions below
+	addMembers,
 };
 
 // Call assignRoles like this:
