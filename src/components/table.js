@@ -54,6 +54,18 @@ const OvalSVG = () => {
 					[selection]: playerState[selection],
 					[clickedUserName]: playerState[clickedUserName],
 				});
+				apiFunctions.setPlayerField(
+					gameID,
+					selection,
+					"",
+					playerState[selection],
+				);
+				apiFunctions.setPlayerField(
+					gameID,
+					clickedUserName,
+					"",
+					playerState[clickedUserName],
+				);
 				setSelection("");
 			}
 		} else if (gameState === "TS" && playerState[userName]?.isKing) {
@@ -63,6 +75,12 @@ const OvalSVG = () => {
 				...playerState,
 				[clickedUserName]: playerState[clickedUserName],
 			});
+			apiFunctions.setPlayerField(
+				gameID,
+				clickedUserName,
+				"onTeam",
+				playerState[clickedUserName].onTeam,
+			);
 		} else if (gameState === "KS" && isAdmin) {
 			playerState[clickedUserName].isKing =
 				!playerState[clickedUserName].isKing;
@@ -70,6 +88,12 @@ const OvalSVG = () => {
 				...playerState,
 				[clickedUserName]: playerState[clickedUserName],
 			});
+			apiFunctions.setPlayerField(
+				gameID,
+				clickedUserName,
+				"",
+				playerState[clickedUserName],
+			);
 			apiFunctions.setGameState(gameID, "TS");
 		}
 	};

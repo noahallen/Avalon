@@ -169,6 +169,7 @@ async function joinGameLobby(userName, displayName, gameID) {
 		index: playerCount,
 		displayName: displayName,
 		role: "",
+		isKing: false,
 	});
 
 	await set(
@@ -223,7 +224,6 @@ function setRoleListener(gameID, setSelectedRoles) {
 	const listener = onValue(
 		ref(database, "/games/" + gameID + "/selectedRoles"),
 		(snapshot) => {
-			console.log(snapshot.val());
 			setSelectedRoles(snapshot.val());
 		},
 	);
@@ -261,8 +261,18 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 	setGameState(gameID, "OS");
 }
 
+function setPlayerField(gameID, userName, field, value) {
+	set(
+		ref(
+			database,
+			"/games/" + gameID + "/players/" + userName + "/" + field,
+		),
+		value,
+	);
+}
+
 //debug functions start
-function addMembers(gameID, number) {
+function addMembers(gameID, existing, number) {
 	const baseName = "test user ";
 
 	for (let i = 0; i < number; i++) {
@@ -271,10 +281,18 @@ function addMembers(gameID, number) {
 				database,
 				"/games/" + gameID + "/players/" + baseName + i.toString(),
 			),
-			{ displayName: baseName + i.toString(), role: "", index: i + 1 },
+			{
+				displayName: baseName + i.toString(),
+				role: "",
+				index: i + 1,
+				isKing: false,
+			},
 		);
 	}
-	set(ref(database, "/games/" + gameID + "/playerCount"), 1 + Number(number));
+	set(
+		ref(database, "/games/" + gameID + "/playerCount"),
+		existing + Number(number),
+	);
 }
 //debug functions end
 
@@ -292,6 +310,7 @@ const apiFunctions = {
 	beginGame,
 	setGameStateListen,
 	setGameState,
+	setPlayerField,
 	//debug functions below
 	addMembers,
 };
