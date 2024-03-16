@@ -1,6 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Old+Standard+TT&display=swap");
 
 :root {
+	/*  */
+	--selected-image: #ffffff;
+
 	/* Text Colors */
 	--text-header: rgb(255, 230, 0);
 	--text-primary: #fff;
@@ -122,4 +125,11 @@ div.error {
 input.error {
 	border: 2px solid var(--error);
 	font-family: "Roboto";
+}
+
+.icon-selected {
+	opacity: 1;
+	height: 64px;
+	width: 64px;
+	padding: 1em;
 }
