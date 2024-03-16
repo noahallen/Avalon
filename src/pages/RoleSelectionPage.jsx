@@ -7,6 +7,7 @@ const RoleSelectionPage = () => {
 	const { goodRoles, evilRoles, isAdmin, playerState, gameID, gameState } =
 		useContext(GameContext);
 	const [selectedRoles, setSelectedRoles] = useState([]);
+<<<<<<< HEAD
 	const [numBad, setNumBad] = useState(0);
 	const navigate = useNavigate();
 
@@ -43,13 +44,66 @@ const RoleSelectionPage = () => {
 	};
 
 	//0 for team is good, 1 is bad
+=======
+	const [numGood, setNumGood] = useState(0);
+	const [numEvil, setNumEvil] = useState(0);
+	const navigate = useNavigate();
+
+	function importAll(r) {
+		let images = {};
+		r.keys().forEach((item, index) => {
+			images[item.replace("./", "")] = r(item);
+		});
+		return images;
+	}
+	const characterImages = importAll(
+		require.context("../res", true, /\.(png|jpe?g|svg)$/),
+	);
+
+	const characterText = {
+		Merlin: "Knows Evil, must remain hidden",
+		Percival: "Knows Merlin",
+		"Loyal Servant of Arthur": "No special ability",
+		Troublemaker: "",
+		Cleric: "Secretly investigates the first Leader",
+		"Untrustworthy Servant":
+			"Appears Evil to Merlin, knows the Assassin can become Evil during the Recruitment stage",
+		"Good Lancelot": "Knows Evil Lancelot, or can switch allegiance",
+		"Good Sorcerer": "May play Magic",
+		"Good Rogue": "May play Rouge Success",
+		"Senior Messenger": "Knows Junior Messenger, may play Good Message",
+		"Junior Messenger": "May play Good Message",
+		Mordred: "Unknown to Merlin",
+		Morgana: "Appears as Merlin",
+		Oberon: "Unkownto Evil, does not know Evil",
+		Assassin: "May activate Assassination stage if three Quests succeed",
+		"Minion of Mordred": "No special ability",
+		Trickster: "May lie about loyalty",
+		Lunatic: "Must Fail every Quest",
+		Brute: "May Fail only the first three Quests",
+		Revealer: "Reveals loyalty after second failed quest",
+		"Evil Lancelot": "Knows Good Lancelot, or can switch allegiance",
+		"Evil Sorcerer": "May play Magic, may not play Fail",
+		"Evil Rogue":
+			"May play Rogue Fail, unknown to Evil, does not know Evil",
+		"Evil Messenger": "May play Evil Message",
+	};
+
+	//1 for team is good, 0 is bad
+>>>>>>> bc3e3e1 (Added images instead of buttons; fixed good and bad role count)
 	const RoleButtonClick = (val, team) => {
 		const indOf = selectedRoles.indexOf(val);
 
 		if (indOf === -1) {
 			setSelectedRoles([...selectedRoles, val]);
 			if (team) {
+<<<<<<< HEAD
 				setNumBad(numBad + 1);
+=======
+				setNumGood(numGood + 1);
+			} else {
+				setNumEvil(numEvil + 1);
+>>>>>>> bc3e3e1 (Added images instead of buttons; fixed good and bad role count)
 			}
 		} else {
 			setSelectedRoles([
@@ -58,7 +112,13 @@ const RoleSelectionPage = () => {
 			]);
 
 			if (team) {
+<<<<<<< HEAD
 				setNumBad(numBad - 1);
+=======
+				setNumGood(numGood - 1);
+			} else {
+				setNumEvil(numEvil - 1);
+>>>>>>> bc3e3e1 (Added images instead of buttons; fixed good and bad role count)
 			}
 		}
 		// apiFunctions.changeRoles(gameID, [
@@ -76,6 +136,7 @@ const RoleSelectionPage = () => {
 	return (
 		<div>
 			<h4>Role Selection</h4>
+<<<<<<< HEAD
 			{isAdmin && (
 				<div id={"RoleSelections"}>
 					{Object.values(goodRoles).map((val) => (
@@ -108,6 +169,40 @@ const RoleSelectionPage = () => {
 					)}
 				</div>
 			)}
+=======
+			<div id={"RoleSelections"}>
+				{Object.values(goodRoles).map((val) => (
+					<img
+						className="icon-selected"
+						src={characterImages[`${val}.png`]}
+						alt={val}
+						title={characterText[val]}
+						id={val}
+						key={val}
+						onClick={() => {
+							RoleButtonClick(val, 1);
+						}}
+					></img>
+				))}
+				{Object.values(evilRoles).map((val) => (
+					<img
+						className="icon-selected"
+						src={characterImages[`${val}.png`]}
+						alt={val}
+						title={characterText[val]}
+						id={val}
+						key={val}
+						onClick={() => {
+							RoleButtonClick(val, 0);
+						}}
+					></img>
+				))}
+			</div>
+			<h6>
+				Roles Selected: {numGood + numEvil} | Num Good: {numGood} | Num
+				Evil: {numEvil}
+			</h6>
+>>>>>>> bc3e3e1 (Added images instead of buttons; fixed good and bad role count)
 			<div id={"SelectedRoles"}>
 				{selectedRoles &&
 					selectedRoles.map((val) => <div key={val}>{val}</div>)}
