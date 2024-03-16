@@ -129,7 +129,19 @@ input.error {
 
 .icon-selected {
 	opacity: 1;
-	height: 64px;
-	width: 64px;
+	height: 5rem;
+	width: 5rem;
 	padding: 1em;
+	border-radius: 50%;
+	border: 1px solid transparent;
+	align-content: center;
+	border
+}
+
+#RoleSelections {
+	max-height: 600px; /* Adjust based on your needs */
+	overflow-y: auto; /* Enables vertical scrolling if content overflows */
+	display: flex; /* Adjust layout as needed, e.g., for a grid of icons */
+	flex-wrap: wrap; /* Allows items to wrap in the container */
+	gap: 15px; /* Optional: adds space between icons */
 }

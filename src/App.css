@@ -158,3 +158,40 @@ button:disabled:hover {
 button:disabled:focus {
 	outline: none;
 }
+
+.bn632-hover {
+	position: fixed;
+	left: 50%;
+	bottom: 2em;
+	width: 20rem;
+	font-size: 23px;
+	font-weight: 60;
+	color: #ffffff;
+	transform: translateX(-50%);
+	cursor: pointer;
+	/* margin: 20px; */
+	height: 45px;
+	text-align: center;
+	border: none;
+	background-size: 200% 100%;
+	border-radius: 50px;
+	moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
+	background-position: 100% 0;
+	moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
+	outline: none;
+	padding-bottom: 10px;
+	background-image: linear-gradient(
+		to right,
+		#f5ce62,
+		#e43603,
+		#49242f,
+		#bb4a16
+	);
+	box-shadow: 0 4px 15px 0 rgba(229, 66, 10, 0.75);
+}

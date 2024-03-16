@@ -121,7 +121,13 @@ const WaitingRoom = () => {
 											className="small-gear-image"
 										/>
 									</a>
-									<button onClick={moveOn}>Advance</button>
+
+									<button
+										className="bn632-hover"
+										onClick={moveOn}
+									>
+										Choose Roles
+									</button>
 								</>
 							)}
 						</div>
