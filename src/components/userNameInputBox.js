@@ -22,6 +22,7 @@ const UserNameInputBox = (props) => {
 		setListeners,
 		gameID,
 		playerState,
+		setIsAdmin,
 	} = useContext(GameContext);
 
 	const navigate = useNavigate();
@@ -46,6 +47,7 @@ const UserNameInputBox = (props) => {
 			);
 			setListeners(createResponse.listeners);
 			setGameID(createResponse.gameID);
+			setIsAdmin(true);
 			navigate("/waiting-room", {
 				state: { isAdmin: isCreate, gameID: gameID },
 			});
@@ -61,7 +63,6 @@ const UserNameInputBox = (props) => {
 					setSelectedEvilRoles,
 				),
 			);
-
 			const joinResponse = await apiFunctions.joinGameLobby(
 				userName,
 				name,

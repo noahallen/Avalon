@@ -85,6 +85,7 @@ function createGameLobby(
 			useRoleDist: false,
 			useQuestCards: false,
 		},
+		playerCount: 1,
 	});
 	const listeners = loadGameLobby(
 		gameID,
@@ -92,6 +93,7 @@ function createGameLobby(
 		setGoodRoles,
 		setBadRoles,
 	);
+
 	const response = {};
 	response.listeners = listeners;
 	response.gameID = gameID;
