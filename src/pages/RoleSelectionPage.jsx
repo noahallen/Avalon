@@ -8,6 +8,7 @@ const RoleSelectionPage = () => {
 		useContext(GameContext);
 	const [selectedRoles, setSelectedRoles] = useState([]);
 	const [numBad, setNumBad] = useState(0);
+	const [requiredBad, setRequiredBad] = useState(0);
 	const navigate = useNavigate();
 
 	function importAll(r) {
@@ -52,6 +53,15 @@ const RoleSelectionPage = () => {
 	useEffect(() => {
 		if (!isAdmin) {
 			apiFunctions.setRoleListener(gameID, setSelectedRoles);
+		} else {
+			const numPlayers = Object.keys(playerState).length;
+			if (numPlayers < 7) {
+				setRequiredBad(2);
+			} else if (numPlayers < 10) {
+				setRequiredBad(3);
+			} else {
+				setRequiredBad(4);
+			}
 		}
 	}, []);
 
@@ -149,12 +159,12 @@ const RoleSelectionPage = () => {
 							}}
 						></img>
 					))}
-					{selectedRoles.length ===
-						Object.keys(playerState).length && (
-						<div>
-							<button onClick={confirmRoles}>Confirm</button>
-						</div>
-					)}
+					{selectedRoles.length === Object.keys(playerState).length &&
+						numBad === requiredBad && (
+							<div>
+								<button onClick={confirmRoles}>Confirm</button>
+							</div>
+						)}
 				</div>
 			)}
 			<div id={"SelectedRoles"}>
