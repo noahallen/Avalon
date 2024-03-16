@@ -284,7 +284,7 @@ function addMembers(gameID, existing, number) {
 			{
 				displayName: baseName + i.toString(),
 				role: "",
-				index: i + 1,
+				index: i + existing,
 				isKing: false,
 			},
 		);
