@@ -207,7 +207,7 @@ function setFeatureSelection(gameID, value) {
 
 function setGameStateListen(gameID, setGameState, listeners, setListeners) {
 	const stateListener = onValue(
-		ref(database, "/games/" + "/gameState"),
+		ref(database, "/games/" + gameID + "/gameState"),
 		(snapshot) => {
 			setGameState(snapshot.val());
 		},

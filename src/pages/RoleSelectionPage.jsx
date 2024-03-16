@@ -84,7 +84,7 @@ const RoleSelectionPage = () => {
 					<button onClick={confirmRoles}>Confirm</button>
 				</div>
 			)}
-			<h6>Roles Selected: {numGood}</h6>
+			<h6>Roles Selected: {numBad}</h6>
 			<div id={"SelectedRoles"}>
 				{selectedRoles.map((val) => (
 					<div>{val}</div>
