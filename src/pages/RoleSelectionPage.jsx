@@ -4,17 +4,8 @@ import { useNavigate } from "react-router-dom";
 import apiFunctions from "../firebase/api.jsx";
 
 const RoleSelectionPage = () => {
-	const {
-		goodRoles,
-		evilRoles,
-		isAdmin,
-		playerState,
-		gameID,
-		gameState,
-		listeners,
-		setGameState,
-		setListeners,
-	} = useContext(GameContext);
+	const { goodRoles, evilRoles, isAdmin, playerState, gameID, gameState } =
+		useContext(GameContext);
 	const [selectedRoles, setSelectedRoles] = useState([]);
 	const [numBad, setNumBad] = useState(0);
 	const navigate = useNavigate();
@@ -23,6 +14,9 @@ const RoleSelectionPage = () => {
 		if (!isAdmin) {
 			apiFunctions.setRoleListener(gameID, setSelectedRoles);
 		}
+	}, []);
+
+	useEffect(() => {
 		if (gameState && gameState !== "RoleSelect") {
 			navigate("/game");
 		}
@@ -32,7 +26,6 @@ const RoleSelectionPage = () => {
 		let allowedBad;
 		const numPlayers = Object.keys(playerState).length;
 		if (selectedRoles.length != numPlayers) {
-			console.log("not enough roles");
 			return;
 		}
 		if (numPlayers < 7) {
@@ -43,7 +36,6 @@ const RoleSelectionPage = () => {
 			allowedBad = 4;
 		}
 		if (numBad != allowedBad) {
-			console.log("not enough bad");
 			return;
 		}
 		apiFunctions.beginGame();
@@ -102,7 +94,6 @@ const RoleSelectionPage = () => {
 					</div>
 				</div>
 			)}
-			<h6>Roles Selected: {numBad}</h6>
 			<div id={"SelectedRoles"}>
 				{selectedRoles.map((val) => (
 					<div key={val}>{val}</div>

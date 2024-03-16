@@ -19,10 +19,12 @@ const UserNameInputBox = (props) => {
 		setName,
 		userName,
 		setUserName,
+		listeners,
 		setListeners,
 		gameID,
 		playerState,
 		setIsAdmin,
+		setGameState,
 	} = useContext(GameContext);
 
 	const navigate = useNavigate();
@@ -48,6 +50,12 @@ const UserNameInputBox = (props) => {
 			setListeners(createResponse.listeners);
 			setGameID(createResponse.gameID);
 			setIsAdmin(true);
+			apiFunctions.setGameStateListen(
+				gameID,
+				setGameState,
+				listeners,
+				setListeners,
+			);
 			navigate("/waiting-room", {
 				state: { isAdmin: isCreate, gameID: gameID },
 			});
