@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { GameContext } from "../components/GameProvider.js";
 import { Navigate, useNavigate } from "react-router-dom";

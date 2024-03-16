@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../style/popup.css";
+import OvalSVG from "../components/table";
 
 const MainGamePage = () => {
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
@@ -64,12 +65,22 @@ const MainGamePage = () => {
 
 	return (
 		<div>
-			{/* ...other content... */}
+			<OvalSVG />
 
 			<div className="tab-bar">
 				<div className="tabs">
-					<button onClick={handleRoleInfoClick}>Roles Info</button>
-					<button onClick={handleMyRoleClick}>My Role</button>
+					<button
+						className={showRoleInfo ? "tabsOpen" : ""}
+						onClick={handleRoleInfoClick}
+					>
+						Roles Info
+					</button>
+					<button
+						className={showMyRole ? "tabsOpen" : ""}
+						onClick={handleMyRoleClick}
+					>
+						My Role
+					</button>
 				</div>
 			</div>
 

@@ -21,7 +21,7 @@
 .tabs button {
 	font-size: 16px;
 	color: #ffd700;
-	background: #491303;
+	background-color: #491303;
 	border: rgb(199, 127, 32);
 	outline: none;
 	padding: 12px 3em; /* Padding inside the buttons */
@@ -30,14 +30,9 @@
 	cursor: pointer;
 	transition: background-color 0.3s ease; /* Smooth background color transition */
 	font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-}
-
-.tabs button:active {
-	background-color: #743c2b; /* Even darker red when the button is clicked */
-}
-
-.tabs button:hover {
-	background-color: #853838; /* Slightly darker red on hover */
+	&.tabsOpen {
+		background-color: #853838; /* Even darker red when the button is clicked */
+	}
 }
 
 .popup {
