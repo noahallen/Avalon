@@ -70,6 +70,7 @@ const UserNameInputBox = (props) => {
 			);
 			if (joinResponse === 1) {
 				setGameID(roomId);
+				setIsAdmin(false);
 				navigate("/waiting-room", {
 					state: { isAdmin: isCreate, gameID: gameID },
 				});
@@ -79,6 +80,7 @@ const UserNameInputBox = (props) => {
 				alert("Game does not exist");
 			} else if (joinResponse === 2) {
 				setGameID(roomId);
+				setIsAdmin(false);
 				navigate("/waiting-room", {
 					state: { isAdmin: isCreate, gameID: gameID },
 				});
