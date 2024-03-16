@@ -41,11 +41,13 @@
 }
 
 .popup {
-	position: fixed;
-	width: 70%;
+	position: absolute;
+	width: auto;
 	height: 30em;
-	top: 20%; /* Center the popup */
-	left: 10%;
+	top: 10rem; /* Center the popup */
+	left: 1rem;
+	right: 1rem;
+
 	background: rgb(216, 179, 162);
 	z-index: 10;
 	padding: 20px;
@@ -53,14 +55,30 @@
 	border-bottom-right-radius: 18px; /* Rounded bottom right edge */
 	border-top-left-radius: 18px;
 	border-top-right-radius: 18px;
+	justify-content: space-between;
 }
 
 .popup button {
-	padding: 5px 10px;
+	padding: 3px 10px;
 	background: #8f8a70; /* A button fit for royalty, in gold */
 	color: #2e0000; /* Dark red text, for contrast and regal elegance */
 	border: none;
 	border-radius: 5px; /* Slightly rounded edges for the button */
 	font-size: 16px;
 	cursor: pointer; /* The hand of the king, beckoning for action */
+}
+
+.popuptext {
+	text-align: left;
+	margin-right: -0.5rem;
+}
+
+.popup-footer {
+	position: relative;
+	bottom: 5;
+	left: 0;
+	right: 0;
+	padding: 2px;
+	text-align: center; /* Center the buttons if desired */
+	padding-top: 2.5em;
 }
