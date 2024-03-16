@@ -48,8 +48,8 @@ export const GameContextProvider = ({ children }) => {
 	};
 
 	const gamePhases = {
-		WaitingRoom: "WR",
-		RoleEdit: "RE",
+		WaitingRoom: "Waiting",
+		RoleEdit: "RoleSelect",
 		TeamSelection: "TS",
 		TeamSelectionVote: "VOTE",
 		TeamSelectionReveal: "REV",

@@ -23,12 +23,16 @@ const RoleSelectionPage = () => {
 		if (!isAdmin) {
 			apiFunctions.setRoleListener(gameID, setSelectedRoles);
 		}
-	}, []);
+		if (gameState && gameState !== "RoleSelect") {
+			navigate("/game");
+		}
+	}, [gameState]);
 
 	const confirmRoles = () => {
 		let allowedBad;
 		const numPlayers = Object.keys(playerState).length;
 		if (selectedRoles.length != numPlayers) {
+			console.log("not enough roles");
 			return;
 		}
 		if (numPlayers < 7) {
@@ -39,6 +43,7 @@ const RoleSelectionPage = () => {
 			allowedBad = 4;
 		}
 		if (numBad != allowedBad) {
+			console.log("not enough bad");
 			return;
 		}
 		apiFunctions.beginGame();
@@ -92,7 +97,9 @@ const RoleSelectionPage = () => {
 							{val}
 						</button>
 					))}
-					<button onClick={confirmRoles}>Confirm</button>
+					<div>
+						<button onClick={confirmRoles}>Confirm</button>
+					</div>
 				</div>
 			)}
 			<h6>Roles Selected: {numBad}</h6>

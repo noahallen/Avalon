@@ -232,7 +232,29 @@ function changeRoles(gameID, selectedRoles) {
 }
 //Add role
 
-function beginGame(gameID, playerUsers, selectedRoles) {}
+function beginGame(gameID, playerUsers, selectedRoles) {
+	//randomly assign roles
+	let playerInd;
+	let roleInd;
+	let playerName;
+	let roleName;
+	while (selectedRoles.length > 0) {
+		playerInd = Math.floor(Math.random() * playerUsers.length);
+		roleInd = Math.floor(Math.random() * selectedRoles.length);
+		playerUsers.splice(playerInd, 1);
+		selectedRoles.splice(roleInd, 1);
+
+		set(
+			ref(
+				database,
+				"/games/" + gameID + "/players/" + playerName + "/role",
+			),
+			roleName,
+		);
+	}
+
+	set(ref(database, "/games/" + gameID + "/gameState"), "TS");
+}
 
 const apiFunctions = {
 	setRoleListener,

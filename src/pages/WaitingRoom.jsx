@@ -33,7 +33,6 @@ const WaitingRoom = () => {
 	};
 
 	useEffect(() => {
-		console.log(listeners);
 		if (gameState === undefined) {
 			apiFunctions.setGameStateListen(
 				gameID,
@@ -44,7 +43,6 @@ const WaitingRoom = () => {
 		}
 		if (gameState !== "Waiting" && gameState !== undefined) {
 			navigate("/role-selection");
-			//console.log(gameState);
 		}
 	}, [gameState]);
 
