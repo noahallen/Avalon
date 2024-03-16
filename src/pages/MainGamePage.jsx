@@ -13,7 +13,7 @@ const MainGamePage = () => {
 		isAdmin,
 		userName,
 		gameID,
-		round,
+		rounds,
 		listeners,
 	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
@@ -83,6 +83,8 @@ const MainGamePage = () => {
 		//let index = playerState[userName].index; // don't need the index rn
 		apiFunctions.voteCount(gameID, userName, vote, playerState);
 		setShowVotes(false);
+		console.log("here");
+		console.log(rounds);
 	};
 
 	const confimPlayerOrder = () => {

@@ -341,16 +341,22 @@ async function voteCount(gameId, playerUserName, vote, playerState) {
 	const dbref = ref(database);
 	let rounds;
 	let round;
-	let roundCount;
-	let currentRound;
+	let roundCount = 0;
+	let currentRound = [0];
 	let playerPath = "/games/" + gameId + "/players/";
 	let roundPath = "/games/" + gameId + "/rounds/";
 	let roundObjects;
 	let playerObjects;
 	let players;
 	let playerCount;
-	let trial;
-	let totVotes;
+	let trial = 0;
+	let totVotes = 0;
+	let trialCount = 0;
+	let currentRoundCount = 0;
+	let currentTrialCount = 0;
+	let approveCount = 0;
+	let rejectCount = 0;
+	let player;
 	// await get(child(dbref, playerPath)).then((snapshot) => {
 	// 	playerObjects = snapshot.val();
 	// });
@@ -367,14 +373,21 @@ async function voteCount(gameId, playerUserName, vote, playerState) {
 		roundObjects = snapshot.val();
 		if (!!roundObjects) {
 			round = Object.values(roundObjects);
-			roundCount = Object.values(roundObjects).length;
-			round.sort();
-			currentRound = round[roundCount - 1];
-			trial = currentRound[currentRound.length - 1];
+			roundCount = roundObjects.trackRoundCount;
+			currentRound = round[roundCount];
+			trialCount = currentRound.trackTrialCount;
+
+			// trialCount = currentRound.length;
+			// //.sort();
+			// trial = currentRound[currentRoundCount - 1];
+			// trialCount =
+			// 	Object.keys(currentRound)[Object.keys(currentRound).length - 1];
+
+			//totVotes = Object.values(trial.player).length;
 			//totVotes = trial.totalVotes + 1;
 		}
 	});
-	rounds = 0;
+
 	//await set(ref(database, "/games/" + gameId + "/rounds/"), rounds);
 
 	// await set(
@@ -390,15 +403,28 @@ async function voteCount(gameId, playerUserName, vote, playerState) {
 	// 	{
 	// 		//success: vote, // change the success
 	// 	},
+
+	await set(
+		ref(database, "/games/" + gameId + "/rounds/" + "/trackRoundCount"),
+		roundCount,
+	);
+
+	await set(
+		ref(
+			database,
+			"/games/" + gameId + "/rounds/" + roundCount + "/trackTrialCount",
+		),
+		trialCount,
+	);
 	await set(
 		ref(
 			database,
 			"/games/" +
 				gameId +
 				"/rounds/" +
-				rounds +
+				roundCount +
 				"/" +
-				currentRound.length +
+				trialCount +
 				"/player/" +
 				playerUserName,
 		),
@@ -406,6 +432,65 @@ async function voteCount(gameId, playerUserName, vote, playerState) {
 			vote: vote,
 		},
 	);
+	// playercount < votecount just continue
+	player = currentRound[trialCount].player;
+	Object.keys(player).map((key) => {
+		approveCount = approveCount + player[key]["vote"];
+	});
+	if (playerCount <= totVotes) {
+		rejectCount = totVotes - approveCount;
+		// this is the last count
+		// sincrement the
+
+		// if success then move to the next round
+		//count votes to see if it passes or not
+		if (approveCount > rejectCount) {
+			//if passes go to next round
+			await set(
+				ref(
+					database,
+					"/games/" + gameId + "/rounds/" + "/trackRoundCount",
+				),
+				roundCount + 1,
+			);
+			//set trial count to 0
+			await set(
+				ref(
+					database,
+					"/games/" +
+						gameId +
+						"/rounds/" +
+						roundCount +
+						"/trackTrialCount",
+				),
+				0,
+			);
+			//set round to sucess
+			await set(
+				ref(database, "/games/" + gameId + "/rounds/" + "/success"),
+				1,
+			);
+		} else {
+			//move to the next trial
+			await set(
+				ref(
+					database,
+					"/games/" +
+						gameId +
+						"/rounds/" +
+						roundCount +
+						"/trackTrialCount",
+				),
+				trialCount + 1,
+			);
+			await set(
+				ref(database, "/games/" + gameId + "/rounds/" + "/success"),
+				0,
+			);
+		}
+	}
+	//else change the round to next round and display the results
+
 	//check if everyone voted
 	//if success then update then start the next round
 	// await set(

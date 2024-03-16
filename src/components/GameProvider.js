@@ -14,8 +14,7 @@ export const GameContextProvider = ({ children }) => {
 		{},
 	);
 	const [isAdmin, setIsAdmin] = useState();
-	const [round, setRound] = useState({}); //this might not work check it out
-	const [gameState, setGameState] = useState();
+	const [rounds, setRound] = useState({}); //this might not work check it out
 
 	const goodRoles = {
 		Merlin: "Merlin",
@@ -84,7 +83,7 @@ export const GameContextProvider = ({ children }) => {
 				setFeatureSelectionSettings,
 				isAdmin,
 				setIsAdmin,
-				round,
+				rounds,
 				setRound,
 				gameState,
 				setGameState,
