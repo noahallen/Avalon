@@ -37,6 +37,9 @@ const WaitingRoom = () => {
 	};
 
 	const moveOn = () => {
+		if (Object.keys(playerState).length < 6) {
+			return;
+		}
 		apiFunctions.goToRoleSelection(gameID);
 		navigate("/role-selection");
 	};

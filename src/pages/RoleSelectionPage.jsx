@@ -23,6 +23,9 @@ const RoleSelectionPage = () => {
 		if (!isAdmin) {
 			apiFunctions.setRoleListener(gameID, setSelectedRoles);
 		}
+	}, []);
+
+	useEffect(() => {
 		if (gameState && gameState !== "RoleSelect") {
 			navigate("/game");
 		}
@@ -38,7 +41,6 @@ const RoleSelectionPage = () => {
 		let allowedBad;
 		const numPlayers = Object.keys(playerState).length;
 		if (selectedRoles.length != numPlayers) {
-			console.log("not enough roles");
 			return;
 		}
 		if (numPlayers < 7) {
@@ -49,7 +51,6 @@ const RoleSelectionPage = () => {
 			allowedBad = 4;
 		}
 		if (numBad != allowedBad) {
-			console.log("not enough bad");
 			return;
 		}
 
@@ -60,7 +61,7 @@ const RoleSelectionPage = () => {
 	const RoleButtonClick = (val, team) => {
 		const indOf = selectedRoles.indexOf(val);
 
-		if (indOf == -1) {
+		if (indOf === -1) {
 			setSelectedRoles([...selectedRoles, val]);
 			if (team) {
 				setNumBad(numBad + 1);
@@ -104,9 +105,12 @@ const RoleSelectionPage = () => {
 							{val}
 						</button>
 					))}
-					<div>
-						<button onClick={confirmRoles}>Confirm</button>
-					</div>
+					{selectedRoles.length ===
+						Object.keys(playerState).length && (
+						<div>
+							<button onClick={confirmRoles}>Confirm</button>
+						</div>
+					)}
 				</div>
 			)}
 			<div id={"SelectedRoles"}>
