@@ -40,13 +40,7 @@ const FeatureSelectionPage = (props) => {
 				},
 			);
 		}
-	}, [
-		gameID,
-		listeners,
-		props.isAdmin,
-		setFeatureSelectionSettings,
-		setListeners,
-	]);
+	}, []);
 
 	const handleRoleDistributionToggle = () => {
 		setRoleDistribution(!roleDistribution);
