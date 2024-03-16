@@ -63,6 +63,15 @@
 	cursor: pointer; /* The hand of the king, beckoning for action */
 }
 
+button:hover {
+	background-color: #641f0c; /* change to your desired color */
+	color: white; /* change to your desired color */
+}
+button:focus {
+	background-color: #641f0c; /* change to your desired color */
+	color: white; /* change to your desired color */
+}
+
 .popuptext {
 	text-align: left;
 	margin-right: -0.5rem;

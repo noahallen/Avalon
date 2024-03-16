@@ -16,8 +16,13 @@ const WaitingRoom = () => {
 	const gearOnClick = () => {
 		setPopupState(true);
 	};
+
+	// const moveOn = () => {
+	// 	navigate("/role-selection");
+	// };
+
 	const moveOn = () => {
-		navigate("/role-selection");
+		navigate("/game");
 	};
 
 	const voteOnClick = () => {
