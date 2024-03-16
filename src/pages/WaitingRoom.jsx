@@ -41,7 +41,6 @@ const WaitingRoom = () => {
 			return;
 		}
 		apiFunctions.goToRoleSelection(gameID);
-		//navigate("/game");-
 		navigate("/role-selection");
 	};
 
