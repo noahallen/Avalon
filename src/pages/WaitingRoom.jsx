@@ -66,7 +66,7 @@ const WaitingRoom = () => {
 	} else {
 		return (
 			<div>
-				{
+				{/* {
 					//debug stuff
 					true && (
 						<div>
@@ -82,7 +82,7 @@ const WaitingRoom = () => {
 							<button onClick={createMembers}>Add Members</button>
 						</div>
 					)
-				}
+				} */}
 
 				{!popupState && (
 					<div className="welcome-message">
