@@ -16,6 +16,7 @@ const WaitingRoom = () => {
 	const gearOnClick = () => {
 		setPopupState(true);
 	};
+
 	const moveOn = () => {
 		navigate("/role-selection");
 	};

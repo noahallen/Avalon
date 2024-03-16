@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { GameContext } from "../components/GameProvider.js";
+import apiFunctions from "../firebase/api";
 import "../style/popup.css";
 import OvalSVG from "../components/table";
 
@@ -6,29 +8,34 @@ const MainGamePage = () => {
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
+	const [showVotes, setShowVotes] = useState(false);
+
+	const { gameID, round, userName, playerState } = useContext(GameContext);
 
 	const handleRoleInfoClick = () => {
 		setShowMyRole(false); // Close "My Role" popup if open
-		if (!showRoleInfo || showMyRole) {
-			setShowRoleInfo(!showRoleInfo); // Toggle "Roles Info" popup
-			setCurrentPage(1); // Default to page 1
-		} else {
-			setShowRoleInfo(false); // Close popup
-		}
+		setShowVotes(false); // Close "Votes" popup
+		setShowRoleInfo(true); // Close popup
+		setCurrentPage(1); // Default to page 1
 	};
 
 	const handleMyRoleClick = () => {
-		setShowRoleInfo(false); // Close "Roles Info" popup if open
-		if (!showMyRole || showRoleInfo) {
-			setShowMyRole(!showMyRole); // Toggle "My Role" popup
-		} else {
-			setShowMyRole(false); // Close popup
-		}
+		setShowRoleInfo(false); // Close popup
+		setShowVotes(false); // Close "Votes" popup
+		setShowMyRole(true); // Close "My Role" popup if open
+	};
+
+	// open the votes pop-up
+	const handleVotes = () => {
+		setShowRoleInfo(false); // Close popup
+		setShowMyRole(false); // Close "My Role" popup if open
+		setShowVotes(true); // Close "Votes" popup
 	};
 
 	const handleClose = () => {
 		setShowRoleInfo(false);
 		setShowMyRole(false);
+		setShowVotes(false);
 	};
 
 	const nextPage = () => {
@@ -63,6 +70,12 @@ const MainGamePage = () => {
 		letterSpacing: "-1px",
 	};
 
+	const VoteClick = (userName, vote) => {
+		//let index = playerState[userName].index; // don't need the index rn
+		apiFunctions.voteCount(gameID, userName, vote, playerState);
+		setShowVotes(false);
+	};
+
 	return (
 		<div>
 			<OvalSVG />
@@ -81,6 +94,7 @@ const MainGamePage = () => {
 					>
 						My Role
 					</button>
+					<button onClick={handleVotes}>Send Votes</button>
 				</div>
 			</div>
 
@@ -371,6 +385,30 @@ const MainGamePage = () => {
 				<div className="popup">
 					{/* Popup content for My Role */}
 					<button onClick={handleClose}>Close</button>
+				</div>
+			)}
+			{showVotes && (
+				<div className="popup votes">
+					<div>
+						<h4>VOTE</h4>
+						<h4>{userName}</h4>
+						<div id={"VoteSelection"}>
+							<button
+								onClick={() => {
+									VoteClick(userName, 1);
+								}}
+							>
+								Approve
+							</button>
+							<button
+								onClick={() => {
+									VoteClick(userName, 0);
+								}}
+							>
+								Reject
+							</button>
+						</div>
+					</div>
 				</div>
 			)}
 		</div>

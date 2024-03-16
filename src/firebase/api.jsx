@@ -73,7 +73,11 @@ function createGameLobby(
 
 	set(ref(database, "/games/" + gameID), {
 		players: {
-			[userName]: { index: "0", displayName: displayName, role: "" },
+			[userName]: {
+				index: "0",
+				displayName: displayName,
+				role: "",
+			},
 		},
 		goodRoles: ["Merlin"],
 		badRoles: ["Assassin", "Mordred"],
@@ -86,6 +90,11 @@ function createGameLobby(
 			useQuestCards: false,
 		},
 		playerCount: 1,
+		// rounds: {
+		// 	[0]: {
+		// 		[0]: { totalVotes: 0 },
+		// 	},
+		// },
 	});
 	const listeners = loadGameLobby(
 		gameID,
@@ -158,15 +167,17 @@ async function joinGameLobby(userName, displayName, gameID) {
 	if (playerCount > 10) {
 		return 0;
 	}
-	await set(
-		ref(database, "/games/" + gameID + "/playerCount"),
-		playerCount + 1,
-	);
+
 	await set(ref(database, "/games/" + gameID + "/players/" + userName), {
 		index: playerCount,
 		displayName: displayName,
 		role: "",
 	});
+
+	await set(
+		ref(database, "/games/" + gameID + "/playerCount"),
+		playerCount + 1,
+	);
 	return 1;
 }
 
@@ -183,7 +194,7 @@ function loadFeatureSelection(
 		(snapshot) => {
 			setFeatureSelectionSettings(snapshot.val());
 			for (const key in snapshot.val()) {
-				featureFunctions[key](snapshot.val()[key]);
+				[key](snapshot.val()[key]);
 			}
 		},
 	);
@@ -243,6 +254,7 @@ const apiFunctions = {
 	setFeatureSelection,
 	loadFeatureSelection,
 	assignRoles,
+	voteCount,
 };
 
 // Call assignRoles like this:
@@ -273,5 +285,154 @@ async function assignRoles(roles, gameId) {
 	await set(ref(database, "/games/" + gameId + "/players/"), players);
 	return 1;
 }
+// round: {
+//     trial: {
+//         [1]:{
+//             kingIndex: -1,
+//             kingUsername,
+//             success,
+//         },
+//     },
+// },
+// gets called whenever someone clicks to vote
+// it updates the vote count in round
+// advances to the next round if everyone voted
+// displays the results
+async function voteCount(gameId, playerUserName, vote, playerState) {
+	const dbref = ref(database);
+	let rounds;
+	let round;
+	let roundCount;
+	let currentRound;
+	let playerPath = "/games/" + gameId + "/players/";
+	let roundPath = "/games/" + gameId + "/rounds/";
+	let roundObjects;
+	let playerObjects;
+	let players;
+	let playerCount;
+	let trial;
+	let totVotes;
+	// await get(child(dbref, playerPath)).then((snapshot) => {
+	// 	playerObjects = snapshot.val();
+	// });
+
+	//const players = Object.values(playerObjects);
+
+	await get(child(dbref, playerPath)).then((snapshot) => {
+		const playerObjects = snapshot.val();
+		const players = Object.values(playerObjects);
+		playerCount = Object.keys(playerObjects).length;
+	});
+
+	await get(child(dbref, roundPath)).then((snapshot) => {
+		roundObjects = snapshot.val();
+		if (!!roundObjects) {
+			round = Object.values(roundObjects);
+			roundCount = Object.values(roundObjects).length;
+			round.sort();
+			currentRound = round[roundCount - 1];
+			trial = currentRound[currentRound.length - 1];
+			//totVotes = trial.totalVotes + 1;
+		}
+	});
+	rounds = 0;
+	//await set(ref(database, "/games/" + gameId + "/rounds/"), rounds);
+
+	// await set(
+	// 	ref(
+	// 		database,
+	// 		"/games/" +
+	// 			gameId +
+	// 			"/rounds/" +
+	// 			rounds +
+	// 			"/" +
+	// 			currentRound.length,
+	// 	),
+	// 	{
+	// 		//success: vote, // change the success
+	// 	},
+	await set(
+		ref(
+			database,
+			"/games/" +
+				gameId +
+				"/rounds/" +
+				rounds +
+				"/" +
+				currentRound.length +
+				"/player/" +
+				playerUserName,
+		),
+		{
+			vote: vote,
+		},
+	);
+	//check if everyone voted
+	//if success then update then start the next round
+	// await set(
+	// 	ref(database, "/games/" + gameId + "/round-" + round + "/"),
+	// 	round,
+	// );
+}
+
+//start round
+//this starts before each round
+// start the round
+// set the next king index
+// set king username for tracking
+// s
+// async function startRound(roles, gameId) {
+// 	const dbref = ref(database);
+// 	let round;
+// 	let playerPath = "/games/" + gameId + "/players/";
+// 	let roundPath = "/games/" + gameId + "/round/";
+// 	let playerObjects;
+// 	let players;
+// 	let kingIndex;
+// 	let kingUsername;
+// 	let playerCount;
+
+// 	await get(child(dbref, roundPath)).then((snapshot) => {
+// 		const roundObjects = snapshot.val();
+// 		round = Object.keys(roundObjects).length + 1;
+// 		kingIndex = roundObjects.kingIndex + 1;
+// 	});
+
+// 	await get(child(dbref, playerPath)).then((snapshot) => {
+// 		const playerObjects = snapshot.val();
+// 		const players = Object.values(playerObjects);
+// 		playerCount = Object.keys(playerObjects).length;
+// 	});
+
+// 	round++;
+// 	await set(ref(database, "/games/" + gameId + "/round/"), round);
+
+// 	//check if everyone voted
+// 	//if success then update then start the next round
+// 	await set(
+// 		ref(database, "/games/" + gameId + "/round-" + round + "/"),
+// 		round,
+// 	);
+// }
+
+// //game
+// // -round + number
+// // -- number
+// // --- king: username
+// // ---king index
+// // --- success:true or false
+
+// async function nextRound(roles, gameId) {
+// 	//should update king
+// 	//update round count
+// 	//reset voteCount
+// 	//set previous round
+// 	let success;
+// 	let reject;
+// 	const dbref = ref(database);
+// 	let round;
+// 	let playerPath = "/games/" + gameId + "/players/";
+// 	let roundPath = "/games/" + gameId + "/round/";
+// }
 
 export default apiFunctions;

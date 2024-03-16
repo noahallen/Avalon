@@ -7,7 +7,7 @@ const AvalonHeader = () => {
 			width="100%"
 			height="100px"
 			viewBox="0 0 600 180"
-			style={{ display: "block", margin: "auto" }}
+			style={{ display: "block", margin: "auto", overflow: "visible" }}
 		>
 			<defs>
 				<filter
