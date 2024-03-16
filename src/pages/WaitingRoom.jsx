@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { GameContext } from "../components/GameProvider.js";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import QRCodeComponent from "../components/QRCode.js";
 import gear from "../res/Gear.png";
 import FeatureSelectionPage from "./FeatureSelectionPage.jsx";
@@ -10,11 +10,14 @@ import scroll from "../res/Scroll.png";
 const WaitingRoom = () => {
 	const [popupState, setPopupState] = useState(false);
 	const location = useLocation();
-	const isAdmin = location ? location.state.isAdmin : undefined;
-	const { playerState, gameID, name } = useContext(GameContext);
+	const { playerState, gameID, name, isAdmin } = useContext(GameContext);
+	const navigate = useNavigate();
 
 	const gearOnClick = () => {
 		setPopupState(true);
+	};
+	const moveOn = () => {
+		navigate("/role-selection");
 	};
 
 	if (isAdmin === null || isAdmin === undefined) {
@@ -59,6 +62,7 @@ const WaitingRoom = () => {
 											className="small-gear-image"
 										/>
 									</a>
+									<button onClick={moveOn}>Advance</button>
 								</>
 							)}
 						</div>
