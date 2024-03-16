@@ -9,8 +9,7 @@ const MainGamePage = () => {
 		playerState,
 		setPlayerState,
 		setIsAdmin,
-		setGamePhase,
-		gamePhase,
+		gameState,
 		isAdmin,
 		userName,
 		gameID,
@@ -86,17 +85,17 @@ const MainGamePage = () => {
 	};
 
 	const confimPlayerOrder = () => {
-		setGamePhase("KS");
+		apiFunctions.setGameState(gameID, "KS");
 	};
 
 	return (
 		<div>
-			{gamePhase === "OS" && isAdmin && (
+			{gameState === "OS" && isAdmin && (
 				<button onClick={confimPlayerOrder}>
 					Confirm Player Order
 				</button>
 			)}
-			{gamePhase === "KS" && isAdmin && <h1>Please select a king!</h1>}
+			{gameState === "KS" && isAdmin && <h1>Please select a king!</h1>}
 			<OvalSVG />
 
 			<div className="tab-bar">

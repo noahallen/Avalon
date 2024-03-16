@@ -217,7 +217,7 @@ function setGameStateListen(gameID, setGameState, listeners, setListeners) {
 
 // Role functions
 function goToRoleSelection(gameID) {
-	set(ref(database, "/games/" + gameID + "/gameState"), "RoleSelect");
+	setGameState(gameID, "RoleSelect");
 }
 function setRoleListener(gameID, setSelectedRoles) {
 	const listener = onValue(
@@ -233,6 +233,10 @@ function changeRoles(gameID, selectedRoles) {
 	set(ref(database, "/games/" + gameID + "/selectedRoles/"), selectedRoles);
 }
 //Add role
+
+function setGameState(gameID, state) {
+	set(ref(database, "/games/" + gameID + "/gameState"), state);
+}
 
 function beginGame(gameID, playerUsers, selectedRoles) {
 	//randomly assign roles
@@ -254,8 +258,7 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 			roleName[0],
 		);
 	}
-
-	set(ref(database, "/games/" + gameID + "/gameState"), "OS");
+	setGameState(gameID, "OS");
 }
 
 //debug functions start
@@ -288,6 +291,7 @@ const apiFunctions = {
 	voteCount,
 	beginGame,
 	setGameStateListen,
+	setGameState,
 	//debug functions below
 	addMembers,
 };
