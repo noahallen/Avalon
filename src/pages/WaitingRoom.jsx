@@ -54,7 +54,7 @@ const WaitingRoom = () => {
 				setListeners,
 			);
 		}
-	});
+	}, []);
 
 	useEffect(() => {
 		if (gameState !== "Waiting" && gameState !== undefined) {
