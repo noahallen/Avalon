@@ -61,8 +61,18 @@ const RoleSelectionPage = () => {
 				setNumBad(numBad - 1);
 			}
 		}
-		apiFunctions.changeRoles(gameID, selectedRoles);
+		// apiFunctions.changeRoles(gameID, [
+		// 	...selectedRoles.slice(0, indOf),
+		// 	...selectedRoles.slice(indOf + 1),
+		// ]);
 	};
+
+	useEffect(() => {
+		if (isAdmin) {
+			apiFunctions.changeRoles(gameID, selectedRoles);
+		}
+	}, [selectedRoles]);
+
 	return (
 		<div>
 			<h4>Role Selection</h4>
@@ -99,9 +109,8 @@ const RoleSelectionPage = () => {
 				</div>
 			)}
 			<div id={"SelectedRoles"}>
-				{selectedRoles.map((val) => (
-					<div key={val}>{val}</div>
-				))}
+				{selectedRoles &&
+					selectedRoles.map((val) => <div key={val}>{val}</div>)}
 			</div>
 		</div>
 	);

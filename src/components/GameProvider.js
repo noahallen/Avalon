@@ -51,6 +51,8 @@ export const GameContextProvider = ({ children }) => {
 		WaitingRoom: "Waiting",
 		RoleEdit: "RoleSelect",
 		TeamSelection: "TS",
+		OrderSelection: "OS",
+		KingSelection: "KS",
 		TeamSelectionVote: "VOTE",
 		TeamSelectionReveal: "REV",
 		MissionRun: "MR",

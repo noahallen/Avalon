@@ -5,12 +5,20 @@ import "../style/popup.css";
 import OvalSVG from "../components/table";
 
 const MainGamePage = () => {
+	const {
+		playerState,
+		setPlayerState,
+		setIsAdmin,
+		gameState,
+		isAdmin,
+		userName,
+		gameID,
+		round,
+	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
-
-	const { gameID, round, userName, playerState } = useContext(GameContext);
 
 	const handleRoleInfoClick = () => {
 		setShowMyRole(false); // Close "My Role" popup if open
@@ -76,8 +84,18 @@ const MainGamePage = () => {
 		setShowVotes(false);
 	};
 
+	const confimPlayerOrder = () => {
+		apiFunctions.setGameState(gameID, "KS");
+	};
+
 	return (
 		<div>
+			{gameState === "OS" && isAdmin && (
+				<button onClick={confimPlayerOrder}>
+					Confirm Player Order
+				</button>
+			)}
+			{gameState === "KS" && isAdmin && <h1>Please select a king!</h1>}
 			<OvalSVG />
 
 			<div className="tab-bar">
