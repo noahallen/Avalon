@@ -90,11 +90,8 @@ function createGameLobby(
 			useQuestCards: false,
 		},
 		playerCount: 1,
-		// rounds: {
-		// 	[0]: {
-		// 		[0]: { totalVotes: 0 },
-		// 	},
-		// },
+		gameState: "Waiting",
+		selectedRoles: [],
 	});
 	const listeners = loadGameLobby(
 		gameID,
@@ -208,53 +205,91 @@ function setFeatureSelection(gameID, value) {
 	set(ref(database, "/games/" + gameID + "/featureSettings"), value);
 }
 
-// Role functions
+function setGameStateListen(gameID, setGameState, listeners, setListeners) {
+	const stateListener = onValue(
+		ref(database, "/games/" + gameID + "/gameState"),
+		(snapshot) => {
+			setGameState(snapshot.val());
+		},
+	);
+	setListeners({ ...listeners, stateListener });
+}
 
+// Role functions
+function goToRoleSelection(gameID) {
+	set(ref(database, "/games/" + gameID + "/gameState"), "RoleSelect");
+}
+function setRoleListener(gameID, setSelectedRoles) {
+	onValue(
+		ref(database, "/games/" + gameID + "/selectedRoles/"),
+		(snapshot) => {
+			setSelectedRoles(snapshot.val());
+		},
+	);
+}
+function changeRoles(gameID, selectedRoles) {
+	set(ref(database, "/games/" + gameID + "/selectedRoles/"), selectedRoles);
+}
 //Add role
 
-function addRole(gameID, newRoleTeam, oldRoles, newRole) {
-	// evil
-	if (newRoleTeam === false) {
-		set(ref(database, "/games/" + gameID + "/badRoles/"), [
-			...oldRoles,
-			newRole,
-		]);
-	} else {
-		//good
-		set(ref(database, "/games/" + gameID + "/goodRoles/"), [
-			...oldRoles,
-			newRole,
-		]);
+function beginGame(gameID, playerUsers, selectedRoles) {
+	//randomly assign roles
+	let playerInd;
+	let roleInd;
+	let playerName;
+	let roleName;
+	while (selectedRoles.length > 0) {
+		playerInd = Math.floor(Math.random() * playerUsers.length);
+		roleInd = Math.floor(Math.random() * selectedRoles.length);
+		playerName = playerUsers.splice(playerInd, 1);
+		roleName = selectedRoles.splice(roleInd, 1);
+
+		set(
+			ref(
+				database,
+				"/games/" + gameID + "/players/" + playerName + "/role",
+			),
+			roleName[0],
+		);
 	}
+
+	set(ref(database, "/games/" + gameID + "/gameState"), "TS");
 }
 
-//Remove role
-function removeRole(gameID, removeRoleTeam, oldRoles, removedRole) {
-	for (let i = 0; i < oldRoles.length; i++) {
-		if (oldRoles[i] === removedRole) {
-			oldRoles.splice(i, 1);
-			break;
-		}
+/*
+//debug functions start
+function addMembers(gameID, number) {
+	const baseName = "test user ";
+
+	for (let i = 0; i < number; i++) {
+		set(
+			ref(
+				database,
+				"/games/" + gameID + "/players/" + baseName + i.toString(),
+			),
+			{ displayName: baseName + i.toString(), role: "", index: i + 1 },
+		);
 	}
-	if (removeRoleTeam === false) {
-		//bad
-		set(ref(database, "/games/" + gameID + "/badRoles/"), oldRoles);
-	} else {
-		//good
-		set(ref(database, "/games/" + gameID + "/goodRoles/"), oldRoles);
-	}
+	set(ref(database, "/games/" + gameID + "/playerCount"), 1 + Number(number));
 }
+//debug functions end
+*/
 
 const apiFunctions = {
+	setRoleListener,
 	createGameLobby,
 	loadGameLobby,
 	joinGameLobby,
-	addRole,
-	removeRole,
+	goToRoleSelection,
+	changeRoles,
 	setFeatureSelection,
 	loadFeatureSelection,
 	assignRoles,
 	voteCount,
+	beginGame,
+	setGameStateListen,
+	//debug functions below
+	//addMembers,
 };
 
 // Call assignRoles like this:

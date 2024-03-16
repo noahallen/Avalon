@@ -1,16 +1,36 @@
-import React, { useState, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import { Navigate, useNavigate } from "react-router-dom";
 import QRCodeComponent from "../components/QRCode.js";
 import gear from "../res/Gear.png";
 import FeatureSelectionPage from "./FeatureSelectionPage.jsx";
 import scroll from "../res/Scroll.png";
+import apiFunctions from "../firebase/api.jsx";
 
 const WaitingRoom = () => {
 	const [popupState, setPopupState] = useState(false);
-	const location = useLocation();
-	const { playerState, gameID, name, isAdmin } = useContext(GameContext);
+	const {
+		playerState,
+		gameID,
+		name,
+		isAdmin,
+		gameState,
+		setGameState,
+		listeners,
+		setListeners,
+	} = useContext(GameContext);
+	/*
+	// * debug stuff start
+	const [numNew, setNumNew] = useState(0);
+	const createMembers = () => {
+		if (numNew > 0) {
+			apiFunctions.addMembers(gameID, numNew);
+		}
+	};
+
+	// * debug stuff stop
+	*/
+
 	const navigate = useNavigate();
 
 	const gearOnClick = () => {
@@ -18,14 +38,53 @@ const WaitingRoom = () => {
 	};
 
 	const moveOn = () => {
+		if (Object.keys(playerState).length < 6) {
+			return;
+		}
+		apiFunctions.goToRoleSelection(gameID);
 		navigate("/role-selection");
 	};
+
+	useEffect(() => {
+		if (gameState === undefined) {
+			apiFunctions.setGameStateListen(
+				gameID,
+				setGameState,
+				listeners,
+				setListeners,
+			);
+		}
+	}, []);
+
+	useEffect(() => {
+		if (gameState === "RoleSelect" && gameState !== undefined) {
+			navigate("/role-selection");
+		}
+	}, [gameState]);
 
 	if (isAdmin === null || isAdmin === undefined) {
 		return <Navigate to={"/"} />;
 	} else {
 		return (
 			<div>
+				{/*
+					//debug stuff
+					true && (
+						<div>
+							{" "}
+							<input
+								onChange={(val) => {
+									setNumNew(val.nativeEvent.data);
+								}}
+								type="number"
+								min="1"
+								max="9"
+							/>
+							<button onClick={createMembers}>Add Members</button>
+						</div>
+					)
+					*/}
+
 				{!popupState && (
 					<div className="welcome-message">
 						<h1 className="welcome-title">

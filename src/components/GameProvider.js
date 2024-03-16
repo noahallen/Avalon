@@ -15,6 +15,7 @@ export const GameContextProvider = ({ children }) => {
 	);
 	const [isAdmin, setIsAdmin] = useState();
 	const [round, setRound] = useState({}); //this might not work check it out
+	const [gameState, setGameState] = useState();
 
 	const goodRoles = {
 		Merlin: "Merlin",
@@ -47,8 +48,8 @@ export const GameContextProvider = ({ children }) => {
 	};
 
 	const gamePhases = {
-		WaitingRoom: "WR",
-		RoleEdit: "RE",
+		WaitingRoom: "Waiting",
+		RoleEdit: "RoleSelect",
 		TeamSelection: "TS",
 		TeamSelectionVote: "VOTE",
 		TeamSelectionReveal: "REV",
@@ -83,6 +84,8 @@ export const GameContextProvider = ({ children }) => {
 				setIsAdmin,
 				round,
 				setRound,
+				gameState,
+				setGameState,
 			}}
 		>
 			{children}
