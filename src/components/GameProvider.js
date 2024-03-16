@@ -1,4 +1,5 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
+import apiFunctions from "../firebase/api";
 
 export const GameContext = createContext();
 
@@ -13,6 +14,37 @@ export const GameContextProvider = ({ children }) => {
 	const [featureSelectionSettings, setFeatureSelectionSettings] = useState(
 		{},
 	);
+	useEffect(() => {
+		if (!gameID || !userName) {
+			const storedGameID = JSON.parse(localStorage.getItem("gameID"));
+			const storedUserName = JSON.parse(localStorage.getItem("userName"));
+			const storedDisplayName = JSON.parse(
+				localStorage.getItem("displayName"),
+			);
+			if (storedGameID === null || storedUserName === null) {
+				return;
+			}
+			loadAfterRefresh(storedGameID, storedUserName, storedDisplayName);
+		}
+	}, []);
+
+	const loadAfterRefresh = (
+		storedGameID,
+		storedUserName,
+		storedDisplayName,
+	) => {
+		setUserName(storedUserName);
+		setGameID(storedGameID);
+		setName(storedDisplayName);
+		setListeners(
+			apiFunctions.loadGameLobby(
+				storedGameID,
+				setPlayerState,
+				setSelectedGoodRoles,
+				setSelectedEvilRoles,
+			),
+		);
+	};
 
 	const goodRoles = {
 		Merlin: "Merlin",
