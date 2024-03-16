@@ -20,6 +20,10 @@ const WaitingRoom = () => {
 		navigate("/role-selection");
 	};
 
+	const voteOnClick = () => {
+		setPopupState(true);
+	};
+
 	if (isAdmin === null || isAdmin === undefined) {
 		return <Navigate to={"/"} />;
 	} else {
