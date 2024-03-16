@@ -256,6 +256,7 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 	set(ref(database, "/games/" + gameID + "/gameState"), "TS");
 }
 
+/*
 //debug functions start
 function addMembers(gameID, number) {
 	const baseName = "test user ";
@@ -272,6 +273,7 @@ function addMembers(gameID, number) {
 	set(ref(database, "/games/" + gameID + "/playerCount"), 1 + Number(number));
 }
 //debug functions end
+*/
 
 const apiFunctions = {
 	setRoleListener,

@@ -19,16 +19,17 @@ const WaitingRoom = () => {
 		listeners,
 		setListeners,
 	} = useContext(GameContext);
+	/*
 	// * debug stuff start
 	const [numNew, setNumNew] = useState(0);
 	const createMembers = () => {
-		console.log(numNew);
 		if (numNew > 0) {
 			apiFunctions.addMembers(gameID, numNew);
 		}
 	};
 
 	// * debug stuff stop
+	*/
 
 	const navigate = useNavigate();
 
@@ -63,7 +64,7 @@ const WaitingRoom = () => {
 	} else {
 		return (
 			<div>
-				{
+				{/*
 					//debug stuff
 					true && (
 						<div>
@@ -79,7 +80,7 @@ const WaitingRoom = () => {
 							<button onClick={createMembers}>Add Members</button>
 						</div>
 					)
-				}
+					*/}
 
 				{!popupState && (
 					<div className="welcome-message">
