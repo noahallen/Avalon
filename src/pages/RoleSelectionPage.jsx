@@ -10,6 +10,45 @@ const RoleSelectionPage = () => {
 	const [numBad, setNumBad] = useState(0);
 	const navigate = useNavigate();
 
+	function importAll(r) {
+		let images = {};
+		r.keys().forEach((item, index) => {
+			images[item.replace("./", "")] = r(item);
+		});
+		return images;
+	}
+	const characterImages = importAll(
+		require.context("../res", true, /\.(png|jpe?g|svg)$/),
+	);
+	const characterText = {
+		Merlin: "Knows Evil, must remain hidden",
+		Percival: "Knows Merlin",
+		"Loyal Servant of Arthur": "No special ability",
+		Troublemaker: "",
+		Cleric: "Secretly investigates the first Leader",
+		"Untrustworthy Servant":
+			"Appears Evil to Merlin, knows the Assassin can become Evil during the Recruitment stage",
+		"Good Lancelot": "Knows Evil Lancelot, or can switch allegiance",
+		"Good Sorcerer": "May play Magic",
+		"Good Rogue": "May play Rouge Success",
+		"Senior Messenger": "Knows Junior Messenger, may play Good Message",
+		"Junior Messenger": "May play Good Message",
+		Mordred: "Unknown to Merlin",
+		Morgana: "Appears as Merlin",
+		Oberon: "Unkownto Evil, does not know Evil",
+		Assassin: "May activate Assassination stage if three Quests succeed",
+		"Minion of Mordred": "No special ability",
+		Trickster: "May lie about loyalty",
+		Lunatic: "Must Fail every Quest",
+		Brute: "May Fail only the first three Quests",
+		Revealer: "Reveals loyalty after second failed quest",
+		"Evil Lancelot": "Knows Good Lancelot, or can switch allegiance",
+		"Evil Sorcerer": "May play Magic, may not play Fail",
+		"Evil Rogue":
+			"May play Rogue Fail, unknown to Evil, does not know Evil",
+		"Evil Messenger": "May play Evil Message",
+	};
+
 	useEffect(() => {
 		if (!isAdmin) {
 			apiFunctions.setRoleListener(gameID, setSelectedRoles);
@@ -61,10 +100,6 @@ const RoleSelectionPage = () => {
 				setNumBad(numBad - 1);
 			}
 		}
-		// apiFunctions.changeRoles(gameID, [
-		// 	...selectedRoles.slice(0, indOf),
-		// 	...selectedRoles.slice(indOf + 1),
-		// ]);
 	};
 
 	useEffect(() => {
@@ -79,26 +114,30 @@ const RoleSelectionPage = () => {
 			{isAdmin && (
 				<div id={"RoleSelections"}>
 					{Object.values(goodRoles).map((val) => (
-						<button
+						<img
+							className="icon-selected"
+							src={characterImages[`${val}.png`]}
 							key={val}
 							id={val}
+							alt={val}
+							title={characterText[val]}
 							onClick={() => {
 								RoleButtonClick(val, 0);
 							}}
-						>
-							{val}
-						</button>
+						></img>
 					))}
 					{Object.values(evilRoles).map((val) => (
-						<button
+						<img
+							className="icon-selected"
+							src={characterImages[`${val}.png`]}
 							key={val}
 							id={val}
+							alt={val}
+							title={characterText[val]}
 							onClick={() => {
 								RoleButtonClick(val, 1);
 							}}
-						>
-							{val}
-						</button>
+						></img>
 					))}
 					{selectedRoles.length ===
 						Object.keys(playerState).length && (

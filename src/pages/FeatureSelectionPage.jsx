@@ -128,7 +128,7 @@ const FeatureSelectionPage = (props) => {
 					isChecked={questCards}
 					handleToggle={handleQuestCards}
 				/>
-				<h3 className="toggle-header"></h3>
+				<h3 className="toggle-header"> </h3>
 				<button onClick={saveFeatures}>Save</button>
 				<button
 					onClick={() => {
