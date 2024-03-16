@@ -41,6 +41,7 @@ const WaitingRoom = () => {
 		}
 		if (gameState !== "Waiting" && gameState !== undefined) {
 			navigate("/role-selection");
+			//console.log(gameState);
 		}
 	}, [gameState]);
 

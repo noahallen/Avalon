@@ -4,8 +4,17 @@ import { useNavigate } from "react-router-dom";
 import apiFunctions from "../firebase/api.jsx";
 
 const RoleSelectionPage = () => {
-	const { goodRoles, evilRoles, isAdmin, playerState, gameID, gameState } =
-		useContext(GameContext);
+	const {
+		goodRoles,
+		evilRoles,
+		isAdmin,
+		playerState,
+		gameID,
+		gameState,
+		listeners,
+		setGameState,
+		setListeners,
+	} = useContext(GameContext);
 	const [selectedRoles, setSelectedRoles] = useState([]);
 	const [numBad, setNumBad] = useState(0);
 	const navigate = useNavigate();
