@@ -57,7 +57,7 @@ const WaitingRoom = () => {
 	}, []);
 
 	useEffect(() => {
-		if (gameState !== "Waiting" && gameState !== undefined) {
+		if (gameState === "RoleSelect" && gameState !== undefined) {
 			navigate("/role-selection");
 		}
 	}, [gameState]);
