@@ -1,10 +1,25 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, {
+	useState,
+	useContext,
+	useEffect,
+	useContext,
+	useEffect,
+} from "react";
 import { GameContext } from "../components/GameProvider.js";
 import apiFunctions from "../firebase/api";
 import "../style/popup.css";
 import OvalSVG from "../components/table";
+import { GameContext } from "../components/GameProvider.js";
 
 const MainGamePage = () => {
+	const {
+		playerState,
+		setPlayerState,
+		setIsAdmin,
+		setGamePhase,
+		gamePhase,
+		isAdmin,
+	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
@@ -78,6 +93,12 @@ const MainGamePage = () => {
 
 	return (
 		<div>
+			{gamePhase === "OS" && isAdmin && (
+				<button onClick={confimPlayerOrder}>
+					Confirm Player Order
+				</button>
+			)}
+			{gamePhase === "KS" && isAdmin && <h1>Please select a king!</h1>}
 			<OvalSVG />
 
 			<div className="tab-bar">

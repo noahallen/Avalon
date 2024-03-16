@@ -2,83 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { GameContext } from "../components/GameProvider.js";
 
 const OvalSVG = () => {
-	const { playerState, userName, setPlayerState } = useContext(GameContext);
+	const {
+		playerState,
+		userName,
+		setPlayerState,
+		gamePhase,
+		isAdmin,
+		setGamePhase,
+	} = useContext(GameContext);
 	const numPlayers = Object.keys(playerState).length;
 	const scaleFactor = 0.78;
 	const [dimension, setDimension] = useState(window.innerWidth * scaleFactor);
-
-	//For debugging purposes
-	// useEffect(() => {
-	// 	setPlayerState({
-	// 		...playerState,
-	// 		["Noah"]: {
-	// 			index: 0,
-	// 			displayName: "Noah",
-	// 			isKing: true,
-	// 			onTeam: false,
-	// 		},
-	// 		["Peter"]: {
-	// 			index: 1,
-	// 			displayName: "Peter",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["John"]: {
-	// 			index: 2,
-	// 			displayName: "John",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["James"]: {
-	// 			index: 3,
-	// 			displayName: "James",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["Andrew"]: {
-	// 			index: 4,
-	// 			displayName: "Andrew",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["Philip"]: {
-	// 			index: 5,
-	// 			displayName: "Philip",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["Bartholomew"]: {
-	// 			index: 6,
-	// 			displayName: "Bartholomew",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["Matthew"]: {
-	// 			index: 7,
-	// 			displayName: "Matthew",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["Thomas"]: {
-	// 			index: 8,
-	// 			displayName: "Thomas",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["NotJames"]: {
-	// 			index: 9,
-	// 			displayName: "NotJames",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 		["Simon"]: {
-	// 			index: 10,
-	// 			displayName: "Simon",
-	// 			isKing: false,
-	// 			onTeam: false,
-	// 		},
-	// 	});
-	// }, [userName, setPlayerState]);
+	const [selection, setSelection] = useState("");
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -104,61 +39,75 @@ const OvalSVG = () => {
 		[numPlayers, dimension],
 	);
 
-	const handleCircleClick = React.useCallback(
-		(clickedUserName) => {
-			// For debugging purposes
-			// if (playerState["Noah"]?.isKing) {
-			if (playerState[userName]?.isKing) {
-				playerState[clickedUserName].onTeam =
-					!playerState[clickedUserName].onTeam;
+	const handleCircleClick = (clickedUserName) => {
+		if (gamePhase === "OS" && isAdmin) {
+			if (selection === "") {
+				setSelection(clickedUserName);
+			} else {
+				const temp = playerState[selection].index;
+				playerState[selection].index =
+					playerState[clickedUserName].index;
+				playerState[clickedUserName].index = temp;
 				setPlayerState({
 					...playerState,
+					[selection]: playerState[selection],
 					[clickedUserName]: playerState[clickedUserName],
 				});
+				setSelection("");
 			}
-		},
-		[playerState, setPlayerState, userName],
-	);
+		} else if (gamePhase === "TS" && playerState[userName]?.isKing) {
+			playerState[clickedUserName].onTeam =
+				!playerState[clickedUserName].onTeam;
+			setPlayerState({
+				...playerState,
+				[clickedUserName]: playerState[clickedUserName],
+			});
+		} else if (gamePhase === "KS" && isAdmin) {
+			playerState[clickedUserName].isKing =
+				!playerState[clickedUserName].isKing;
+			setPlayerState({
+				...playerState,
+				[clickedUserName]: playerState[clickedUserName],
+			});
+			setGamePhase("TS");
+		}
+	};
 
 	const renderCircles = React.useCallback(() => {
-		const circles = Object.entries(playerState).map(
-			([key, player], index) => {
-				const { x, y } = calculateCircleCoordinates(index);
+		const circles = Object.entries(playerState).map(([key, player]) => {
+			const index = playerState[key].index;
+			const { x, y } = calculateCircleCoordinates(index);
+			const circleColor = player.isKing ? "#996515" : "black"; // Set different color for isKing players
+			return (
+				<g key={index}>
+					<a onClick={() => handleCircleClick(key)}>
+						<ellipse
+							cx={x}
+							cy={y}
+							rx={dimension / 10}
+							ry={dimension / 20}
+							style={{
+								fill: circleColor,
+							}}
+						></ellipse>
 
-				const circleColor = player.isKing ? "#996515" : "black"; // Set different color for isKing players
-				return (
-					<g key={index}>
-						<a onClick={() => handleCircleClick(key)}>
-							<ellipse
-								cx={x}
-								cy={y}
-								rx={dimension / 10}
-								ry={dimension / 20}
-								style={{
-									fill: circleColor,
-								}}
-							></ellipse>
-
-							<text
-								x={x}
-								y={y}
-								textAnchor="middle"
-								dominantBaseline="middle"
-								style={{
-									fill: "white",
-									fontSize: dimension / 25,
-									fontWeight: player.onTeam
-										? "bold"
-										: "lighter",
-								}}
-							>
-								{player.displayName}
-							</text>
-						</a>
-					</g>
-				);
-			},
-		);
+						<text
+							x={x}
+							y={y}
+							textAnchor="middle"
+							dominantBaseline="middle"
+							style={{
+								fill: "white",
+								fontSize: dimension / 25,
+								fontWeight: player.onTeam ? "bold" : "lighter",
+							}}
+						>
+							{player.displayName}
+						</text>
+					</a>
+				</g>
+			);
+		});
 		return circles;
 	}, [playerState, dimension, handleCircleClick, calculateCircleCoordinates]);
 
