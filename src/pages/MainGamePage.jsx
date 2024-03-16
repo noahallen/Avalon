@@ -81,10 +81,8 @@ const MainGamePage = () => {
 
 	const VoteClick = (userName, vote) => {
 		//let index = playerState[userName].index; // don't need the index rn
-		apiFunctions.voteCount(gameID, userName, vote, playerState);
+		apiFunctions.playerVote(gameID, userName, vote, playerState);
 		setShowVotes(false);
-		console.log("here");
-		console.log(rounds);
 	};
 
 	const confimPlayerOrder = () => {
@@ -100,7 +98,7 @@ const MainGamePage = () => {
 			)}
 			{gameState === "KS" && isAdmin && <h1>Please select a king!</h1>}
 			<OvalSVG />
-
+			{/* {gameState === "VOTE" && } */}
 			<div className="tab-bar">
 				<div className="tabs">
 					<button

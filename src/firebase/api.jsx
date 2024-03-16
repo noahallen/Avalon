@@ -291,7 +291,7 @@ async function assignRoles(roles, gameId) {
 	return 1;
 }
 
-async function playerVote(gameId, playerUserName, vote, playerState) {
+async function playerVote(gameId, playerUserName, vote) {
 	const dbref = ref(database);
 	let roundPath = "/games/" + gameId + "/rounds/";
 	let {
@@ -320,7 +320,7 @@ async function playerVote(gameId, playerUserName, vote, playerState) {
 		}
 		return {};
 	});
-	const playerVote = { playerUserName: vote };
+	const playerVote = { [playerUserName]: vote };
 
 	await set(
 		ref(
