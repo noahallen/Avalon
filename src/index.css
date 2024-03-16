@@ -144,3 +144,18 @@ input.error {
 	flex-wrap: wrap; /* Allows items to wrap in the container */
 	gap: 15px; /* Optional: adds space between icons */
 }
+
+.my-role-tab {
+	display: grid;
+	align-items: center;
+	grid-template-columns: 5fr;
+}
+.my-role-tab img {
+	height: 10em;
+	width: 10em;
+
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 25%;
+}
