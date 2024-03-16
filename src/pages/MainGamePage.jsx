@@ -19,13 +19,14 @@ const MainGamePage = () => {
 		setGamePhase,
 		gamePhase,
 		isAdmin,
+		userName,
+		gameID,
+		round,
 	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
-
-	const { gameID, round, userName, playerState } = useContext(GameContext);
 
 	const handleRoleInfoClick = () => {
 		setShowMyRole(false); // Close "My Role" popup if open
@@ -89,6 +90,10 @@ const MainGamePage = () => {
 		//let index = playerState[userName].index; // don't need the index rn
 		apiFunctions.voteCount(gameID, userName, vote, playerState);
 		setShowVotes(false);
+	};
+
+	const confimPlayerOrder = () => {
+		setGamePhase("KS");
 	};
 
 	return (
