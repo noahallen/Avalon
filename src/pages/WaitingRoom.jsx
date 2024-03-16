@@ -6,11 +6,13 @@ import QRCodeComponent from "../components/QRCode.js";
 import gear from "../res/Gear.png";
 import FeatureSelectionPage from "./FeatureSelectionPage.jsx";
 import scroll from "../res/Scroll.png";
+import apiFunctions from "../firebase/api.jsx";
 
 const WaitingRoom = () => {
 	const [popupState, setPopupState] = useState(false);
 	const location = useLocation();
-	const { playerState, gameID, name, isAdmin } = useContext(GameContext);
+	const { playerState, gameID, name, isAdmin, gameState } =
+		useContext(GameContext);
 	const navigate = useNavigate();
 
 	const gearOnClick = () => {
@@ -18,8 +20,15 @@ const WaitingRoom = () => {
 	};
 
 	const moveOn = () => {
+		apiFunctions.goToRoleSelection(gameID);
 		navigate("/role-selection");
 	};
+
+	useEffect(() => {
+		if (gameState !== "Waiting") {
+			navigate("/role-selection");
+		}
+	}, [gameState]);
 
 	if (isAdmin === null || isAdmin === undefined) {
 		return <Navigate to={"/"} />;

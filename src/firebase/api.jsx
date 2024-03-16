@@ -90,11 +90,8 @@ function createGameLobby(
 			useQuestCards: false,
 		},
 		playerCount: 1,
-		// rounds: {
-		// 	[0]: {
-		// 		[0]: { totalVotes: 0 },
-		// 	},
-		// },
+		gameState: "Waiting",
+		selectedRoles: [],
 	});
 	const listeners = loadGameLobby(
 		gameID,
@@ -208,53 +205,48 @@ function setFeatureSelection(gameID, value) {
 	set(ref(database, "/games/" + gameID + "/featureSettings"), value);
 }
 
-// Role functions
+function setGameStateListen(gameID, setGameState, listeners, setListeners) {
+	const stateListener = onValue(
+		ref(database, "/games/" + "/gameState"),
+		(snapshot) => {
+			setGameState(snapshot.val());
+		},
+	);
+	setListeners({ ...listeners, stateListener });
+}
 
+// Role functions
+function goToRoleSelection(gameID) {
+	set(ref(database, "/games/" + gameID + "/gameState"), "RoleSelect");
+}
+function setRoleListener(gameID, setSelectedRoles) {
+	onValue(
+		ref(database, "/games/" + gameID + "/selectedRoles/"),
+		(snapshot) => {
+			setSelectedRoles(snapshot.val());
+		},
+	);
+}
+function changeRoles(gameID, selectedRoles) {
+	set(ref(database, "/games/" + gameID + "/selectedRoles/"), selectedRoles);
+}
 //Add role
 
-function addRole(gameID, newRoleTeam, oldRoles, newRole) {
-	// evil
-	if (newRoleTeam === false) {
-		set(ref(database, "/games/" + gameID + "/badRoles/"), [
-			...oldRoles,
-			newRole,
-		]);
-	} else {
-		//good
-		set(ref(database, "/games/" + gameID + "/goodRoles/"), [
-			...oldRoles,
-			newRole,
-		]);
-	}
-}
-
-//Remove role
-function removeRole(gameID, removeRoleTeam, oldRoles, removedRole) {
-	for (let i = 0; i < oldRoles.length; i++) {
-		if (oldRoles[i] === removedRole) {
-			oldRoles.splice(i, 1);
-			break;
-		}
-	}
-	if (removeRoleTeam === false) {
-		//bad
-		set(ref(database, "/games/" + gameID + "/badRoles/"), oldRoles);
-	} else {
-		//good
-		set(ref(database, "/games/" + gameID + "/goodRoles/"), oldRoles);
-	}
-}
+function beginGame(gameID, playerUsers, selectedRoles) {}
 
 const apiFunctions = {
+	setRoleListener,
 	createGameLobby,
 	loadGameLobby,
 	joinGameLobby,
-	addRole,
-	removeRole,
+	goToRoleSelection,
+	changeRoles,
 	setFeatureSelection,
 	loadFeatureSelection,
 	assignRoles,
 	voteCount,
+	beginGame,
+	setGameStateListen,
 };
 
 // Call assignRoles like this:
