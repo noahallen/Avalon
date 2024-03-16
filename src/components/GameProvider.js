@@ -17,19 +17,6 @@ export const GameContextProvider = ({ children }) => {
 	const [round, setRound] = useState({}); //this might not work check it out
 	const [gameState, setGameState] = useState();
 
-	const gamePhases = {
-		WaitingRoom: "WR",
-		RoleEdit: "RE",
-		OrderSelection: "OS",
-		KingSelection: "KS",
-		TeamSelection: "TS",
-		TeamSelectionVote: "VOTE",
-		TeamSelectionReveal: "REV",
-		MissionRun: "MR",
-		MissionReveal: "MREV",
-		Lady: "LAD",
-	};
-
 	const goodRoles = {
 		Merlin: "Merlin",
 		Percival: "Percival",
@@ -64,6 +51,8 @@ export const GameContextProvider = ({ children }) => {
 		WaitingRoom: "Waiting",
 		RoleEdit: "RoleSelect",
 		TeamSelection: "TS",
+		OrderSelection: "OS",
+		KingSelection: "KS",
 		TeamSelectionVote: "VOTE",
 		TeamSelectionReveal: "REV",
 		MissionRun: "MR",
@@ -80,8 +69,6 @@ export const GameContextProvider = ({ children }) => {
 				evilRoles,
 				gamePhases,
 				selectedGoodRoles,
-				gamePhase,
-				setGamePhase,
 				setSelectedGoodRoles,
 				selectedEvilRoles,
 				setSelectedEvilRoles,

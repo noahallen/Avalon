@@ -1,15 +1,8 @@
-import React, {
-	useState,
-	useContext,
-	useEffect,
-	useContext,
-	useEffect,
-} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import apiFunctions from "../firebase/api";
 import "../style/popup.css";
 import OvalSVG from "../components/table";
-import { GameContext } from "../components/GameProvider.js";
 
 const MainGamePage = () => {
 	const {

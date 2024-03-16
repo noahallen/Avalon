@@ -4,15 +4,29 @@ import { useNavigate } from "react-router-dom";
 import apiFunctions from "../firebase/api.jsx";
 
 const RoleSelectionPage = () => {
-	const { goodRoles, evilRoles, isAdmin, playerState, gameID, gameState } =
-		useContext(GameContext);
+	const {
+		goodRoles,
+		evilRoles,
+		isAdmin,
+		playerState,
+		gameID,
+		gameState,
+		listeners,
+		setListeners,
+	} = useContext(GameContext);
 	const [selectedRoles, setSelectedRoles] = useState([]);
 	const [numBad, setNumBad] = useState(0);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!isAdmin) {
-			apiFunctions.setRoleListener(gameID, setSelectedRoles);
+			setListeners({
+				...listeners,
+				roleListen: apiFunctions.setRoleListener(
+					gameID,
+					setSelectedRoles,
+				),
+			});
 		}
 	}, []);
 
@@ -99,9 +113,8 @@ const RoleSelectionPage = () => {
 				</div>
 			)}
 			<div id={"SelectedRoles"}>
-				{selectedRoles.map((val) => (
-					<div key={val}>{val}</div>
-				))}
+				{selectedRoles &&
+					selectedRoles.map((val) => <div key={val}>{val}</div>)}
 			</div>
 		</div>
 	);

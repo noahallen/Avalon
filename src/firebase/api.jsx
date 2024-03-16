@@ -191,7 +191,7 @@ function loadFeatureSelection(
 		(snapshot) => {
 			setFeatureSelectionSettings(snapshot.val());
 			for (const key in snapshot.val()) {
-				[key](snapshot.val()[key]);
+				featureFunctions[key](snapshot.val()[key]);
 			}
 		},
 	);
@@ -220,12 +220,14 @@ function goToRoleSelection(gameID) {
 	set(ref(database, "/games/" + gameID + "/gameState"), "RoleSelect");
 }
 function setRoleListener(gameID, setSelectedRoles) {
-	onValue(
-		ref(database, "/games/" + gameID + "/selectedRoles/"),
+	const listener = onValue(
+		ref(database, "/games/" + gameID + "/selectedRoles"),
 		(snapshot) => {
+			console.log(snapshot.val());
 			setSelectedRoles(snapshot.val());
 		},
 	);
+	return listener;
 }
 function changeRoles(gameID, selectedRoles) {
 	set(ref(database, "/games/" + gameID + "/selectedRoles/"), selectedRoles);
@@ -256,7 +258,6 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 	set(ref(database, "/games/" + gameID + "/gameState"), "TS");
 }
 
-/*
 //debug functions start
 function addMembers(gameID, number) {
 	const baseName = "test user ";
@@ -273,7 +274,6 @@ function addMembers(gameID, number) {
 	set(ref(database, "/games/" + gameID + "/playerCount"), 1 + Number(number));
 }
 //debug functions end
-*/
 
 const apiFunctions = {
 	setRoleListener,
@@ -289,7 +289,7 @@ const apiFunctions = {
 	beginGame,
 	setGameStateListen,
 	//debug functions below
-	//addMembers,
+	addMembers,
 };
 
 // Call assignRoles like this:
