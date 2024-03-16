@@ -23,7 +23,10 @@ const RoleSelectionPage = () => {
 		if (!isAdmin) {
 			apiFunctions.setRoleListener(gameID, setSelectedRoles);
 		}
-	}, []);
+		if (gameState && gameState !== "RoleSelect") {
+			navigate("/game");
+		}
+	}, [gameState]);
 
 	useEffect(() => {
 		if (gameState && gameState !== "RoleSelect") {
@@ -35,6 +38,7 @@ const RoleSelectionPage = () => {
 		let allowedBad;
 		const numPlayers = Object.keys(playerState).length;
 		if (selectedRoles.length != numPlayers) {
+			console.log("not enough roles");
 			return;
 		}
 		if (numPlayers < 7) {
@@ -45,6 +49,7 @@ const RoleSelectionPage = () => {
 			allowedBad = 4;
 		}
 		if (numBad != allowedBad) {
+			console.log("not enough bad");
 			return;
 		}
 		apiFunctions.beginGame();
