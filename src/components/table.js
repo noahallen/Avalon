@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import { GameContext } from "../components/GameProvider.js";
+import apiFunctions from "../firebase/api.jsx";
 
 const OvalSVG = () => {
 	const {
 		playerState,
 		userName,
 		setPlayerState,
-		gamePhase,
+		gameState,
 		isAdmin,
-		setGamePhase,
+		gameID,
 	} = useContext(GameContext);
 	const numPlayers = Object.keys(playerState).length;
 	const scaleFactor = 0.78;
@@ -40,7 +41,7 @@ const OvalSVG = () => {
 	);
 
 	const handleCircleClick = (clickedUserName) => {
-		if (gamePhase === "OS" && isAdmin) {
+		if (gameState === "OS" && isAdmin) {
 			if (selection === "") {
 				setSelection(clickedUserName);
 			} else {
@@ -55,21 +56,21 @@ const OvalSVG = () => {
 				});
 				setSelection("");
 			}
-		} else if (gamePhase === "TS" && playerState[userName]?.isKing) {
+		} else if (gameState === "TS" && playerState[userName]?.isKing) {
 			playerState[clickedUserName].onTeam =
 				!playerState[clickedUserName].onTeam;
 			setPlayerState({
 				...playerState,
 				[clickedUserName]: playerState[clickedUserName],
 			});
-		} else if (gamePhase === "KS" && isAdmin) {
+		} else if (gameState === "KS" && isAdmin) {
 			playerState[clickedUserName].isKing =
 				!playerState[clickedUserName].isKing;
 			setPlayerState({
 				...playerState,
 				[clickedUserName]: playerState[clickedUserName],
 			});
-			setGamePhase("TS");
+			apiFunctions.setGameState(gameID, "TS");
 		}
 	};
 

@@ -14,6 +14,7 @@ const MainGamePage = () => {
 		userName,
 		gameID,
 		round,
+		listeners,
 	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
@@ -23,21 +24,21 @@ const MainGamePage = () => {
 	const handleRoleInfoClick = () => {
 		setShowMyRole(false); // Close "My Role" popup if open
 		setShowVotes(false); // Close "Votes" popup
-		setShowRoleInfo(true); // Close popup
+		setShowRoleInfo((prevState) => !prevState); // Close popup
 		setCurrentPage(1); // Default to page 1
 	};
 
 	const handleMyRoleClick = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowVotes(false); // Close "Votes" popup
-		setShowMyRole(true); // Close "My Role" popup if open
+		setShowMyRole((prevState) => !prevState); // Close "My Role" popup if open
 	};
 
 	// open the votes pop-up
 	const handleVotes = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowMyRole(false); // Close "My Role" popup if open
-		setShowVotes(true); // Close "Votes" popup
+		setShowVotes((prevState) => !prevState); // Close "Votes" popup
 	};
 
 	const handleClose = () => {
