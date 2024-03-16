@@ -255,7 +255,7 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 		);
 	}
 
-	set(ref(database, "/games/" + gameID + "/gameState"), "TS");
+	set(ref(database, "/games/" + gameID + "/gameState"), "OS");
 }
 
 //debug functions start
