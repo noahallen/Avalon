@@ -21,12 +21,12 @@ const WaitingRoom = () => {
 	} = useContext(GameContext);
 
 	// * debug stuff start
-	// const [numNew, setNumNew] = useState(0);
-	// const createMembers = () => {
-	// 	if (numNew > 0) {
-	// 		apiFunctions.addMembers(gameID, numNew);
-	// 	}
-	// };
+	const [numNew, setNumNew] = useState(0);
+	const createMembers = () => {
+		if (numNew > 0) {
+			apiFunctions.addMembers(gameID, numNew);
+		}
+	};
 
 	// * debug stuff stop
 
@@ -41,6 +41,7 @@ const WaitingRoom = () => {
 			return;
 		}
 		apiFunctions.goToRoleSelection(gameID);
+		//navigate("/game");-
 		navigate("/role-selection");
 	};
 
@@ -66,7 +67,7 @@ const WaitingRoom = () => {
 	} else {
 		return (
 			<div>
-				{/* {
+				{
 					//debug stuff
 					true && (
 						<div>
@@ -82,7 +83,7 @@ const WaitingRoom = () => {
 							<button onClick={createMembers}>Add Members</button>
 						</div>
 					)
-				} */}
+				}
 
 				{!popupState && (
 					<div className="welcome-message">
@@ -121,7 +122,13 @@ const WaitingRoom = () => {
 											className="small-gear-image"
 										/>
 									</a>
-									<button onClick={moveOn}>Advance</button>
+
+									<button
+										className="bn632-hover"
+										onClick={moveOn}
+									>
+										Choose Roles
+									</button>
 								</>
 							)}
 						</div>

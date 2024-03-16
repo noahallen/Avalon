@@ -110,13 +110,23 @@ const RoleSelectionPage = () => {
 
 	return (
 		<div>
-			<h4>Role Selection</h4>
+			<h4
+				style={{
+					fontSize: "30px",
+					fontWeight: "bold",
+					color: "#FFFFFF",
+					fontFamily: "Courier",
+					backgroundColor: "#742A01",
+				}}
+			>
+				Role Selection
+			</h4>
 			{isAdmin && (
 				<div id={"RoleSelections"}>
 					{Object.values(goodRoles).map((val) => (
 						<img
 							className="icon-selected"
-							src={characterImages[`${val}.png`]}
+							src={characterImages[`${val}.jpg`]}
 							key={val}
 							id={val}
 							alt={val}
@@ -129,7 +139,7 @@ const RoleSelectionPage = () => {
 					{Object.values(evilRoles).map((val) => (
 						<img
 							className="icon-selected"
-							src={characterImages[`${val}.png`]}
+							src={characterImages[`${val}.jpg`]}
 							key={val}
 							id={val}
 							alt={val}
