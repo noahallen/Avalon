@@ -74,26 +74,6 @@ const MainGamePage = () => {
 		//let index = playerState[userName].index; // don't need the index rn
 		apiFunctions.voteCount(gameID, userName, vote, playerState);
 		setShowVotes(false);
-		//const indOf = selectedRoles.indexOf(val);
-		/*
-		setNumGood(0);
-		setSelectedRoles([]);
-		return;
-		*/
-		// if (indOf == -1) {
-		// 	setSelectedRoles([...selectedRoles, val]);
-		// 	if (team) {
-		// 		setNumGood(numGood + 1);
-		// 	}
-		// } else {
-		// 	setSelectedRoles([
-		// 		...selectedRoles.slice(0, indOf),
-		// 		...selectedRoles.slice(indOf + 1),
-		// 	]);
-		// 	if (team) {
-		// 		setNumGood(numGood - 1);
-		// 	}
-		// }
 	};
 
 	return (

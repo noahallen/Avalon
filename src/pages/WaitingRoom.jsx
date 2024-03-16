@@ -17,16 +17,8 @@ const WaitingRoom = () => {
 		setPopupState(true);
 	};
 
-	// const moveOn = () => {
-	// 	navigate("/role-selection");
-	// };
-
 	const moveOn = () => {
-		navigate("/game");
-	};
-
-	const voteOnClick = () => {
-		setPopupState(true);
+		navigate("/role-selection");
 	};
 
 	if (isAdmin === null || isAdmin === undefined) {
