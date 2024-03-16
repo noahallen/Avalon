@@ -52,7 +52,8 @@ const RoleSelectionPage = () => {
 			console.log("not enough bad");
 			return;
 		}
-		apiFunctions.beginGame();
+
+		apiFunctions.beginGame(gameID, Object.keys(playerState), selectedRoles);
 	};
 
 	//0 for team is good, 1 is bad
@@ -86,7 +87,7 @@ const RoleSelectionPage = () => {
 							key={val}
 							id={val}
 							onClick={() => {
-								RoleButtonClick(val, 1);
+								RoleButtonClick(val, 0);
 							}}
 						>
 							{val}
@@ -97,7 +98,7 @@ const RoleSelectionPage = () => {
 							key={val}
 							id={val}
 							onClick={() => {
-								RoleButtonClick(val, 0);
+								RoleButtonClick(val, 1);
 							}}
 						>
 							{val}

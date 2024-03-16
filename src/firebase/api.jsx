@@ -241,15 +241,15 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 	while (selectedRoles.length > 0) {
 		playerInd = Math.floor(Math.random() * playerUsers.length);
 		roleInd = Math.floor(Math.random() * selectedRoles.length);
-		playerUsers.splice(playerInd, 1);
-		selectedRoles.splice(roleInd, 1);
+		playerName = playerUsers.splice(playerInd, 1);
+		roleName = selectedRoles.splice(roleInd, 1);
 
 		set(
 			ref(
 				database,
 				"/games/" + gameID + "/players/" + playerName + "/role",
 			),
-			roleName,
+			roleName[0],
 		);
 	}
 
@@ -269,6 +269,7 @@ function addMembers(gameID, number) {
 			{ displayName: baseName + i.toString(), role: "", index: i + 1 },
 		);
 	}
+	set(ref(database, "/games/" + gameID + "/playerCount"), 1 + Number(number));
 }
 //debug functions end
 
