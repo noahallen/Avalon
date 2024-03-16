@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import { Navigate, useNavigate } from "react-router-dom";
 import QRCodeComponent from "../components/QRCode.js";
@@ -10,7 +9,6 @@ import apiFunctions from "../firebase/api.jsx";
 
 const WaitingRoom = () => {
 	const [popupState, setPopupState] = useState(false);
-	const location = useLocation();
 	const {
 		playerState,
 		gameID,
