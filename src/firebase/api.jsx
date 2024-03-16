@@ -289,7 +289,7 @@ const apiFunctions = {
 	beginGame,
 	setGameStateListen,
 	//debug functions below
-	addMembers,
+	//addMembers,
 };
 
 // Call assignRoles like this:
