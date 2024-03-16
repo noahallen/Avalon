@@ -19,12 +19,10 @@ const UserNameInputBox = (props) => {
 		setName,
 		userName,
 		setUserName,
-		listeners,
 		setListeners,
 		gameID,
 		playerState,
 		setIsAdmin,
-		setGameState,
 	} = useContext(GameContext);
 
 	const navigate = useNavigate();
@@ -50,12 +48,6 @@ const UserNameInputBox = (props) => {
 			setListeners(createResponse.listeners);
 			setGameID(createResponse.gameID);
 			setIsAdmin(true);
-			apiFunctions.setGameStateListen(
-				gameID,
-				setGameState,
-				listeners,
-				setListeners,
-			);
 			navigate("/waiting-room", {
 				state: { isAdmin: isCreate, gameID: gameID },
 			});
@@ -88,12 +80,6 @@ const UserNameInputBox = (props) => {
 				alert("Game does not exist");
 			} else if (joinResponse === 2) {
 				setGameID(roomId);
-				apiFunctions.setGameStateListen(
-					gameID,
-					setGameState,
-					listeners,
-					setListeners,
-				);
 				setIsAdmin(false);
 				navigate("/waiting-room", {
 					state: { isAdmin: isCreate, gameID: gameID },

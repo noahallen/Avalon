@@ -11,8 +11,16 @@ import apiFunctions from "../firebase/api.jsx";
 const WaitingRoom = () => {
 	const [popupState, setPopupState] = useState(false);
 	const location = useLocation();
-	const { playerState, gameID, name, isAdmin, gameState } =
-		useContext(GameContext);
+	const {
+		playerState,
+		gameID,
+		name,
+		isAdmin,
+		gameState,
+		setGameState,
+		listeners,
+		setListeners,
+	} = useContext(GameContext);
 	const navigate = useNavigate();
 
 	const gearOnClick = () => {
@@ -25,8 +33,18 @@ const WaitingRoom = () => {
 	};
 
 	useEffect(() => {
-		if (gameState !== "Waiting") {
+		console.log(listeners);
+		if (gameState === undefined) {
+			apiFunctions.setGameStateListen(
+				gameID,
+				setGameState,
+				listeners,
+				setListeners,
+			);
+		}
+		if (gameState !== "Waiting" && gameState !== undefined) {
 			navigate("/role-selection");
+			//console.log(gameState);
 		}
 	}, [gameState]);
 

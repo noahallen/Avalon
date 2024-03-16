@@ -4,8 +4,17 @@ import { useNavigate } from "react-router-dom";
 import apiFunctions from "../firebase/api.jsx";
 
 const RoleSelectionPage = () => {
-	const { goodRoles, evilRoles, isAdmin, playerState, gameID } =
-		useContext(GameContext);
+	const {
+		goodRoles,
+		evilRoles,
+		isAdmin,
+		playerState,
+		gameID,
+		gameState,
+		listeners,
+		setGameState,
+		setListeners,
+	} = useContext(GameContext);
 	const [selectedRoles, setSelectedRoles] = useState([]);
 	const [numBad, setNumBad] = useState(0);
 	const navigate = useNavigate();
@@ -63,6 +72,7 @@ const RoleSelectionPage = () => {
 				<div id={"RoleSelections"}>
 					{Object.values(goodRoles).map((val) => (
 						<button
+							key={val}
 							id={val}
 							onClick={() => {
 								RoleButtonClick(val, 1);
@@ -73,6 +83,7 @@ const RoleSelectionPage = () => {
 					))}
 					{Object.values(evilRoles).map((val) => (
 						<button
+							key={val}
 							id={val}
 							onClick={() => {
 								RoleButtonClick(val, 0);
@@ -87,7 +98,7 @@ const RoleSelectionPage = () => {
 			<h6>Roles Selected: {numBad}</h6>
 			<div id={"SelectedRoles"}>
 				{selectedRoles.map((val) => (
-					<div>{val}</div>
+					<div key={val}>{val}</div>
 				))}
 			</div>
 		</div>
