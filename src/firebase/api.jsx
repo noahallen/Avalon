@@ -215,6 +215,16 @@ function setGameStateListen(gameID, setGameState, listeners, setListeners) {
 	setListeners({ ...listeners, stateListener });
 }
 
+function setRoundsListen(gameID, setRoundState, listeners, setListeners) {
+	const stateListener = onValue(
+		ref(database, "/games/" + gameID + "/rounds"),
+		(snapshot) => {
+			setRoundState(snapshot.val());
+		},
+	);
+	setListeners({ ...listeners, stateListener });
+}
+
 // Role functions
 function goToRoleSelection(gameID) {
 	setGameState(gameID, "RoleSelect");
