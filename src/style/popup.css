@@ -1,36 +1,66 @@
+.tab-bar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #491303; /* Solid red background */
+	padding: 10px 0; /* Some padding to give height to the red block */
+}
+
 .tabs {
 	position: fixed;
 	bottom: 0;
-	width: 100%;
+	left: 0;
+	right: 0;
 	display: flex;
-	justify-content: space-evenly;
-	background-color: #111; /* Dark background for the tab buttons */
-	border-top: 2px solid darkred;
+	justify-content: space-evenly; /* Distribute space evenly around items */
+	align-items: center;
+	padding: 15px 0;
 }
 
 .tabs button {
-	padding: 10px 20px;
 	font-size: 16px;
-	background: transparent;
-	color: gold; /* Gold text color for the buttons */
-	border: none; /* Removes the border */
+	color: #ffd700;
+	background: #491303;
+	border: rgb(199, 127, 32);
 	outline: none;
+	padding: 12px 3em; /* Padding inside the buttons */
+	margin: 1px 0px; /* Margin between the buttons */
+	border-radius: 10px; /* Rounded borders for the buttons */
+	cursor: pointer;
+	transition: background-color 0.3s ease; /* Smooth background color transition */
+	font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+.tabs button:active {
+	background-color: #743c2b; /* Even darker red when the button is clicked */
+}
+
+.tabs button:hover {
+	background-color: #853838; /* Slightly darker red on hover */
 }
 
 .popup {
 	position: fixed;
-	width: 80%;
-	height: 50%;
-	top: 25%; /* Center the popup */
+	width: 70%;
+	height: 30em;
+	top: 20%; /* Center the popup */
 	left: 10%;
-	background: white;
-	border: 1px solid #ccc;
+	background: rgb(216, 179, 162);
 	z-index: 10;
 	padding: 20px;
+	border-bottom-left-radius: 18px; /* Rounded bottom left edge */
+	border-bottom-right-radius: 18px; /* Rounded bottom right edge */
+	border-top-left-radius: 18px;
+	border-top-right-radius: 18px;
 }
 
 .popup button {
-	position: absolute;
-	top: 10px;
-	right: 10px;
+	padding: 5px 10px;
+	background: #8f8a70; /* A button fit for royalty, in gold */
+	color: #2e0000; /* Dark red text, for contrast and regal elegance */
+	border: none;
+	border-radius: 5px; /* Slightly rounded edges for the button */
+	font-size: 16px;
+	cursor: pointer; /* The hand of the king, beckoning for action */
 }
