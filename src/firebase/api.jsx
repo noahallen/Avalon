@@ -390,19 +390,29 @@ async function countVoteResults(gameId) {
 	await set(
 		ref(
 			database,
-			"/games/" +
-				gameId +
-				"/rounds/" +
-				currentRoundIndex +
-				"/trials/" +
-				currentTrialIndex +
-				"/pass/",
+			"/games/" + gameId + "/roundResults/" + currentRoundIndex,
 		),
 		pass,
 	);
-	if (currentRoundIndex < 5) {
-		currentRoundIndex++;
-		currentTrialIndex = 0;
+	if (pass) {
+		if (currentRoundIndex < 5) {
+			currentRoundIndex++;
+			currentTrialIndex = 0;
+			await set(
+				ref(
+					database,
+					"/games/" +
+						gameId +
+						"/rounds/" +
+						currentRoundIndex +
+						"/trials/" +
+						currentTrialIndex,
+				),
+				{},
+			);
+		}
+	} else {
+		currentTrialIndex++;
 		await set(
 			ref(
 				database,
@@ -416,6 +426,7 @@ async function countVoteResults(gameId) {
 			{},
 		);
 	}
+
 	return pass;
 }
 
