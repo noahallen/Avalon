@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import { useNavigate } from "react-router-dom";
 import apiFunctions from "../firebase/api.jsx";
+import "../index.css";
 
 const RoleSelectionPage = () => {
 	const { goodRoles, evilRoles, isAdmin, playerState, gameID, gameState } =
@@ -122,10 +123,10 @@ const RoleSelectionPage = () => {
 				Role Selection
 			</h4>
 			{isAdmin && (
-				<div id={"RoleSelections"}>
+				<div id="RoleSelections">
 					{Object.values(goodRoles).map((val) => (
 						<img
-							className="icon-selected"
+							className={`icon-selected ${selectedRoles.includes(val) ? "highlighted" : ""}`}
 							src={characterImages[`${val}.jpg`]}
 							key={val}
 							id={val}
@@ -136,9 +137,11 @@ const RoleSelectionPage = () => {
 							}}
 						></img>
 					))}
+					<div className="role-separator"></div>
+
 					{Object.values(evilRoles).map((val) => (
 						<img
-							className="icon-selected"
+							className={`icon-selected ${selectedRoles.includes(val) ? "highlighted" : ""}`}
 							src={characterImages[`${val}.jpg`]}
 							key={val}
 							id={val}

@@ -134,15 +134,37 @@ input.error {
 	padding: 1em;
 	border-radius: 50%;
 	border: 1px solid transparent;
-	align-content: center;
 }
 
 #RoleSelections {
-	max-height: 600px; /* Adjust based on your needs */
+	max-height: 500px; /* Adjust based on your needs */
 	overflow-y: auto; /* Enables vertical scrolling if content overflows */
-	display: flex; /* Adjust layout as needed, e.g., for a grid of icons */
-	flex-wrap: wrap; /* Allows items to wrap in the container */
-	gap: 15px; /* Optional: adds space between icons */
+	display: flex; /* Lays out the images in a row */
+	flex-wrap: wrap; /* Allows items to wrap to the next line */
+	gap: 5px; /* Adds space between icons */
+	justify-content: center;
+	border: 5px solid #440303; /* Optional: adds a border around the container */
+	margin-bottom: 20px; /* Adds some space between the containers */
+}
+
+.highlighted {
+	border: 6px solid rgb(255, 255, 0); /* Example: yellow border */
+	border-radius: 50%; /* Maintain rounded appearance */
+	opacity: 0.6;
+	padding: 7px;
+}
+
+#SelectedRoles {
+	font-size: 1em;
+	font-weight: bold;
+	display: grid;
+	grid-template-columns: 1fr 1fr; /* Creates two columns of equal width */
+	gap: 4px;
+}
+
+.role-separator {
+	height: 20px; /* Or any height for spacing */
+	background-color: #f0f0f0; /* Optional: if you want a colored divider, otherwise can be omitted */
 }
 
 .my-role-tab {
