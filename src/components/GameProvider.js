@@ -13,6 +13,7 @@ export const GameContextProvider = ({ children }) => {
 	const [featureSelectionSettings, setFeatureSelectionSettings] = useState(
 		{},
 	);
+	const [roundSuccess, setRoundSuccess] = useState([]);
 	const [isAdmin, setIsAdmin] = useState();
 	const [rounds, setRound] = useState({});
 	const [gameState, setGameState] = useState();
@@ -75,6 +76,8 @@ export const GameContextProvider = ({ children }) => {
 				gameID,
 				setGameID,
 				name,
+				roundSuccess,
+				setRoundSuccess,
 				setName,
 				userName,
 				setUserName,
