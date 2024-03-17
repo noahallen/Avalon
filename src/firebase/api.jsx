@@ -336,10 +336,10 @@ async function playerVote(gameId, playerUserName, vote) {
 	);
 }
 
-async function countVoteResults(gameId) {
+async function countVoteResults(gameID) {
 	const dbref = ref(database);
-	let roundPath = "/games/" + gameId + "/rounds/";
-	let playerPath = "/games/" + gameId + "/players/";
+	let roundPath = "/games/" + gameID + "/rounds/";
+	let playerPath = "/games/" + gameID + "/players/";
 	let playerCount = 0;
 
 	await get(child(dbref, playerPath)).then((snapshot) => {
@@ -387,13 +387,6 @@ async function countVoteResults(gameId) {
 		}
 	});
 	const pass = approveCount > rejectCount;
-	await set(
-		ref(
-			database,
-			"/games/" + gameId + "/roundResults/" + currentRoundIndex,
-		),
-		pass,
-	);
 	if (pass) {
 		if (currentRoundIndex < 5) {
 			currentRoundIndex++;
@@ -402,7 +395,7 @@ async function countVoteResults(gameId) {
 				ref(
 					database,
 					"/games/" +
-						gameId +
+						gameID +
 						"/rounds/" +
 						currentRoundIndex +
 						"/trials/" +
@@ -417,7 +410,7 @@ async function countVoteResults(gameId) {
 			ref(
 				database,
 				"/games/" +
-					gameId +
+					gameID +
 					"/rounds/" +
 					currentRoundIndex +
 					"/trials/" +
@@ -426,7 +419,7 @@ async function countVoteResults(gameId) {
 			{},
 		);
 	}
-
+	setGameState(gameID, "TS");
 	return pass;
 }
 
@@ -462,6 +455,7 @@ const apiFunctions = {
 	setGameState,
 	playerVote,
 	countVoteResults,
+	setRoundsListen,
 	//debug functions below
 	addMembers,
 };

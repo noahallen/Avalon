@@ -15,12 +15,20 @@ const MainGamePage = () => {
 		gameID,
 		rounds,
 		listeners,
+		setRound,
+		setListeners,
+		roundSuccess,
+		setRoundSuccess,
 		helperText,
 	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
+
+	useEffect(() => {
+		apiFunctions.setRoundsListen(gameID, setRound, listeners, setListeners);
+	}, []);
 
 	function importAllImages(r) {
 		let images = {};
@@ -39,6 +47,11 @@ const MainGamePage = () => {
 		setShowRoleInfo((prevState) => !prevState); // Close popup
 		setCurrentPage(1); // Default to page 1
 	};
+
+	useEffect(() => {
+		if (gameState === "TeamSelectionVote") {
+		}
+	}, [rounds]);
 
 	const handleMyRoleClick = () => {
 		setShowRoleInfo(false); // Close popup
@@ -97,6 +110,10 @@ const MainGamePage = () => {
 		setShowVotes(false);
 	};
 
+	const confirmTeamSelection = () => {
+		apiFunctions.setGameState(gameID, "VOTE");
+	};
+
 	const confimPlayerOrder = () => {
 		apiFunctions.setGameState(gameID, "KS");
 	};
@@ -110,7 +127,11 @@ const MainGamePage = () => {
 			)}
 			{gameState === "KS" && isAdmin && <h1>Please select a king!</h1>}
 			<OvalSVG />
-			{/* {gameState === "VOTE" && } */}
+			{gameState === "TS" && playerState[userName].isKing && (
+				<button onClick={confirmTeamSelection}>
+					Confirm Team Selection
+				</button>
+			)}
 			<div className="tab-bar">
 				<div className="tabs">
 					<button
@@ -429,7 +450,7 @@ const MainGamePage = () => {
 					<button onClick={handleClose}>Close</button>
 				</div>
 			)}
-			{showVotes && (
+			{showVotes && gameState === "VOTE" && (
 				<div className="popup votes">
 					<div>
 						<h4>VOTE</h4>
