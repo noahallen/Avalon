@@ -32,6 +32,7 @@ const MainGamePage = () => {
 	const [showVotes, setShowVotes] = useState(false);
 	const [currentVote, setCurrentVote] = useState(0);
 	const [kingVoted, setKingVoted] = useState(false);
+	const [totalApproves, setTotalApproves] = useState(-1);
 
 	useEffect(() => {
 		apiFunctions.setRoundsListen(
@@ -64,11 +65,24 @@ const MainGamePage = () => {
 
 	useEffect(() => {
 		if (gameState === "TS") {
+			setTotalApproves(-1);
 		}
 		if (gameState === "VOTE") {
 			handleVotes();
 		}
 		if (gameState === "REV") {
+			//grab the result
+			if (totalApproves === -1) {
+				let votes = 0;
+				const simplifiedRound =
+					rounds[currentRound]["trials"][currentTrial]["votes"];
+				for (const key in simplifiedRound) {
+					votes += simplifiedRound[key];
+				}
+				setTotalApproves(votes);
+			}
+		}
+		if (gameState === "GO") {
 		}
 	}, [gameState]);
 
@@ -146,7 +160,25 @@ const MainGamePage = () => {
 
 	const finalizeVotes = () => {
 		setKingVoted(false);
-		apiFunctions.countVoteResults(gameID, currentRound, currentTrial);
+		//calculate vote results
+		let votes = 0;
+		const simplifiedRound =
+			rounds[currentRound]["trials"][currentTrial]["votes"];
+		for (const key in simplifiedRound) {
+			votes += simplifiedRound[key];
+		}
+		const didPass = Object.keys(playerState).length / 2 < votes;
+		setTotalApproves(votes);
+		apiFunctions.countVoteResults(
+			gameID,
+			didPass,
+			currentRound,
+			currentTrial,
+		);
+	};
+
+	const finishVoteReview = () => {
+		//set new king
 		const ind = playerState[userName].index + 1;
 		let newKing;
 		for (const key in playerState) {
@@ -159,7 +191,7 @@ const MainGamePage = () => {
 			}
 		}
 		apiFunctions.setKing(gameID, newKing, userName);
-		apiFunctions.setGameState(gameID, "REV");
+		apiFunctions.setGameState("TS");
 	};
 
 	const confirmTeamSelection = () => {
@@ -541,6 +573,22 @@ const MainGamePage = () => {
 					</div>
 				</div>
 			)}
+			{
+				(gameState = "REV" && (
+					<div className="popup">
+						{" "}
+						Approves: {totalApproves} Rejects:{" "}
+						{playerState
+							? Object.keys(playerState).length - totalApproves
+							: 0}{" "}
+						{playerState[userName].isKing && (
+							<button onClick={finishVoteReview}>
+								Finish Review
+							</button>
+						)}
+					</div>
+				))
+			}
 		</div>
 	);
 };

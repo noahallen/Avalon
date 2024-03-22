@@ -61,6 +61,7 @@ export const GameContextProvider = ({ children }) => {
 		MissionRun: "MR",
 		MissionReveal: "MREV",
 		Lady: "LAD",
+		GameOver: "GO",
 	};
 
 	const helperText = {

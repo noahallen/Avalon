@@ -259,8 +259,22 @@ function changeRoles(gameID, selectedRoles) {
 }
 //Add role
 
-function setGameState(gameID, state) {
+//general purpose set game state for use in main game page and progressing game along
+function setGameState(gameID, state, playerState) {
 	set(ref(database, "/games/" + gameID + "/gameState"), state);
+
+	//if changing to TS reset all on team statuses
+	if (state === "TS") {
+		for (const key in playerState) {
+			set(
+				ref(
+					database,
+					"/games/" + gameID + "/players/" + key + "/onTeam",
+				),
+				false,
+			);
+		}
+	}
 }
 
 function beginGame(gameID, playerUsers, selectedRoles) {
@@ -353,7 +367,8 @@ async function playerVote(
 				"/rounds/" +
 				currentRound +
 				"/trials/" +
-				currentTrial,
+				currentTrial +
+				"/votes",
 		),
 		playerVote,
 	);
@@ -370,7 +385,7 @@ function setKing(gameID, newKing, oldKing) {
 	);
 }
 
-async function countVoteResults(gameID, currentRound, currentTrial) {
+async function countVoteResults(gameID, didPass, currentRound, currentTrial) {
 	/*
 	const dbref = ref(database);
 	let roundPath = "/games/" + gameID + "/rounds/";
@@ -455,8 +470,24 @@ async function countVoteResults(gameID, currentRound, currentTrial) {
 		);
 	}
 	*/
-	setGameState(gameID, "TS");
-	return pass;
+	if (didPass) {
+		set(
+			ref(database, "/games/" + gameID + "/currentRound"),
+			currentRound + 1,
+		);
+		set(ref(database, "/games/" + gameID + "/currentTrial"), 1);
+	} else {
+		set(
+			ref(database, "/games/" + gameID + "/currentTrial"),
+			currentTrial + 1,
+		);
+	}
+	if (currentTrial + 1 === 5) {
+		setGameState(gameID, "GO");
+	} else {
+		setGameState(gameID, "REV");
+	}
+	return;
 }
 
 //debug functions start
