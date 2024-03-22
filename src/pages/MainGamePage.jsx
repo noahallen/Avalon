@@ -3,6 +3,7 @@ import { GameContext } from "../components/GameProvider.js";
 import apiFunctions from "../firebase/api";
 import "../style/popup.css";
 import OvalSVG from "../components/table";
+import { user } from "firebase-functions/v1/auth";
 
 const MainGamePage = () => {
 	const {
@@ -19,14 +20,27 @@ const MainGamePage = () => {
 		setListeners,
 		roundSuccess,
 		setRoundSuccess,
+		setCurrentRound,
+		setCurrentTrial,
+		currentRound,
+		currentTrial,
 	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
+	const [currentVote, setCurrentVote] = useState(0);
+	const [kingVoted, setKingVoted] = useState(false);
 
 	useEffect(() => {
-		apiFunctions.setRoundsListen(gameID, setRound, listeners, setListeners);
+		apiFunctions.setRoundsListen(
+			gameID,
+			setRound,
+			listeners,
+			setCurrentRound,
+			setCurrentTrial,
+			setListeners,
+		);
 	}, []);
 
 	const handleRoleInfoClick = () => {
@@ -37,14 +51,24 @@ const MainGamePage = () => {
 	};
 
 	useEffect(() => {
-		if (gameState === "TeamSelectionVote") {
+		if (gameState === "TS") {
 		}
-	}, [rounds]);
+		if (gameState === "VOTE") {
+			handleVotes();
+		}
+		if (gameState === "REV") {
+		}
+	}, [gameState]);
 
 	const handleMyRoleClick = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowVotes(false); // Close "Votes" popup
 		setShowMyRole((prevState) => !prevState); // Close "My Role" popup if open
+	};
+
+	//send votes to everyone
+	const sendVotes = () => {
+		apiFunctions.setGameState("Vote");
 	};
 
 	// open the votes pop-up
@@ -94,8 +118,36 @@ const MainGamePage = () => {
 
 	const VoteClick = (userName, vote) => {
 		//let index = playerState[userName].index; // don't need the index rn
-		apiFunctions.playerVote(gameID, userName, vote, playerState);
-		setShowVotes(false);
+		apiFunctions.playerVote(
+			gameID,
+			userName,
+			vote,
+			currentRound,
+			currentTrial,
+		);
+		if (!playerState[userName].isKing) {
+			setShowVotes(false);
+		} else {
+			setKingVoted(true);
+		}
+	};
+
+	const finalizeVotes = () => {
+		setKingVoted(false);
+		apiFunctions.countVoteResults(gameID, currentRound, currentTrial);
+		const ind = playerState[userName].index + 1;
+		let newKing;
+		for (const key in playerState) {
+			if (playerState[key].index === ind) {
+				newKing = key;
+				break;
+			}
+			if (playerState[key].index === 0) {
+				newKing = key;
+			}
+		}
+		apiFunctions.setKing(gameID, newKing, userName);
+		apiFunctions.setGameState(gameID, "REV");
 	};
 
 	const confirmTeamSelection = () => {
@@ -134,7 +186,7 @@ const MainGamePage = () => {
 					>
 						My Role
 					</button>
-					<button onClick={handleVotes}>Send Votes</button>
+					<button onClick={sendVotes}>Send Votes</button>
 				</div>
 			</div>
 
@@ -430,23 +482,38 @@ const MainGamePage = () => {
 			{showVotes && gameState === "VOTE" && (
 				<div className="popup votes">
 					<div>
-						<h4>VOTE</h4>
+						<h4>
+							VOTE: {currentVote === 1 ? "Approve" : "Reject"}
+						</h4>
 						<h4>{userName}</h4>
 						<div id={"VoteSelection"}>
 							<button
 								onClick={() => {
-									VoteClick(userName, 1);
+									setCurrentVote(1);
 								}}
 							>
 								Approve
 							</button>
 							<button
 								onClick={() => {
-									VoteClick(userName, 0);
+									setCurrentVote(0);
 								}}
 							>
 								Reject
 							</button>
+							{!kingVoted ? (
+								<button
+									onClick={() => {
+										VoteClick(userName, currentVote);
+									}}
+								>
+									Vote
+								</button>
+							) : (
+								<button onClick={finalizeVotes}>
+									Finalize Votes
+								</button>
+							)}
 						</div>
 					</div>
 				</div>

@@ -92,6 +92,8 @@ function createGameLobby(
 		playerCount: 1,
 		gameState: "Waiting",
 		selectedRoles: [],
+		currentRound: 1,
+		currentTrial: 1,
 	});
 	const listeners = loadGameLobby(
 		gameID,
@@ -212,17 +214,30 @@ function setGameStateListen(gameID, setGameState, listeners, setListeners) {
 			setGameState(snapshot.val());
 		},
 	);
-	setListeners({ ...listeners, stateListener });
+	setListeners({ ...listeners, stateListener: stateListener });
 }
 
-function setRoundsListen(gameID, setRoundState, listeners, setListeners) {
+function setRoundsListen(
+	gameID,
+	setRoundState,
+	listeners,
+	setCurrentRound,
+	setCurrentTrial,
+	setListeners,
+) {
 	const stateListener = onValue(
 		ref(database, "/games/" + gameID + "/rounds"),
 		(snapshot) => {
 			setRoundState(snapshot.val());
 		},
 	);
-	setListeners({ ...listeners, stateListener });
+	ref(database, "/games/" + gameID + "/currentRound", (snapshot) => {
+		setCurrentRound(snapshot.val());
+	});
+	ref(database, "/games/" + gameID + "currentTrial", (snapshot) => {
+		setCurrentTrial(snapshot.val());
+	});
+	setListeners({ ...listeners, roundsListener: stateListener });
 }
 
 // Role functions
@@ -291,9 +306,16 @@ async function assignRoles(roles, gameId) {
 	return 1;
 }
 
-async function playerVote(gameId, playerUserName, vote) {
-	const dbref = ref(database);
-	let roundPath = "/games/" + gameId + "/rounds/";
+async function playerVote(
+	gameId,
+	playerUserName,
+	vote,
+	currentRound,
+	currentTrial,
+) {
+	//const dbref = ref(database);
+	//let roundPath = "/games/" + gameId + "/rounds/";
+	/*
 	let {
 		currentRoundIndex,
 		currentRound,
@@ -320,6 +342,7 @@ async function playerVote(gameId, playerUserName, vote) {
 		}
 		return {};
 	});
+	*/
 	const playerVote = { [playerUserName]: vote };
 
 	await set(
@@ -328,15 +351,27 @@ async function playerVote(gameId, playerUserName, vote) {
 			"/games/" +
 				gameId +
 				"/rounds/" +
-				currentRoundIndex +
+				currentRound +
 				"/trials/" +
-				currentTrialIndex,
+				currentTrial,
 		),
 		playerVote,
 	);
 }
 
-async function countVoteResults(gameID) {
+function setKing(gameID, newKing, oldKing) {
+	set(
+		ref(database, "/games/" + gameID + "/players/" + oldKing + "/isKing"),
+		false,
+	);
+	set(
+		ref(database, "/games/" + gameID + "/players/" + newKing + "/isKing"),
+		true,
+	);
+}
+
+async function countVoteResults(gameID, currentRound, currentTrial) {
+	/*
 	const dbref = ref(database);
 	let roundPath = "/games/" + gameID + "/rounds/";
 	let playerPath = "/games/" + gameID + "/players/";
@@ -419,6 +454,7 @@ async function countVoteResults(gameID) {
 			{},
 		);
 	}
+	*/
 	setGameState(gameID, "TS");
 	return pass;
 }
@@ -456,6 +492,7 @@ const apiFunctions = {
 	playerVote,
 	countVoteResults,
 	setRoundsListen,
+	setKing,
 	//debug functions below
 	addMembers,
 };
