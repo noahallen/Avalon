@@ -147,6 +147,31 @@ input.error {
 	margin-bottom: 20px; /* Adds some space between the containers */
 }
 
+.goodrole-name {
+	color: #ffffff; /* Set text color */
+	margin-top: -15px; /* Space between image and text */
+	font-family: Arial; /* Font family */
+	font-size: 15px; /* Increased font size */
+	text-align: center; /* Align text to center */
+	margin-bottom: 5px;
+	font-weight: bold;
+	background-color: #2778bb;
+	padding: 3px;
+	max-width: 100px;
+}
+
+.evilrole-name {
+	color: #ffffff; /* Set text color */
+	margin-top: -15px; /* Space between image and text */
+	font-family: Arial; /* Font family */
+	font-size: 15px; /* Increased font size */
+	text-align: center; /* Align text to center */
+	margin-bottom: 5px;
+	font-weight: bold;
+	background-color: #aa1010;
+	padding: 3px;
+	max-width: 100px;
+}
 .highlighted {
 	border: 6px solid rgb(255, 255, 0); /* Example: yellow border */
 	border-radius: 50%; /* Maintain rounded appearance */
@@ -159,12 +184,20 @@ input.error {
 	font-weight: bold;
 	display: grid;
 	grid-template-columns: 1fr 1fr; /* Creates two columns of equal width */
-	gap: 4px;
+	gap: -5px;
+}
+
+.goodRolesColumn,
+.evilRolesColumn {
+	width: 48%; /* Adjust based on your design */
+	display: flex;
+	flex-direction: column;
 }
 
 .role-separator {
-	height: 20px; /* Or any height for spacing */
-	background-color: #f0f0f0; /* Optional: if you want a colored divider, otherwise can be omitted */
+	height: 10px; /* Or any height for spacing */
+	background-color: #0e0c0c; /* Optional: if you want a colored divider, otherwise can be omitted */
+	width: 100%;
 }
 
 .my-role-tab {
