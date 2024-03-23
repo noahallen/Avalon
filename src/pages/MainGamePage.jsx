@@ -3,7 +3,7 @@ import { GameContext } from "../components/GameProvider.js";
 import apiFunctions from "../firebase/api";
 import "../style/popup.css";
 import OvalSVG from "../components/table";
-import { user } from "firebase-functions/v1/auth";
+//import { user } from "firebase-functions/v1/auth";
 
 const MainGamePage = () => {
 	const {
@@ -71,7 +71,7 @@ const MainGamePage = () => {
 			handleVotes();
 		}
 		if (gameState === "REV") {
-			//grab the result
+			//calc the result
 			if (totalApproves === -1) {
 				let votes = 0;
 				const simplifiedRound =
