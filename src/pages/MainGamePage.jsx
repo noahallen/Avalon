@@ -15,11 +15,23 @@ const MainGamePage = () => {
 		gameID,
 		round,
 		listeners,
+		helperText,
 	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
+
+	function importAllImages(r) {
+		let images = {};
+		r.keys().forEach((item, index) => {
+			images[item.replace("./", "")] = r(item);
+		});
+		return images;
+	}
+	const characterImages = importAllImages(
+		require.context("../res", true, /\.(png|jpe?g|svg)$/),
+	);
 
 	const handleRoleInfoClick = () => {
 		setShowMyRole(false); // Close "My Role" popup if open
@@ -401,8 +413,19 @@ const MainGamePage = () => {
 			)}
 
 			{showMyRole && (
-				<div className="popup">
+				<div className="popup my-role-tab">
 					{/* Popup content for My Role */}
+					<h1>{playerState[userName]["role"]}</h1>
+					<img
+						src={
+							characterImages[
+								`${playerState[userName]["role"]}.jpg`
+							]
+						}
+						alt={playerState[userName]["role"]}
+					></img>
+					<p>{playerState[userName]["helperText"]}</p>
+
 					<button onClick={handleClose}>Close</button>
 				</div>
 			)}
