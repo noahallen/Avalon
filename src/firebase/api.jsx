@@ -236,14 +236,7 @@ function setRoundsListen(
 	ref(database, "/games/" + gameID + "/currentRound", (snapshot) => {
 		setCurrentRound(snapshot.val());
 	});
-	ref(database, "/games/" + gameID + "currentTrial", (snapshot) => {
-		setCurrentTrial(snapshot.val());
-	});
-	setListeners({ ...listeners, roundsListener: stateListener });
-	ref(database, "/games/" + gameID + "/currentRound", (snapshot) => {
-		setCurrentRound(snapshot.val());
-	});
-	ref(database, "/games/" + gameID + "currentTrial", (snapshot) => {
+	ref(database, "/games/" + gameID + "/currentTrial", (snapshot) => {
 		setCurrentTrial(snapshot.val());
 	});
 	setListeners({ ...listeners, roundsListener: stateListener });
