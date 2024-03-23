@@ -302,6 +302,16 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 	setGameState(gameID, "OS");
 }
 
+function setPlayerField(gameID, userName, field, value) {
+	set(
+		ref(
+			database,
+			"/games/" + gameID + "/players/" + userName + "/" + field,
+		),
+		value,
+	);
+}
+
 async function assignRoles(roles, gameId) {
 	const dbref = ref(database);
 
@@ -493,7 +503,7 @@ async function countVoteResults(gameID, didPass, currentRound, currentTrial) {
 }
 
 //debug functions start
-function addMembers(gameID, number) {
+function addMembers(gameID, existing, number) {
 	const baseName = "test user ";
 
 	for (let i = 0; i < number; i++) {
@@ -502,10 +512,18 @@ function addMembers(gameID, number) {
 				database,
 				"/games/" + gameID + "/players/" + baseName + i.toString(),
 			),
-			{ displayName: baseName + i.toString(), role: "", index: i + 1 },
+			{
+				displayName: baseName + i.toString(),
+				role: "",
+				index: i + existing,
+				isKing: false,
+			},
 		);
 	}
-	set(ref(database, "/games/" + gameID + "/playerCount"), 1 + Number(number));
+	set(
+		ref(database, "/games/" + gameID + "/playerCount"),
+		existing + Number(number),
+	);
 }
 //debug functions end
 
@@ -526,6 +544,7 @@ const apiFunctions = {
 	countVoteResults,
 	setRoundsListen,
 	setKing,
+	setPlayerField,
 	//debug functions below
 	addMembers,
 };

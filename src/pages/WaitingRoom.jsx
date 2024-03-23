@@ -24,7 +24,11 @@ const WaitingRoom = () => {
 	const [numNew, setNumNew] = useState(0);
 	const createMembers = () => {
 		if (numNew > 0) {
-			apiFunctions.addMembers(gameID, numNew);
+			apiFunctions.addMembers(
+				gameID,
+				Object.keys(playerState).length,
+				numNew,
+			);
 		}
 	};
 
