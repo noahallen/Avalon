@@ -30,6 +30,7 @@ const MainGamePage = () => {
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
 	const [currentVote, setCurrentVote] = useState(0);
+	const [currenMissionVote, setCurrentMissionVote] = useState(0);
 	const [totalApproves, setTotalApproves] = useState(-1);
 	const [currentVotesAdmin, setCurrentVotesAdmin] = useState({});
 	const [adminListener, setAdminListener] = useState();
@@ -92,6 +93,8 @@ const MainGamePage = () => {
 			}
 		}
 		if (gameState === "GO") {
+		}
+		if (gameState === "MR") {
 		}
 	}, [gameState]);
 
@@ -219,6 +222,11 @@ const MainGamePage = () => {
 	};
 
 	const finishVoteReview = () => {
+		//give out the mission cards if approved
+		const didPass = Object.keys(playerState).length / 2 < votes;
+		if (didPass) {
+		}
+		//derya
 		//set new king
 		const ind = playerState[userName].index + 1;
 		let newKing;
@@ -626,10 +634,35 @@ const MainGamePage = () => {
 						? Object.keys(playerState).length - totalApproves
 						: 0}{" "}
 					{playerState[userName].isKing && (
-						<button onClick={finishVoteReview}>
+						<button onClick={finishVoteReview()}>
 							Finish Review
 						</button>
 					)}
+				</div>
+			)}
+			{gameState === "MR" && ( //and isvoting people + check for player cards
+				<div className="popup">
+					<button
+						onClick={() => {
+							setCurrentMissionVote(1);
+						}}
+					>
+						Pass
+					</button>
+					<button
+						onClick={() => {
+							setCurrentMissionVote(0);
+						}}
+					>
+						Fail
+					</button>
+					<button
+						onClick={() => {
+							MissionVoteClick(userName, currentVote);
+						}}
+					>
+						Vote
+					</button>
 				</div>
 			)}
 		</div>
