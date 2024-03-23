@@ -21,12 +21,12 @@ const WaitingRoom = () => {
 	} = useContext(GameContext);
 
 	// * debug stuff start
-	const [numNew, setNumNew] = useState(0);
-	const createMembers = () => {
-		if (numNew > 0) {
-			apiFunctions.addMembers(gameID, numNew);
-		}
-	};
+	// const [numNew, setNumNew] = useState(0);
+	// const createMembers = () => {
+	// if (numNew > 0) {
+	// apiFunctions.addMembers(gameID, numNew);
+	// }
+	// };
 
 	// * debug stuff stop
 
