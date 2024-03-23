@@ -233,12 +233,20 @@ function setRoundsListen(
 			setRoundState(snapshot.val());
 		},
 	);
-	ref(database, "/games/" + gameID + "/currentRound", (snapshot) => {
-		setCurrentRound(snapshot.val());
-	});
-	ref(database, "/games/" + gameID + "/currentTrial", (snapshot) => {
-		setCurrentTrial(snapshot.val());
-	});
+
+	const roundListener = onValue(
+		ref(database, "/games/" + gameID + "/currentRound"),
+		(snapshot) => {
+			setCurrentRound(snapshot.val());
+		},
+	);
+	const triaListener = onValue(
+		ref(database, "/games/" + gameID + "/currentTrial"),
+		(snapshot) => {
+			setCurrentTrial(snapshot.val());
+		},
+	);
+
 	setListeners({ ...listeners, roundsListener: stateListener });
 }
 
@@ -369,7 +377,7 @@ async function playerVote(
 		return {};
 	});
 	*/
-	const playerVote = { [playerUserName]: vote };
+	//const playerVote = { [playerUserName]: vote };
 
 	await set(
 		ref(
@@ -380,9 +388,10 @@ async function playerVote(
 				currentRound +
 				"/trials/" +
 				currentTrial +
-				"/votes",
+				"/votes/" +
+				playerUserName,
 		),
-		playerVote,
+		vote,
 	);
 }
 
@@ -533,9 +542,9 @@ function allVote(gameID, currentRound, currentTrial, playerState, result) {
 		currentRound +
 		"/trials/" +
 		currentTrial +
-		"/votes";
+		"/votes/";
 	for (let key in playerState) {
-		set(ref(database, path), { [key]: result });
+		set(ref(database, path + key), result);
 	}
 }
 //debug functions end

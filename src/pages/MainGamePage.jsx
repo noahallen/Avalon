@@ -93,16 +93,27 @@ const MainGamePage = () => {
 
 	//send votes to everyone
 	const sendVotes = () => {
-		console.log("here");
-		apiFunctions.setGameState("VOTE");
+		apiFunctions.setGameState(gameID, "VOTE");
 	};
 
 	//debug functions
 	const allFail = () => {
-		apiFunctions.allVote(gameID, playerState, 0);
+		apiFunctions.allVote(
+			gameID,
+			currentRound,
+			currentTrial,
+			playerState,
+			0,
+		);
 	};
 	const allPass = () => {
-		apiFunctions.allVote(gameID, playerState, 1);
+		apiFunctions.allVote(
+			gameID,
+			currentRound,
+			currentTrial,
+			playerState,
+			1,
+		);
 	};
 
 	// open the votes pop-up
@@ -175,6 +186,7 @@ const MainGamePage = () => {
 			Object.keys(simplifiedRound).length !==
 			Object.keys(playerState).length
 		) {
+			console.log("all need to vote still");
 			return;
 		}
 		setKingVoted(false);
@@ -207,7 +219,7 @@ const MainGamePage = () => {
 		if (!isDebugFlag) {
 			apiFunctions.setKing(gameID, newKing, userName);
 		}
-		apiFunctions.setGameState("TS");
+		apiFunctions.setGameState(gameID, "TS");
 	};
 
 	const confirmTeamSelection = () => {
@@ -246,7 +258,9 @@ const MainGamePage = () => {
 					>
 						My Role
 					</button>
-					<button onClick={sendVotes}>Send Votes</button>
+					{playerState && playerState[userName].isKing && (
+						<button onClick={sendVotes}>Send Votes</button>
+					)}
 				</div>
 			</div>
 
