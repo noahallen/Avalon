@@ -30,8 +30,9 @@ const MainGamePage = () => {
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
 	const [currentVote, setCurrentVote] = useState(0);
-	const [kingVoted, setKingVoted] = useState(false);
 	const [totalApproves, setTotalApproves] = useState(-1);
+	const [currentVotesAdmin, setCurrentVotesAdmin] = useState({});
+	const [adminListener, setAdminListener] = useState();
 
 	useEffect(() => {
 		apiFunctions.setRoundsListen(
@@ -43,6 +44,15 @@ const MainGamePage = () => {
 			setListeners,
 		);
 	}, []);
+
+	useEffect(() => {
+		if (
+			Object.keys(currentVotesAdmin).length ===
+			Object.keys(playerState).length
+		) {
+			finalizeVotes();
+		}
+	}, [currentVotesAdmin]);
 
 	function importAllImages(r) {
 		let images = {};
@@ -89,11 +99,6 @@ const MainGamePage = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowVotes(false); // Close "Votes" popup
 		setShowMyRole((prevState) => !prevState); // Close "My Role" popup if open
-	};
-
-	//send votes to everyone
-	const sendVotes = () => {
-		apiFunctions.setGameState(gameID, "VOTE");
 	};
 
 	//debug functions
@@ -170,10 +175,16 @@ const MainGamePage = () => {
 			currentRound,
 			currentTrial,
 		);
-		if (!playerState[userName].isKing) {
-			setShowVotes(false);
-		} else {
-			setKingVoted(true);
+
+		setShowVotes(false);
+
+		if (isAdmin) {
+			adminListener();
+			apiFunctions.attachAdminListener(
+				gameID,
+				setAdminListener,
+				setCurrentVotesAdmin,
+			);
 		}
 	};
 
@@ -189,7 +200,7 @@ const MainGamePage = () => {
 			console.log("all need to vote still");
 			return;
 		}
-		setKingVoted(false);
+
 		for (const key in simplifiedRound) {
 			votes += simplifiedRound[key];
 		}
@@ -591,19 +602,14 @@ const MainGamePage = () => {
 									<button onClick={allFail}>All Fail</button>
 								</div>
 							)}
-							{!kingVoted ? (
-								<button
-									onClick={() => {
-										VoteClick(userName, currentVote);
-									}}
-								>
-									Vote
-								</button>
-							) : (
-								<button onClick={finalizeVotes}>
-									Finalize Votes
-								</button>
-							)}
+
+							<button
+								onClick={() => {
+									VoteClick(userName, currentVote);
+								}}
+							>
+								Vote
+							</button>
 						</div>
 					</div>
 				</div>
