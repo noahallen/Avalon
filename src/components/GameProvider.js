@@ -13,9 +13,13 @@ export const GameContextProvider = ({ children }) => {
 	const [featureSelectionSettings, setFeatureSelectionSettings] = useState(
 		{},
 	);
+	const [roundSuccess, setRoundSuccess] = useState([]);
 	const [isAdmin, setIsAdmin] = useState();
-	const [round, setRound] = useState({}); //this might not work check it out
+	const [rounds, setRound] = useState({});
 	const [gameState, setGameState] = useState();
+	const [currentRound, setCurrentRound] = useState();
+	const [currentTrial, setCurrentTrial] = useState();
+	const [isDebugFlag, setIsDebugFlag] = useState(false);
 
 	const goodRoles = {
 		Merlin: "Merlin",
@@ -58,6 +62,7 @@ export const GameContextProvider = ({ children }) => {
 		MissionRun: "MR",
 		MissionReveal: "MREV",
 		Lady: "LAD",
+		GameOver: "GO",
 	};
 
 	const helperText = {
@@ -104,6 +109,8 @@ export const GameContextProvider = ({ children }) => {
 				gameID,
 				setGameID,
 				name,
+				roundSuccess,
+				setRoundSuccess,
 				setName,
 				userName,
 				setUserName,
@@ -113,11 +120,16 @@ export const GameContextProvider = ({ children }) => {
 				setFeatureSelectionSettings,
 				isAdmin,
 				setIsAdmin,
-				round,
+				rounds,
 				setRound,
 				gameState,
 				setGameState,
+				currentRound,
+				setCurrentRound,
+				currentTrial,
+				setCurrentTrial,
 				helperText,
+				isDebugFlag,
 			}}
 		>
 			{children}

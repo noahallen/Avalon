@@ -92,6 +92,10 @@ function createGameLobby(
 		playerCount: 1,
 		gameState: "Waiting",
 		selectedRoles: [],
+		currentRound: 1,
+		currentTrial: 1,
+		currentRound: 1,
+		currentTrial: 1,
 	});
 	const listeners = loadGameLobby(
 		gameID,
@@ -169,6 +173,8 @@ async function joinGameLobby(userName, displayName, gameID) {
 		index: playerCount,
 		displayName: displayName,
 		role: "",
+		isKing: false,
+		onTeam: false,
 	});
 
 	await set(
@@ -212,7 +218,38 @@ function setGameStateListen(gameID, setGameState, listeners, setListeners) {
 			setGameState(snapshot.val());
 		},
 	);
-	setListeners({ ...listeners, stateListener });
+	setListeners({ ...listeners, stateListener: stateListener });
+}
+
+function setRoundsListen(
+	gameID,
+	setRoundState,
+	listeners,
+	setCurrentRound,
+	setCurrentTrial,
+	setListeners,
+) {
+	const stateListener = onValue(
+		ref(database, "/games/" + gameID + "/rounds"),
+		(snapshot) => {
+			setRoundState(snapshot.val());
+		},
+	);
+
+	const roundListener = onValue(
+		ref(database, "/games/" + gameID + "/currentRound"),
+		(snapshot) => {
+			setCurrentRound(snapshot.val());
+		},
+	);
+	const triaListener = onValue(
+		ref(database, "/games/" + gameID + "/currentTrial"),
+		(snapshot) => {
+			setCurrentTrial(snapshot.val());
+		},
+	);
+
+	setListeners({ ...listeners, roundsListener: stateListener });
 }
 
 // Role functions
@@ -234,8 +271,78 @@ function changeRoles(gameID, selectedRoles) {
 }
 //Add role
 
-function setGameState(gameID, state) {
+//general purpose set game state for use in main game page and progressing game along
+function setGameState(gameID, state, playerState) {
 	set(ref(database, "/games/" + gameID + "/gameState"), state);
+
+	//if changing to TS reset all on team statuses
+	if (state === "TS") {
+		for (const key in playerState) {
+			set(
+				ref(
+					database,
+					"/games/" + gameID + "/players/" + key + "/onTeam",
+				),
+				false,
+			);
+		}
+	}
+	if (state === "VOTE") {
+		setVoteParameters(gameID);
+	}
+}
+
+function attachAdminListener(
+	gameID,
+	currentRound,
+	currentTrial,
+	setAdminListener,
+	setCurrentVotesAdmin,
+) {
+	const listener = onValue(
+		ref(
+			database,
+			"/games/" +
+				gameID +
+				"/rounds/" +
+				currentRound +
+				"/trials/" +
+				currentTrial +
+				"/votes",
+		),
+		(snapshot) => {
+			setCurrentVotesAdmin(snapshot.val());
+		},
+	);
+	setAdminListener(listener);
+}
+
+async function setVoteParameters(gameID) {
+	let currentRound;
+	let currentTrial;
+	await get(child(ref(database), "/games/" + gameID + "/currentRound")).then(
+		(snapshot) => {
+			currentRound = snapshot.val();
+		},
+	);
+	await get(child(ref(database), "/games/" + gameID + "/currentTrial")).then(
+		(snapshot) => {
+			currentTrial = snapshot.val();
+		},
+	);
+	set(
+		ref(
+			database,
+			"/games/" +
+				gameID +
+				"/rounds/" +
+				currentRound +
+				"/trials/" +
+				currentTrial +
+				"/votes/",
+		),
+		{},
+	);
 }
 
 function beginGame(gameID, playerUsers, selectedRoles) {
@@ -261,49 +368,15 @@ function beginGame(gameID, playerUsers, selectedRoles) {
 	setGameState(gameID, "OS");
 }
 
-//debug functions start
-function addMembers(gameID, number) {
-	const baseName = "test user ";
-
-	for (let i = 0; i < number; i++) {
-		set(
-			ref(
-				database,
-				"/games/" + gameID + "/players/" + baseName + i.toString(),
-			),
-			{ displayName: baseName + i.toString(), role: "", index: i + 1 },
-		);
-	}
-	set(ref(database, "/games/" + gameID + "/playerCount"), 1 + Number(number));
+function setPlayerField(gameID, userName, field, value) {
+	set(
+		ref(
+			database,
+			"/games/" + gameID + "/players/" + userName + "/" + field,
+		),
+		value,
+	);
 }
-//debug functions end
-
-const apiFunctions = {
-	setRoleListener,
-	createGameLobby,
-	loadGameLobby,
-	joinGameLobby,
-	goToRoleSelection,
-	changeRoles,
-	setFeatureSelection,
-	loadFeatureSelection,
-	assignRoles,
-	voteCount,
-	beginGame,
-	setGameStateListen,
-	setGameState,
-	//debug functions below
-	addMembers,
-};
-
-// Call assignRoles like this:
-//const { gameID, selectedGoodRoles, selectedEvilRoles } = useContext(GameContext);
-// const assignRoleOnClick = () => {
-//     const combinedSelectedRoles =
-//         selectedGoodRoles.concat(selectedEvilRoles);
-
-//     apiFunctions.assignRoles(combinedSelectedRoles, gameID);
-// };
 
 async function assignRoles(roles, gameId) {
 	const dbref = ref(database);
@@ -324,154 +397,123 @@ async function assignRoles(roles, gameId) {
 	await set(ref(database, "/games/" + gameId + "/players/"), players);
 	return 1;
 }
-// round: {
-//     trial: {
-//         [1]:{
-//             kingIndex: -1,
-//             kingUsername,
-//             success,
-//         },
-//     },
-// },
-// gets called whenever someone clicks to vote
-// it updates the vote count in round
-// advances to the next round if everyone voted
-// displays the results
-async function voteCount(gameId, playerUserName, vote, playerState) {
-	const dbref = ref(database);
-	let rounds;
-	let round;
-	let roundCount;
-	let currentRound;
-	let playerPath = "/games/" + gameId + "/players/";
-	let roundPath = "/games/" + gameId + "/rounds/";
-	let roundObjects;
-	let playerObjects;
-	let players;
-	let playerCount;
-	let trial;
-	let totVotes;
-	// await get(child(dbref, playerPath)).then((snapshot) => {
-	// 	playerObjects = snapshot.val();
-	// });
 
-	//const players = Object.values(playerObjects);
-
-	await get(child(dbref, playerPath)).then((snapshot) => {
-		const playerObjects = snapshot.val();
-		const players = Object.values(playerObjects);
-		playerCount = Object.keys(playerObjects).length;
-	});
-
-	await get(child(dbref, roundPath)).then((snapshot) => {
-		roundObjects = snapshot.val();
-		if (!!roundObjects) {
-			round = Object.values(roundObjects);
-			roundCount = Object.values(roundObjects).length;
-			round.sort();
-			currentRound = round[roundCount - 1];
-			trial = currentRound[currentRound.length - 1];
-			//totVotes = trial.totalVotes + 1;
-		}
-	});
-	rounds = 0;
-	//await set(ref(database, "/games/" + gameId + "/rounds/"), rounds);
-
-	// await set(
-	// 	ref(
-	// 		database,
-	// 		"/games/" +
-	// 			gameId +
-	// 			"/rounds/" +
-	// 			rounds +
-	// 			"/" +
-	// 			currentRound.length,
-	// 	),
-	// 	{
-	// 		//success: vote, // change the success
-	// 	},
+async function playerVote(
+	gameId,
+	playerUserName,
+	vote,
+	currentRound,
+	currentTrial,
+) {
 	await set(
 		ref(
 			database,
 			"/games/" +
 				gameId +
 				"/rounds/" +
-				rounds +
-				"/" +
-				currentRound.length +
-				"/player/" +
+				currentRound +
+				"/trials/" +
+				currentTrial +
+				"/votes/" +
 				playerUserName,
 		),
-		{
-			vote: vote,
-		},
+		vote,
 	);
-	//check if everyone voted
-	//if success then update then start the next round
-	// await set(
-	// 	ref(database, "/games/" + gameId + "/round-" + round + "/"),
-	// 	round,
-	// );
 }
 
-//start round
-//this starts before each round
-// start the round
-// set the next king index
-// set king username for tracking
-// s
-// async function startRound(roles, gameId) {
-// 	const dbref = ref(database);
-// 	let round;
-// 	let playerPath = "/games/" + gameId + "/players/";
-// 	let roundPath = "/games/" + gameId + "/round/";
-// 	let playerObjects;
-// 	let players;
-// 	let kingIndex;
-// 	let kingUsername;
-// 	let playerCount;
+function setKing(gameID, newKing, oldKing) {
+	set(
+		ref(database, "/games/" + gameID + "/players/" + oldKing + "/isKing"),
+		false,
+	);
+	set(
+		ref(database, "/games/" + gameID + "/players/" + newKing + "/isKing"),
+		true,
+	);
+}
 
-// 	await get(child(dbref, roundPath)).then((snapshot) => {
-// 		const roundObjects = snapshot.val();
-// 		round = Object.keys(roundObjects).length + 1;
-// 		kingIndex = roundObjects.kingIndex + 1;
-// 	});
+async function countVoteResults(gameID, didPass, currentRound, currentTrial) {
+	if (didPass) {
+		set(
+			ref(database, "/games/" + gameID + "/currentRound"),
+			currentRound + 1,
+		);
+		set(ref(database, "/games/" + gameID + "/currentTrial"), 1);
+	} else {
+		set(
+			ref(database, "/games/" + gameID + "/currentTrial"),
+			currentTrial + 1,
+		);
+	}
+	if (currentTrial + 1 === 5) {
+		setGameState(gameID, "GO");
+	} else {
+		setGameState(gameID, "REV");
+	}
+	return;
+}
 
-// 	await get(child(dbref, playerPath)).then((snapshot) => {
-// 		const playerObjects = snapshot.val();
-// 		const players = Object.values(playerObjects);
-// 		playerCount = Object.keys(playerObjects).length;
-// 	});
+//debug functions start
+function addMembers(gameID, existing, number) {
+	const baseName = "test user ";
 
-// 	round++;
-// 	await set(ref(database, "/games/" + gameId + "/round/"), round);
+	for (let i = 0; i < number; i++) {
+		set(
+			ref(
+				database,
+				"/games/" + gameID + "/players/" + baseName + i.toString(),
+			),
+			{
+				displayName: baseName + i.toString(),
+				role: "",
+				index: i + existing,
+				isKing: false,
+				onTeam: false,
+			},
+		);
+	}
+	set(
+		ref(database, "/games/" + gameID + "/playerCount"),
+		existing + Number(number),
+	);
+}
+function allVote(gameID, currentRound, currentTrial, playerState, result) {
+	const path =
+		"/games/" +
+		gameID +
+		"/rounds/" +
+		currentRound +
+		"/trials/" +
+		currentTrial +
+		"/votes/";
+	for (let key in playerState) {
+		set(ref(database, path + key), result);
+	}
+}
+//debug functions end
 
-// 	//check if everyone voted
-// 	//if success then update then start the next round
-// 	await set(
-// 		ref(database, "/games/" + gameId + "/round-" + round + "/"),
-// 		round,
-// 	);
-// }
-
-// //game
-// // -round + number
-// // -- number
-// // --- king: username
-// // ---king index
-// // --- success:true or false
-
-// async function nextRound(roles, gameId) {
-// 	//should update king
-// 	//update round count
-// 	//reset voteCount
-// 	//set previous round
-// 	let success;
-// 	let reject;
-// 	const dbref = ref(database);
-// 	let round;
-// 	let playerPath = "/games/" + gameId + "/players/";
-// 	let roundPath = "/games/" + gameId + "/round/";
-// }
+const apiFunctions = {
+	setRoleListener,
+	createGameLobby,
+	loadGameLobby,
+	joinGameLobby,
+	goToRoleSelection,
+	changeRoles,
+	setFeatureSelection,
+	loadFeatureSelection,
+	assignRoles,
+	beginGame,
+	setGameStateListen,
+	setGameState,
+	playerVote,
+	countVoteResults,
+	setRoundsListen,
+	setKing,
+	setPlayerField,
+	attachAdminListener,
+	//debug functions below
+	addMembers,
+	allVote,
+};
 
 export default apiFunctions;

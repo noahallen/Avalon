@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import apiFunctions from "../firebase/api.jsx";
+import { click } from "@testing-library/user-event/dist/click.js";
 
 const OvalSVG = () => {
 	const {
@@ -54,6 +55,18 @@ const OvalSVG = () => {
 					[selection]: playerState[selection],
 					[clickedUserName]: playerState[clickedUserName],
 				});
+				apiFunctions.setPlayerField(
+					gameID,
+					selection,
+					"",
+					playerState[selection],
+				);
+				apiFunctions.setPlayerField(
+					gameID,
+					clickedUserName,
+					"",
+					playerState[clickedUserName],
+				);
 				setSelection("");
 			}
 		} else if (gameState === "TS" && playerState[userName]?.isKing) {
@@ -63,6 +76,12 @@ const OvalSVG = () => {
 				...playerState,
 				[clickedUserName]: playerState[clickedUserName],
 			});
+			apiFunctions.setPlayerField(
+				gameID,
+				clickedUserName,
+				"",
+				playerState[clickedUserName],
+			);
 		} else if (gameState === "KS" && isAdmin) {
 			playerState[clickedUserName].isKing =
 				!playerState[clickedUserName].isKing;
@@ -71,6 +90,12 @@ const OvalSVG = () => {
 				[clickedUserName]: playerState[clickedUserName],
 			});
 			apiFunctions.setGameState(gameID, "TS");
+			apiFunctions.setPlayerField(
+				gameID,
+				clickedUserName,
+				"",
+				playerState[clickedUserName],
+			);
 		}
 	};
 

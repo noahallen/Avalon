@@ -8,19 +8,51 @@ const MainGamePage = () => {
 	const {
 		playerState,
 		setPlayerState,
-		setIsAdmin,
 		gameState,
 		isAdmin,
 		userName,
 		gameID,
-		round,
+		rounds,
 		listeners,
+		setRound,
+		setListeners,
+		roundSuccess,
+		setRoundSuccess,
 		helperText,
+		setCurrentRound,
+		setCurrentTrial,
+		currentRound,
+		currentTrial,
+		isDebugFlag,
 	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
+	const [currentVote, setCurrentVote] = useState(0);
+	const [totalApproves, setTotalApproves] = useState(-1);
+	const [currentVotesAdmin, setCurrentVotesAdmin] = useState({});
+	const [adminListener, setAdminListener] = useState();
+
+	useEffect(() => {
+		apiFunctions.setRoundsListen(
+			gameID,
+			setRound,
+			listeners,
+			setCurrentRound,
+			setCurrentTrial,
+			setListeners,
+		);
+	}, []);
+
+	useEffect(() => {
+		if (
+			Object.keys(currentVotesAdmin).length ===
+			Object.keys(playerState).length
+		) {
+			finalizeVotes();
+		}
+	}, [currentVotesAdmin]);
 
 	function importAllImages(r) {
 		let images = {};
@@ -40,17 +72,60 @@ const MainGamePage = () => {
 		setCurrentPage(1); // Default to page 1
 	};
 
+	useEffect(() => {
+		if (gameState === "TS") {
+			setTotalApproves(-1);
+		}
+		if (gameState === "VOTE") {
+			handleVotes();
+		}
+		if (gameState === "REV") {
+			//calc the result
+			if (totalApproves === -1) {
+				let votes = 0;
+				const simplifiedRound =
+					rounds[currentRound]["trials"][currentTrial]["votes"];
+				for (const key in simplifiedRound) {
+					votes += simplifiedRound[key];
+				}
+				setTotalApproves(votes);
+			}
+		}
+		if (gameState === "GO") {
+		}
+	}, [gameState]);
+
 	const handleMyRoleClick = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowVotes(false); // Close "Votes" popup
 		setShowMyRole((prevState) => !prevState); // Close "My Role" popup if open
 	};
 
+	//debug functions
+	const allFail = () => {
+		apiFunctions.allVote(
+			gameID,
+			currentRound,
+			currentTrial,
+			playerState,
+			0,
+		);
+	};
+	const allPass = () => {
+		apiFunctions.allVote(
+			gameID,
+			currentRound,
+			currentTrial,
+			playerState,
+			1,
+		);
+	};
+
 	// open the votes pop-up
 	const handleVotes = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowMyRole(false); // Close "My Role" popup if open
-		setShowVotes((prevState) => !prevState); // Close "Votes" popup
+		setShowVotes(true); // Open "Votes" popup
 	};
 
 	const handleClose = () => {
@@ -93,8 +168,79 @@ const MainGamePage = () => {
 
 	const VoteClick = (userName, vote) => {
 		//let index = playerState[userName].index; // don't need the index rn
-		apiFunctions.voteCount(gameID, userName, vote, playerState);
+		apiFunctions.playerVote(
+			gameID,
+			userName,
+			vote,
+			currentRound,
+			currentTrial,
+		);
+
 		setShowVotes(false);
+
+		if (isAdmin) {
+			if (adminListener) {
+				adminListener();
+			}
+			apiFunctions.attachAdminListener(
+				gameID,
+				currentRound,
+				currentTrial,
+				setAdminListener,
+				setCurrentVotesAdmin,
+			);
+		}
+	};
+
+	const finalizeVotes = () => {
+		//calculate vote results
+		let votes = 0;
+		const simplifiedRound =
+			rounds[currentRound]["trials"][currentTrial]["votes"];
+		if (
+			Object.keys(simplifiedRound).length !==
+			Object.keys(playerState).length
+		) {
+			console.log("all need to vote still");
+			return;
+		}
+
+		for (const key in simplifiedRound) {
+			votes += simplifiedRound[key];
+		}
+		const didPass = Object.keys(playerState).length / 2 < votes;
+		setTotalApproves(votes);
+		apiFunctions.countVoteResults(
+			gameID,
+			didPass,
+			currentRound,
+			currentTrial,
+		);
+	};
+
+	const finishVoteReview = () => {
+		//set new king
+		const ind = playerState[userName].index + 1;
+		let newKing;
+		for (const key in playerState) {
+			if (playerState[key].index === ind) {
+				newKing = key;
+				break;
+			}
+			if (playerState[key].index === 0) {
+				newKing = key;
+			}
+		}
+		if (!isDebugFlag) {
+			apiFunctions.setKing(gameID, newKing, userName);
+		}
+		console.log("set to TS");
+		apiFunctions.setGameState(gameID, "TS");
+	};
+
+	const confirmTeamSelection = () => {
+		console.log("set to vote");
+		apiFunctions.setGameState(gameID, "VOTE");
 	};
 
 	const confimPlayerOrder = () => {
@@ -110,7 +256,11 @@ const MainGamePage = () => {
 			)}
 			{gameState === "KS" && isAdmin && <h1>Please select a king!</h1>}
 			<OvalSVG />
-
+			{gameState === "TS" && playerState[userName].isKing && (
+				<button onClick={confirmTeamSelection}>
+					Confirm Team Selection
+				</button>
+			)}
 			<div className="tab-bar">
 				<div className="tabs">
 					<button
@@ -125,7 +275,6 @@ const MainGamePage = () => {
 					>
 						My Role
 					</button>
-					<button onClick={handleVotes}>Send Votes</button>
 				</div>
 			</div>
 
@@ -429,28 +578,58 @@ const MainGamePage = () => {
 					<button onClick={handleClose}>Close</button>
 				</div>
 			)}
-			{showVotes && (
+			{showVotes && gameState === "VOTE" && (
 				<div className="popup votes">
 					<div>
-						<h4>VOTE</h4>
+						<h4>
+							VOTE: {currentVote === 1 ? "Approve" : "Reject"}
+						</h4>
 						<h4>{userName}</h4>
 						<div id={"VoteSelection"}>
 							<button
 								onClick={() => {
-									VoteClick(userName, 1);
+									setCurrentVote(1);
 								}}
 							>
 								Approve
 							</button>
 							<button
 								onClick={() => {
-									VoteClick(userName, 0);
+									setCurrentVote(0);
 								}}
 							>
 								Reject
 							</button>
+							{isDebugFlag && (
+								<div>
+									<button onClick={allPass}>All Pass</button>
+									<button onClick={allFail}>All Fail</button>
+								</div>
+							)}
+
+							<button
+								onClick={() => {
+									VoteClick(userName, currentVote);
+								}}
+							>
+								Vote
+							</button>
 						</div>
 					</div>
+				</div>
+			)}
+			{gameState === "REV" && (
+				<div className="popup">
+					{" "}
+					Approves: {totalApproves} Rejects:{" "}
+					{playerState
+						? Object.keys(playerState).length - totalApproves
+						: 0}{" "}
+					{playerState[userName].isKing && (
+						<button onClick={finishVoteReview}>
+							Finish Review
+						</button>
+					)}
 				</div>
 			)}
 		</div>
