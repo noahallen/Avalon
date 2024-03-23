@@ -184,6 +184,8 @@ const MainGamePage = () => {
 			}
 			apiFunctions.attachAdminListener(
 				gameID,
+				currentRound,
+				currentTrial,
 				setAdminListener,
 				setCurrentVotesAdmin,
 			);
