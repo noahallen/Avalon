@@ -179,7 +179,9 @@ const MainGamePage = () => {
 		setShowVotes(false);
 
 		if (isAdmin) {
-			adminListener();
+			if (adminListener) {
+				adminListener();
+			}
 			apiFunctions.attachAdminListener(
 				gameID,
 				setAdminListener,
