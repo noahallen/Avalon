@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import { useNavigate } from "react-router-dom";
 import apiFunctions from "../firebase/api.jsx";
+import "../index.css";
 
 const RoleSelectionPage = () => {
 	const { goodRoles, evilRoles, isAdmin, playerState, gameID, gameState } =
@@ -24,7 +25,7 @@ const RoleSelectionPage = () => {
 		Merlin: "Knows Evil, must remain hidden",
 		Percival: "Knows Merlin",
 		"Loyal Servant of Arthur": "No special ability",
-		Troublemaker: "",
+		Troublemaker: "Must lie about loyalty",
 		Cleric: "Secretly investigates the first Leader",
 		"Untrustworthy Servant":
 			"Appears Evil to Merlin, knows the Assassin can become Evil during the Recruitment stage",
@@ -121,45 +122,88 @@ const RoleSelectionPage = () => {
 			>
 				Role Selection
 			</h4>
+
+			{isAdmin &&
+				selectedRoles.length === Object.keys(playerState).length && (
+					<div
+						style={{
+							marginBottom: "10px",
+							marginTop: "-30px",
+						}}
+					>
+						<button
+							onClick={confirmRoles}
+							style={{ borderRadius: "10px" }}
+						>
+							Confirm
+						</button>
+					</div>
+				)}
 			{isAdmin && (
-				<div id={"RoleSelections"}>
+				<div id="RoleSelections">
 					{Object.values(goodRoles).map((val) => (
-						<img
-							className="icon-selected"
-							src={characterImages[`${val}.jpg`]}
-							key={val}
-							id={val}
-							alt={val}
-							title={characterText[val]}
-							onClick={() => {
-								RoleButtonClick(val, 0);
-							}}
-						></img>
+						<span>
+							<img
+								className={`icon-selected ${selectedRoles.includes(val) ? "highlighted" : ""}`}
+								src={characterImages[`${val}.jpg`]}
+								key={val}
+								id={val}
+								alt={val}
+								title={characterText[val]}
+								onClick={() => {
+									RoleButtonClick(val, 0);
+								}}
+							></img>
+							<p className="goodrole-name">{val}</p>
+						</span>
 					))}
+
+					<div className="role-separator"></div>
+
 					{Object.values(evilRoles).map((val) => (
-						<img
-							className="icon-selected"
-							src={characterImages[`${val}.jpg`]}
-							key={val}
-							id={val}
-							alt={val}
-							title={characterText[val]}
-							onClick={() => {
-								RoleButtonClick(val, 1);
-							}}
-						></img>
+						<span>
+							<img
+								className={`icon-selected ${selectedRoles.includes(val) ? "highlighted" : ""}`}
+								src={characterImages[`${val}.jpg`]}
+								key={val}
+								id={val}
+								alt={val}
+								title={characterText[val]}
+								onClick={() => {
+									RoleButtonClick(val, 1);
+								}}
+							></img>
+							<p className="evilrole-name">{val}</p>
+						</span>
 					))}
-					{selectedRoles.length ===
-						Object.keys(playerState).length && (
-						<div>
-							<button onClick={confirmRoles}>Confirm</button>
-						</div>
-					)}
 				</div>
 			)}
-			<div id={"SelectedRoles"}>
+			{/* <div id={"SelectedRoles"}>
 				{selectedRoles &&
 					selectedRoles.map((val) => <div key={val}>{val}</div>)}
+			</div> */}
+
+			<div id="SelectedRoles">
+				<div className="selectedRolesColumn">
+					{/* Good Roles */}
+					{selectedRoles
+						.filter((role) =>
+							Object.values(goodRoles).includes(role),
+						)
+						.map((role) => (
+							<div key={role}>{role}</div>
+						))}
+				</div>
+				<div className="selectedRolesColumn">
+					{/* Evil Roles */}
+					{selectedRoles
+						.filter((role) =>
+							Object.values(evilRoles).includes(role),
+						)
+						.map((role) => (
+							<div key={role}>{role}</div>
+						))}
+				</div>
 			</div>
 		</div>
 	);
