@@ -125,7 +125,7 @@ const MainGamePage = () => {
 	const handleVotes = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowMyRole(false); // Close "My Role" popup if open
-		setShowVotes(true); // Close "Votes" popup
+		setShowVotes(true); // Open "Votes" popup
 	};
 
 	const handleClose = () => {

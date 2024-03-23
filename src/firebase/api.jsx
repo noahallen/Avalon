@@ -405,38 +405,6 @@ async function playerVote(
 	currentRound,
 	currentTrial,
 ) {
-	//const dbref = ref(database);
-	//let roundPath = "/games/" + gameId + "/rounds/";
-	/*
-	let {
-		currentRoundIndex,
-		currentRound,
-		roundObjects,
-		currentTrialIndex,
-		numRounds,
-		currentTrial,
-	} = await get(child(dbref, roundPath)).then((snapshot) => {
-		roundObjects = snapshot.val();
-		if (!!roundObjects) {
-			numRounds = roundObjects.trackRoundCount;
-			currentRoundIndex = Object.keys(roundObjects).length - 1;
-			currentRound = roundObjects[currentRoundIndex];
-			currentTrialIndex = Object.keys(currentRound).length - 1;
-			currentTrial = currentRound[currentTrialIndex];
-			return {
-				currentRoundIndex,
-				currentRound,
-				roundObjects,
-				currentTrialIndex,
-				numRounds,
-				currentTrial,
-			};
-		}
-		return {};
-	});
-	*/
-	//const playerVote = { [playerUserName]: vote };
-
 	await set(
 		ref(
 			database,
@@ -465,90 +433,6 @@ function setKing(gameID, newKing, oldKing) {
 }
 
 async function countVoteResults(gameID, didPass, currentRound, currentTrial) {
-	/*
-	const dbref = ref(database);
-	let roundPath = "/games/" + gameID + "/rounds/";
-	let playerPath = "/games/" + gameID + "/players/";
-	let playerCount = 0;
-
-	await get(child(dbref, playerPath)).then((snapshot) => {
-		const playerObjects = snapshot.val();
-		playerCount = Object.keys(playerObjects).length;
-	});
-
-	let {
-		currentRoundIndex,
-		currentRound,
-		roundObjects,
-		currentTrialIndex,
-		numRounds,
-		currentTrial,
-	} = await get(child(dbref, roundPath)).then((snapshot) => {
-		roundObjects = snapshot.val();
-		if (!!roundObjects) {
-			numRounds = roundObjects.trackRoundCount;
-			currentRoundIndex = Object.keys(roundObjects).length - 1;
-			currentRound = roundObjects[currentRoundIndex];
-			currentTrialIndex = Object.keys(currentRound).length - 1;
-			currentTrial = currentRound[currentTrialIndex];
-			return {
-				currentRoundIndex,
-				currentRound,
-				roundObjects,
-				currentTrialIndex,
-				numRounds,
-				currentTrial,
-			};
-		}
-		return {};
-	});
-	if (Object.keys(currentTrial).length !== playerCount) {
-		return;
-	}
-	let approveCount = 0;
-	let rejectCount = 0;
-	//Loop over the players in the trial and count the approves and rejects
-	Object.keys(currentTrial).map((key) => {
-		if (currentTrial[key] === 1) {
-			approveCount++;
-		} else {
-			rejectCount++;
-		}
-	});
-	const pass = approveCount > rejectCount;
-	if (pass) {
-		if (currentRoundIndex < 5) {
-			currentRoundIndex++;
-			currentTrialIndex = 0;
-			await set(
-				ref(
-					database,
-					"/games/" +
-						gameID +
-						"/rounds/" +
-						currentRoundIndex +
-						"/trials/" +
-						currentTrialIndex,
-				),
-				{},
-			);
-		}
-	} else {
-		currentTrialIndex++;
-		await set(
-			ref(
-				database,
-				"/games/" +
-					gameID +
-					"/rounds/" +
-					currentRoundIndex +
-					"/trials/" +
-					currentTrialIndex,
-			),
-			{},
-		);
-	}
-	*/
 	if (didPass) {
 		set(
 			ref(database, "/games/" + gameID + "/currentRound"),
