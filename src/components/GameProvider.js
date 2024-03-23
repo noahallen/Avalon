@@ -19,6 +19,7 @@ export const GameContextProvider = ({ children }) => {
 	const [gameState, setGameState] = useState();
 	const [currentRound, setCurrentRound] = useState();
 	const [currentTrial, setCurrentTrial] = useState();
+	const [isDebugFlag, setIsDebugFlag] = useState(1);
 
 	const goodRoles = {
 		Merlin: "Merlin",
@@ -128,6 +129,7 @@ export const GameContextProvider = ({ children }) => {
 				currentTrial,
 				setCurrentTrial,
 				helperText,
+				isDebugFlag,
 			}}
 		>
 			{children}

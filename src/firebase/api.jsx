@@ -525,6 +525,19 @@ function addMembers(gameID, existing, number) {
 		existing + Number(number),
 	);
 }
+function allVote(gameID, currentRound, currentTrial, playerState, result) {
+	const path =
+		"/games/" +
+		gameID +
+		"/rounds/" +
+		currentRound +
+		"/trials/" +
+		currentTrial +
+		"/votes";
+	for (let key in playerState) {
+		set(ref(database, path), { [key]: result });
+	}
+}
 //debug functions end
 
 const apiFunctions = {
@@ -547,6 +560,7 @@ const apiFunctions = {
 	setPlayerField,
 	//debug functions below
 	addMembers,
+	allVote,
 };
 
 // Call assignRoles like this:

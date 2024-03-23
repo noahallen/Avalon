@@ -18,6 +18,7 @@ const WaitingRoom = () => {
 		setGameState,
 		listeners,
 		setListeners,
+		isDebugFlag,
 	} = useContext(GameContext);
 
 	// * debug stuff start
@@ -72,7 +73,7 @@ const WaitingRoom = () => {
 			<div>
 				{
 					//debug stuff
-					true && (
+					isDebugFlag && (
 						<div>
 							{" "}
 							<input

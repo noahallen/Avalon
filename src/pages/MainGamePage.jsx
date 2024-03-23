@@ -8,7 +8,6 @@ const MainGamePage = () => {
 	const {
 		playerState,
 		setPlayerState,
-		setIsAdmin,
 		gameState,
 		isAdmin,
 		userName,
@@ -24,6 +23,7 @@ const MainGamePage = () => {
 		setCurrentTrial,
 		currentRound,
 		currentTrial,
+		isDebugFlag,
 	} = useContext(GameContext);
 	const [showRoleInfo, setShowRoleInfo] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
@@ -93,7 +93,16 @@ const MainGamePage = () => {
 
 	//send votes to everyone
 	const sendVotes = () => {
-		apiFunctions.setGameState("Vote");
+		console.log("here");
+		apiFunctions.setGameState("VOTE");
+	};
+
+	//debug functions
+	const allFail = () => {
+		apiFunctions.allVote(gameID, playerState, 0);
+	};
+	const allPass = () => {
+		apiFunctions.allVote(gameID, playerState, 1);
 	};
 
 	// open the votes pop-up
@@ -158,9 +167,7 @@ const MainGamePage = () => {
 	};
 
 	const finalizeVotes = () => {
-		setKingVoted(false);
 		//calculate vote results
-
 		let votes = 0;
 		const simplifiedRound =
 			rounds[currentRound]["trials"][currentTrial]["votes"];
@@ -170,6 +177,7 @@ const MainGamePage = () => {
 		) {
 			return;
 		}
+		setKingVoted(false);
 		for (const key in simplifiedRound) {
 			votes += simplifiedRound[key];
 		}
@@ -196,7 +204,9 @@ const MainGamePage = () => {
 				newKing = key;
 			}
 		}
-		apiFunctions.setKing(gameID, newKing, userName);
+		if (!isDebugFlag) {
+			apiFunctions.setKing(gameID, newKing, userName);
+		}
 		apiFunctions.setGameState("TS");
 	};
 
@@ -562,6 +572,12 @@ const MainGamePage = () => {
 							>
 								Reject
 							</button>
+							{isDebugFlag && (
+								<div>
+									<button onClick={allPass}>All Pass</button>
+									<button onClick={allFail}>All Fail</button>
+								</div>
+							)}
 							{!kingVoted ? (
 								<button
 									onClick={() => {
