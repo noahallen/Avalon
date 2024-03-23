@@ -77,6 +77,8 @@ function createGameLobby(
 				index: "0",
 				displayName: displayName,
 				role: "",
+				isKing: false,
+				onTeam: false,
 			},
 		},
 		goodRoles: ["Merlin"],
@@ -286,6 +288,7 @@ function addMembers(gameID, existing, number) {
 				role: "",
 				index: i + existing,
 				isKing: false,
+				onTeam: false,
 			},
 		);
 	}
