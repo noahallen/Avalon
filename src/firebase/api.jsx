@@ -421,6 +421,26 @@ async function playerVote(
 	);
 }
 
+async function playerMissionVote(
+	gameId,
+	playerUserName,
+	missionVote,
+	currentRound,
+) {
+	await set(
+		ref(
+			database,
+			"/games/" +
+				gameId +
+				"/rounds/" +
+				currentRound +
+				"/mission/" +
+				playerUserName,
+		),
+		missionVote,
+	);
+}
+
 function setKing(gameID, newKing, oldKing) {
 	set(
 		ref(database, "/games/" + gameID + "/players/" + oldKing + "/isKing"),
@@ -450,6 +470,36 @@ async function countVoteResults(gameID, didPass, currentRound, currentTrial) {
 	} else {
 		setGameState(gameID, "REV");
 	}
+	return;
+}
+
+async function countMissionResults(gameID, didPass, currentRound) {
+	if (didPass) {
+		set(
+			ref(
+				database,
+				"/games/" +
+					gameID +
+					"/currentRound/" +
+					(currentRound - 1) +
+					"/missionResult/",
+			),
+			"Pass",
+		);
+	} else {
+		set(
+			ref(
+				database,
+				"/games/" +
+					gameID +
+					"/currentRound/" +
+					(currentRound - 1) +
+					"/missionResult/",
+			),
+			"Fail",
+		);
+	}
+	setGameState(gameID, "MREV");
 	return;
 }
 

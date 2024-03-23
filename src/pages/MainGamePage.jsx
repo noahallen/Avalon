@@ -17,7 +17,7 @@ const MainGamePage = () => {
 		setRound,
 		setListeners,
 		roundSuccess,
-		setRoundSuccess,
+		setRoundSuccVoteess,
 		helperText,
 		setCurrentRound,
 		setCurrentTrial,
@@ -29,10 +29,20 @@ const MainGamePage = () => {
 	const [currentPage, setCurrentPage] = useState(1); // New state to track current page
 	const [showMyRole, setShowMyRole] = useState(false);
 	const [showVotes, setShowVotes] = useState(false);
+	const [showMissionVotes, setShowMissionVotes] = useState(false);
 	const [currentVote, setCurrentVote] = useState(0);
-	const [currenMissionVote, setCurrentMissionVote] = useState(0);
+	const [currentMissionVote, setCurrentMissionVote] = useState(0);
 	const [totalApproves, setTotalApproves] = useState(-1);
+	const [totalMissionSuccess, setTotalMissionSuccess] = useState(-1);
+	const [totalMissionFails, setTotalMissionFails] = useState(-1);
+	const [totalMissionMagic, setTotalMissionMagic] = useState(-1);
+	const [votesPassed, setVotesPass] = useState(false);
+	const [missionPass, setMissionPass] = useState(false);
+	//set the sorceror one later
 	const [currentVotesAdmin, setCurrentVotesAdmin] = useState({});
+	const [currentMissionVotesAdmin, setCurrentMissionVotesAdmin] = useState(
+		{},
+	);
 	const [adminListener, setAdminListener] = useState();
 
 	useEffect(() => {
@@ -53,7 +63,24 @@ const MainGamePage = () => {
 		) {
 			finalizeVotes();
 		}
+		const numPlayersOnTeam = Object.values(playerState).filter(
+			(player) => player.onTeam,
+		).length;
+
+		if (
+			numPlayersOnTeam ===
+			Object.keys(rounds[currentRound]["mission"]).length
+		) {
+			finalizeMissionVotes();
+		}
 	}, [currentVotesAdmin]);
+
+	const missionCardType = {
+		SUCCESS: 1,
+		FAIL: 2,
+		MAGIC: 3,
+		MESSAGE: 4,
+	};
 
 	function importAllImages(r) {
 		let images = {};
@@ -69,6 +96,7 @@ const MainGamePage = () => {
 	const handleRoleInfoClick = () => {
 		setShowMyRole(false); // Close "My Role" popup if open
 		setShowVotes(false); // Close "Votes" popup
+		setShowMissionVotes(false); // Close "Mission Votes" popup
 		setShowRoleInfo((prevState) => !prevState); // Close popup
 		setCurrentPage(1); // Default to page 1
 	};
@@ -91,16 +119,25 @@ const MainGamePage = () => {
 				}
 				setTotalApproves(votes);
 			}
+
+			setTotalMissionFails(-1);
+			setTotalMissionSuccess(-1);
 		}
 		if (gameState === "GO") {
 		}
 		if (gameState === "MR") {
+			handleMissionVotes();
+		}
+		if (gameState === "MREV") {
+			//get total approves
+			//derya
 		}
 	}, [gameState]);
 
 	const handleMyRoleClick = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowVotes(false); // Close "Votes" popup
+		setShowMissionVotes(false); // Close "Mission Votes" popup
 		setShowMyRole((prevState) => !prevState); // Close "My Role" popup if open
 	};
 
@@ -129,12 +166,29 @@ const MainGamePage = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowMyRole(false); // Close "My Role" popup if open
 		setShowVotes(true); // Open "Votes" popup
+		setShowMissionVotes(false); // Close "Mission Votes" popup
 	};
 
 	const handleClose = () => {
 		setShowRoleInfo(false);
 		setShowMyRole(false);
 		setShowVotes(false);
+		setShowMissionVotes(false); // Close "Mission Votes" popup
+	};
+
+	// open the mission votes pop-up
+	const handleMissionVotes = () => {
+		setShowRoleInfo(false); // Close popup
+		setShowMyRole(false); // Close "My Role" popup if open
+		setShowVotes(false); // Close "Votes" popup
+		setShowMissionVotes(true); // Open "Mission Votes" popup
+	};
+
+	const handleMissionClose = () => {
+		setShowRoleInfo(false);
+		setShowMyRole(false);
+		setShowVotes(false);
+		setShowMissionVotes(false); // Close "Mission Votes" popup
 	};
 
 	const nextPage = () => {
@@ -195,11 +249,39 @@ const MainGamePage = () => {
 		}
 	};
 
+	//derya
+	const MissionVoteClick = (userName, missionVote) => {
+		//let index = playerState[userName].index; // don't need the index rn
+		apiFunctions.playerMissionVote(
+			gameID,
+			userName,
+			missionVote,
+			currentRound,
+		);
+
+		setShowMissionVotes(false);
+
+		// if (isAdmin) {
+		// 	if (adminListener) {
+		// 		adminListener();
+		// 	}
+		// 	apiFunctions.attachAdminListener(
+		// 		gameID,
+		// 		currentRound,
+		// 		currentTrial,
+		// 		setAdminListener,
+		// 		setCurrentMissionVotesAdmin,
+		// 	);
+		// }
+	};
+
 	const finalizeVotes = () => {
 		//calculate vote results
 		let votes = 0;
+
 		const simplifiedRound =
 			rounds[currentRound]["trials"][currentTrial]["votes"];
+
 		if (
 			Object.keys(simplifiedRound).length !==
 			Object.keys(playerState).length
@@ -212,6 +294,7 @@ const MainGamePage = () => {
 			votes += simplifiedRound[key];
 		}
 		const didPass = Object.keys(playerState).length / 2 < votes;
+		setVotesPass(didPass);
 		setTotalApproves(votes);
 		apiFunctions.countVoteResults(
 			gameID,
@@ -221,12 +304,47 @@ const MainGamePage = () => {
 		);
 	};
 
-	const finishVoteReview = () => {
-		//give out the mission cards if approved
-		const didPass = Object.keys(playerState).length / 2 < votes;
-		if (didPass) {
+	const finalizeMissionVotes = () => {
+		//calculate vote results
+		const numPlayersOnTeam = Object.values(playerState).filter(
+			(player) => player.onTeam,
+		).length;
+
+		const simplifiedRound = rounds[currentRound]["mission"];
+		if (Object.keys(simplifiedRound).length !== numPlayersOnTeam) {
+			console.log("all need to vote still");
+			return;
 		}
-		//derya
+
+		let success;
+		let fail;
+		let magic;
+		let didPass;
+		for (const key in simplifiedRound) {
+			success += simplifiedRound[key] === missionCardType.SUCCESS;
+			fail += simplifiedRound[key] === missionCardType.FAIL;
+			magic += simplifiedRound[key] === missionCardType.MAGIC;
+		}
+
+		setTotalMissionFails(fail);
+		setTotalMissionSuccess(success);
+		setTotalMissionMagic(magic);
+
+		//one before the last round
+		if (
+			currentRound === 5 &&
+			Object.keys(playerState).length >= 7 &&
+			fail === 2
+		) {
+			didPass = false;
+		} else if (fail > 0) didPass = false;
+		else didPass = true;
+		setMissionPass(didPass);
+
+		apiFunctions.countMissionResults(gameID, didPass);
+	};
+
+	const finishVoteReview = () => {
 		//set new king
 		const ind = playerState[userName].index + 1;
 		let newKing;
@@ -243,6 +361,16 @@ const MainGamePage = () => {
 			apiFunctions.setKing(gameID, newKing, userName);
 		}
 		console.log("set to TS");
+		//if vote passes then go to mission vote
+		if (votesPassed) {
+			apiFunctions.setGameState(gameID, "MR");
+		} else {
+			apiFunctions.setGameState(gameID, "TS");
+		}
+	};
+
+	const finishMissionVoteReview = () => {
+		//if vote passes then go to mission vote
 		apiFunctions.setGameState(gameID, "TS");
 	};
 
@@ -285,7 +413,6 @@ const MainGamePage = () => {
 					</button>
 				</div>
 			</div>
-
 			{showRoleInfo && (
 				<div className="popup">
 					{currentPage === 1 ? (
@@ -568,7 +695,6 @@ const MainGamePage = () => {
 					)}
 				</div>
 			)}
-
 			{showMyRole && (
 				<div className="popup my-role-tab">
 					{/* Popup content for My Role */}
@@ -640,31 +766,53 @@ const MainGamePage = () => {
 					)}
 				</div>
 			)}
-			{gameState === "MR" && ( //and isvoting people + check for player cards
+			//derya
+			{gameState === "MREV" && (
 				<div className="popup">
-					<button
-						onClick={() => {
-							setCurrentMissionVote(1);
-						}}
-					>
-						Pass
-					</button>
-					<button
-						onClick={() => {
-							setCurrentMissionVote(0);
-						}}
-					>
-						Fail
-					</button>
-					<button
-						onClick={() => {
-							MissionVoteClick(userName, currentVote);
-						}}
-					>
-						Vote
-					</button>
+					Success: {totalMissionSuccess} Fails:{totalMissionFails}
+					Magic:{totalMissionMagic}
+					{playerState[userName].isKing && (
+						<button onClick={finishMissionVoteReview()}>
+							Finish Mission Review
+						</button>
+					)}
 				</div>
 			)}
+			{showMissionVotes &&
+				gameState === "MR" &&
+				playerState[userName].onTeam(
+					//and isvoting people + check for player cards
+					<div className="popup">
+						<button
+							onClick={() => {
+								setCurrentMissionVote(missionCardType.SUCCESS); //success
+							}}
+						>
+							Success
+						</button>
+						<button
+							onClick={() => {
+								setCurrentMissionVote(missionCardType.FAIL); //fail
+							}}
+						>
+							Fail
+						</button>
+						<button
+							onClick={() => {
+								setCurrentMissionVote(missionCardType.MAGIC); //sorceror
+							}}
+						>
+							Sorceror
+						</button>
+						<button
+							onClick={() => {
+								MissionVoteClick(userName, currentMissionVote);
+							}}
+						>
+							Vote
+						</button>
+					</div>,
+				)}
 		</div>
 	);
 };
