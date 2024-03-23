@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 
 export const GameContext = createContext();
 
@@ -19,7 +19,12 @@ export const GameContextProvider = ({ children }) => {
 	const [gameState, setGameState] = useState();
 	const [currentRound, setCurrentRound] = useState();
 	const [currentTrial, setCurrentTrial] = useState();
-	const [isDebugFlag, setIsDebugFlag] = useState(false);
+	const [isDebugFlag] = useState(false);
+	const [board, setBoard] = useState([]);
+
+	useEffect(() => {
+		setBoard(boardRoundNumbers[Object.keys(playerState).length]);
+	}, [playerState]);
 
 	const goodRoles = {
 		Merlin: "Merlin",
@@ -51,6 +56,16 @@ export const GameContextProvider = ({ children }) => {
 		EvilMessenger: "Evil Messenger",
 	};
 
+	const boardRoundNumbers = {
+		5: ["2", "3", "2", "3", "3"],
+		6: ["2", "3", "4", "3", "4"],
+		7: ["2", "3", "3", "4", "4"],
+		8: ["3", "4", "4", "5", "5"],
+		9: ["3", "4", "4", "5", "5"],
+		10: ["3", "4", "4", "5", "5"],
+		11: ["3", "4", "4", "5", "5"],
+	};
+
 	const gamePhases = {
 		WaitingRoom: "Waiting",
 		RoleEdit: "RoleSelect",
@@ -69,7 +84,7 @@ export const GameContextProvider = ({ children }) => {
 		Merlin: "Knows Evil, must remain hidden",
 		Percival: "Knows Merlin",
 		"Loyal Servant of Arthur": "No special ability",
-		Troublemaker: "",
+		Troublemaker: "Must lie about loyalty",
 		Cleric: "Secretly investigates the first Leader",
 		"Untrustworthy Servant":
 			"Appears Evil to Merlin, knows the Assassin can become Evil during the Recruitment stage",
@@ -130,6 +145,7 @@ export const GameContextProvider = ({ children }) => {
 				setCurrentTrial,
 				helperText,
 				isDebugFlag,
+				board,
 			}}
 		>
 			{children}

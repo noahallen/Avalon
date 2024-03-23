@@ -5,8 +5,15 @@ import apiFunctions from "../firebase/api.jsx";
 import "../index.css";
 
 const RoleSelectionPage = () => {
-	const { goodRoles, evilRoles, isAdmin, playerState, gameID, gameState } =
-		useContext(GameContext);
+	const {
+		goodRoles,
+		evilRoles,
+		isAdmin,
+		playerState,
+		gameID,
+		gameState,
+		helperText,
+	} = useContext(GameContext);
 	const [selectedRoles, setSelectedRoles] = useState([]);
 	const [numBad, setNumBad] = useState(0);
 	const [requiredBad, setRequiredBad] = useState(0);
@@ -22,34 +29,6 @@ const RoleSelectionPage = () => {
 	const characterImages = importAll(
 		require.context("../res", true, /\.(png|jpe?g|svg)$/),
 	);
-	const characterText = {
-		Merlin: "Knows Evil, must remain hidden",
-		Percival: "Knows Merlin",
-		"Loyal Servant of Arthur": "No special ability",
-		Troublemaker: "Must lie about loyalty",
-		Cleric: "Secretly investigates the first Leader",
-		"Untrustworthy Servant":
-			"Appears Evil to Merlin, knows the Assassin can become Evil during the Recruitment stage",
-		"Good Lancelot": "Knows Evil Lancelot, or can switch allegiance",
-		"Good Sorcerer": "May play Magic",
-		"Good Rogue": "May play Rouge Success",
-		"Senior Messenger": "Knows Junior Messenger, may play Good Message",
-		"Junior Messenger": "May play Good Message",
-		Mordred: "Unknown to Merlin",
-		Morgana: "Appears as Merlin",
-		Oberon: "Unkownto Evil, does not know Evil",
-		Assassin: "May activate Assassination stage if three Quests succeed",
-		"Minion of Mordred": "No special ability",
-		Trickster: "May lie about loyalty",
-		Lunatic: "Must Fail every Quest",
-		Brute: "May Fail only the first three Quests",
-		Revealer: "Reveals loyalty after second failed quest",
-		"Evil Lancelot": "Knows Good Lancelot, or can switch allegiance",
-		"Evil Sorcerer": "May play Magic, may not play Fail",
-		"Evil Rogue":
-			"May play Rogue Fail, unknown to Evil, does not know Evil",
-		"Evil Messenger": "May play Evil Message",
-	};
 
 	useEffect(() => {
 		if (!isAdmin) {
@@ -58,7 +37,7 @@ const RoleSelectionPage = () => {
 			const numPlayers = Object.keys(playerState).length;
 			if (numPlayers < 7) {
 				setRequiredBad(2);
-			} else if (numPlayers < 10) {
+			} else if (numPlayers >= 7 && numPlayers < 10) {
 				setRequiredBad(3);
 			} else {
 				setRequiredBad(4);
@@ -73,22 +52,14 @@ const RoleSelectionPage = () => {
 	}, [gameState]);
 
 	const confirmRoles = () => {
-		let allowedBad;
 		const numPlayers = Object.keys(playerState).length;
 		if (selectedRoles.length != numPlayers) {
 			return;
 		}
-		if (numPlayers < 7) {
-			allowedBad = 2;
-		} else if (numPlayers < 10) {
-			allowedBad = 3;
-		} else {
-			allowedBad = 4;
-		}
-		if (numBad != allowedBad) {
+
+		if (numBad !== requiredBad) {
 			return;
 		}
-
 		apiFunctions.beginGame(gameID, Object.keys(playerState), selectedRoles);
 	};
 
@@ -134,7 +105,8 @@ const RoleSelectionPage = () => {
 			</h4>
 
 			{isAdmin &&
-				selectedRoles.length === Object.keys(playerState).length && (
+				selectedRoles.length === Object.keys(playerState).length &&
+				numBad === requiredBad && (
 					<div
 						style={{
 							marginBottom: "10px",
@@ -159,7 +131,7 @@ const RoleSelectionPage = () => {
 								key={val}
 								id={val}
 								alt={val}
-								title={characterText[val]}
+								title={helperText[val]}
 								onClick={() => {
 									RoleButtonClick(val, 0);
 								}}
@@ -178,7 +150,7 @@ const RoleSelectionPage = () => {
 								key={val}
 								id={val}
 								alt={val}
-								title={characterText[val]}
+								title={helperText[val]}
 								onClick={() => {
 									RoleButtonClick(val, 1);
 								}}
@@ -188,10 +160,6 @@ const RoleSelectionPage = () => {
 					))}
 				</div>
 			)}
-			{/* <div id={"SelectedRoles"}>
-				{selectedRoles &&
-					selectedRoles.map((val) => <div key={val}>{val}</div>)}
-			</div> */}
 
 			<div id="SelectedRoles">
 				<div className="selectedRolesColumn">

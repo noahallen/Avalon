@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { GameContext } from "../components/GameProvider.js";
 import apiFunctions from "../firebase/api.jsx";
-import { click } from "@testing-library/user-event/dist/click.js";
 
 const OvalSVG = () => {
 	const {
@@ -11,6 +10,8 @@ const OvalSVG = () => {
 		gameState,
 		isAdmin,
 		gameID,
+		board,
+		roundSuccess,
 	} = useContext(GameContext);
 	const numPlayers = Object.keys(playerState).length;
 	const scaleFactor = 0.78;
@@ -39,6 +40,20 @@ const OvalSVG = () => {
 			return { x, y };
 		},
 		[numPlayers, dimension],
+	);
+
+	//Write a new calculate circle coordinates function that calculates the coordinates for the small circles
+	const calculateSmallCircleCoordinates = React.useCallback(
+		(index) => {
+			const numCircles = 5; // Update this with the actual number of circles
+			const containerWidth = dimension * 0.7;
+			const circleWidth = containerWidth / numCircles;
+			const offset = (dimension * 0.3) / 2;
+			const x = offset + circleWidth * index + circleWidth / 2;
+			const y = dimension / 3.85;
+			return { x, y };
+		},
+		[dimension],
 	);
 
 	const handleCircleClick = (clickedUserName) => {
@@ -99,6 +114,65 @@ const OvalSVG = () => {
 		}
 	};
 
+	const getMissionColors = React.useCallback((index) => {
+		if (roundSuccess !== undefined && roundSuccess[index] !== undefined) {
+			return roundSuccess[index] ? "#2778BB" : "#AA1010";
+		}
+		return "none";
+	});
+
+	//Write a new callback that renders 5 small circles across the width of the elipse
+	const renderSmallCircles = React.useCallback(() => {
+		const smallCircles = Array.from({ length: 5 }, (_, index) => {
+			const { x, y } = calculateSmallCircleCoordinates(index);
+
+			return (
+				<g key={index}>
+					{index === 3 && Object.keys(playerState).length > 6 && (
+						<text
+							textAnchor="middle"
+							dominantBaseline="middle"
+							style={{
+								fill: "white",
+								fontSize: dimension / 30,
+							}}
+						>
+							<tspan x={x} y={y - dimension / 8}>
+								Requires two
+							</tspan>
+							<tspan x={x} y={y - dimension / 8 + dimension / 25}>
+								to fail
+							</tspan>
+						</text>
+					)}
+					<circle
+						cx={x}
+						cy={y}
+						r={dimension / 20}
+						style={{
+							fill: getMissionColors(index),
+							stroke: "black",
+						}}
+					/>
+					<text
+						x={x}
+						y={y}
+						textAnchor="middle"
+						dominantBaseline="middle"
+						style={{
+							fill: "white",
+							fontSize: dimension / 25,
+						}}
+					>
+						<tspan x={x} y={y}>
+							{board[index]}
+						</tspan>
+					</text>
+				</g>
+			);
+		});
+		return smallCircles;
+	});
 	const renderCircles = React.useCallback(() => {
 		const circles = Object.entries(playerState).map(([key, player]) => {
 			const index = playerState[key].index;
@@ -161,6 +235,7 @@ const OvalSVG = () => {
 					}}
 				/>
 				{renderCircles()}
+				{renderSmallCircles()}
 			</svg>
 		</div>
 	);
