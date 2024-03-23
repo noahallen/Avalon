@@ -120,7 +120,7 @@ const MainGamePage = () => {
 	const handleVotes = () => {
 		setShowRoleInfo(false); // Close popup
 		setShowMyRole(false); // Close "My Role" popup if open
-		setShowVotes((prevState) => !prevState); // Close "Votes" popup
+		setShowVotes(true); // Close "Votes" popup
 	};
 
 	const handleClose = () => {
@@ -219,10 +219,12 @@ const MainGamePage = () => {
 		if (!isDebugFlag) {
 			apiFunctions.setKing(gameID, newKing, userName);
 		}
+		console.log("set to TS");
 		apiFunctions.setGameState(gameID, "TS");
 	};
 
 	const confirmTeamSelection = () => {
+		console.log("set to vote");
 		apiFunctions.setGameState(gameID, "VOTE");
 	};
 
@@ -258,9 +260,6 @@ const MainGamePage = () => {
 					>
 						My Role
 					</button>
-					{playerState && playerState[userName].isKing && (
-						<button onClick={sendVotes}>Send Votes</button>
-					)}
 				</div>
 			</div>
 

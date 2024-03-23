@@ -173,6 +173,8 @@ async function joinGameLobby(userName, displayName, gameID) {
 		index: playerCount,
 		displayName: displayName,
 		role: "",
+		isKing: false,
+		onTeam: false,
 	});
 
 	await set(
@@ -526,6 +528,7 @@ function addMembers(gameID, existing, number) {
 				role: "",
 				index: i + existing,
 				isKing: false,
+				onTeam: false,
 			},
 		);
 	}
