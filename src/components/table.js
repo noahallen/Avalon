@@ -70,7 +70,6 @@ const OvalSVG = () => {
 				...playerState,
 				[clickedUserName]: playerState[clickedUserName],
 			});
-			apiFunctions.setKing(gameID, newKing, oldKing);
 			apiFunctions.setGameState(gameID, "TS");
 		}
 	};
