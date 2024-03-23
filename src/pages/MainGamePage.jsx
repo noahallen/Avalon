@@ -3,7 +3,6 @@ import { GameContext } from "../components/GameProvider.js";
 import apiFunctions from "../firebase/api";
 import "../style/popup.css";
 import OvalSVG from "../components/table";
-//import { user } from "firebase-functions/v1/auth";
 
 const MainGamePage = () => {
 	const {
@@ -573,22 +572,20 @@ const MainGamePage = () => {
 					</div>
 				</div>
 			)}
-			{
-				(gameState = "REV" && (
-					<div className="popup">
-						{" "}
-						Approves: {totalApproves} Rejects:{" "}
-						{playerState
-							? Object.keys(playerState).length - totalApproves
-							: 0}{" "}
-						{playerState[userName].isKing && (
-							<button onClick={finishVoteReview}>
-								Finish Review
-							</button>
-						)}
-					</div>
-				))
-			}
+			{gameState === "REV" && (
+				<div className="popup">
+					{" "}
+					Approves: {totalApproves} Rejects:{" "}
+					{playerState
+						? Object.keys(playerState).length - totalApproves
+						: 0}{" "}
+					{playerState[userName].isKing && (
+						<button onClick={finishVoteReview}>
+							Finish Review
+						</button>
+					)}
+				</div>
+			)}
 		</div>
 	);
 };
