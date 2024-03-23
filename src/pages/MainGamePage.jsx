@@ -160,9 +160,16 @@ const MainGamePage = () => {
 	const finalizeVotes = () => {
 		setKingVoted(false);
 		//calculate vote results
+
 		let votes = 0;
 		const simplifiedRound =
 			rounds[currentRound]["trials"][currentTrial]["votes"];
+		if (
+			Object.keys(simplifiedRound).length !==
+			Object.keys(playerState).length
+		) {
+			return;
+		}
 		for (const key in simplifiedRound) {
 			votes += simplifiedRound[key];
 		}
