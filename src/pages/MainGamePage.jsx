@@ -63,16 +63,13 @@ const MainGamePage = () => {
 		) {
 			finalizeVotes();
 		}
-		const numPlayersOnTeam = Object.values(playerState).filter(
-			(player) => player.onTeam,
-		).length;
+		// const numPlayersOnTeam = Object.values(playerState).filter(
+		// 	(player) => player.onTeam,
+		// ).length;
 
-		if (
-			numPlayersOnTeam ===
-			Object.keys(rounds[currentRound]["mission"]).length
-		) {
-			finalizeMissionVotes();
-		}
+		// if (missionPass) {
+		// 	finalizeMissionVotes();
+		// }
 	}, [currentVotesAdmin]);
 
 	const missionCardType = {
@@ -276,6 +273,7 @@ const MainGamePage = () => {
 	};
 
 	const finalizeVotes = () => {
+		console.log("finalize votes");
 		//calculate vote results
 		let votes = 0;
 
@@ -339,6 +337,8 @@ const MainGamePage = () => {
 			didPass = false;
 		} else if (fail > 0) didPass = false;
 		else didPass = true;
+		console.log("did pass?");
+		console.log(didPass);
 		setMissionPass(didPass);
 
 		apiFunctions.countMissionResults(gameID, didPass);
@@ -766,7 +766,6 @@ const MainGamePage = () => {
 					)}
 				</div>
 			)}
-			//derya
 			{gameState === "MREV" && (
 				<div className="popup">
 					Success: {totalMissionSuccess} Fails:{totalMissionFails}
@@ -780,7 +779,7 @@ const MainGamePage = () => {
 			)}
 			{showMissionVotes &&
 				gameState === "MR" &&
-				playerState[userName].onTeam(
+				playerState[userName].onTeam && (
 					//and isvoting people + check for player cards
 					<div className="popup">
 						<button
@@ -811,7 +810,7 @@ const MainGamePage = () => {
 						>
 							Vote
 						</button>
-					</div>,
+					</div>
 				)}
 		</div>
 	);

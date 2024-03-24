@@ -561,6 +561,8 @@ const apiFunctions = {
 	setKing,
 	setPlayerField,
 	attachAdminListener,
+	playerMissionVote,
+	countMissionResults,
 	//debug functions below
 	addMembers,
 	allVote,

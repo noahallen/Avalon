@@ -19,7 +19,7 @@ export const GameContextProvider = ({ children }) => {
 	const [gameState, setGameState] = useState();
 	const [currentRound, setCurrentRound] = useState();
 	const [currentTrial, setCurrentTrial] = useState();
-	const [isDebugFlag] = useState(false);
+	const [isDebugFlag] = useState(true);
 	const [board, setBoard] = useState([]);
 
 	useEffect(() => {
